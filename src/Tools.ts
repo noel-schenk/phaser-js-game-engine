@@ -1,72 +1,49 @@
 import { Globals } from './Globals';
 import Sprites from './json/sprites.json';
 import config from './json/config.json';
-import { SpriteData, State } from './Interfaces';
+import { SpriteData, SpriteInfo, State } from './Interfaces';
 import Phaser from 'phaser';
 
 export class Tools {
   private constructor() {}
 
-  static getSpriteDataFromSpriteName(spriteInfo: Array<string>): SpriteData {
-    return Sprites[Tools.getSpriteNameFromSpriteInfo(spriteInfo)];
+  static getSpriteDataFromSpriteName(spriteInfo: SpriteInfo): SpriteData {
+    return Sprites[spriteInfo.name];
   }
 
-  static getSpriteSourceFromSpriteInfo(spriteInfo: Array<string>) {
-    return spriteInfo.join('/');
+  static getSpriteSourceFromSpriteInfo(spriteInfo: SpriteInfo) {
+    return Object.values(spriteInfo).join('/');
   }
 
   static getUndefinedSpriteInfo() {
-    return ['undefined', '0'];
+    return { name: 'undefined', mutation: 0 } as SpriteInfo;
   }
 
   static getSpriteInfoFromSpriteSource(spriteSource: string) {
-    const spriteData = spriteSource.split('/');
-    const spriteName = Tools.getSpriteNameFromSpriteInfo(spriteData);
+    const spriteSplit = spriteSource.split('/');
+    const spriteData = {
+      name: spriteSplit.slice(0, -1).join('/'),
+      mutation: parseInt(spriteSplit.at(-1))
+    } as SpriteInfo;
 
-    if (Globals.Instance.sprites.includes(spriteName)) {
+    if (Globals.Instance.sprites.includes(spriteData.name)) {
       return spriteData;
     }
 
-    console.log(`Could not find [${spriteName}]`);
+    console.log(`Could not find [${spriteData.name}]`);
     return Tools.getUndefinedSpriteInfo();
   }
 
-  static getSpriteNameFromSpriteInfo(spriteInfo: Array<string>) {
-    return spriteInfo.slice(0, -1).join('/');
-  }
-
-  static getSpriteMutationFromSpriteInfo(spriteInfo: Array<string>) {
-    return parseInt(spriteInfo.at(-1));
-  }
-
   static getTopLeftSpritePosition(
-    spriteInfo: Array<string>,
     x: number,
-    y: number
+    y: number,
+    spriteInfo: SpriteInfo
   ): [number, number] {
-    const sprite = Sprites[Tools.getSpriteNameFromSpriteInfo(spriteInfo)];
+    const sprite = Sprites[spriteInfo.name];
 
     x = x + sprite.width / 2;
     y = y + sprite.height / 2;
     return [x, y];
-  }
-
-  static getTopLeftSpriteConfig(
-    spriteInfo: Array<string>,
-    x: number,
-    y: number
-  ) {
-    return Tools.getSpriteConfig(
-      spriteInfo,
-      ...Tools.getTopLeftSpritePosition(spriteInfo, x, y)
-    );
-  }
-
-  static getSpriteConfig(spriteInfo: Array<string>, x: number, y: number) {
-    const spriteMutation = Tools.getSpriteMutationFromSpriteInfo(spriteInfo);
-    const spriteName = Tools.getSpriteNameFromSpriteInfo(spriteInfo);
-
-    return { x, y, spriteName, spriteMutation };
   }
 
   static loadSprites(sceneName: string) {
@@ -88,7 +65,7 @@ export class Tools {
     return Globals.Instance.game.scene.getScene(sceneName);
   }
 
-  static addGameObjectToScene<T>(
+  static addGameObjectToScene<T extends Phaser.GameObjects.GameObject>(
     scene: Phaser.Scene,
     gameObject: Phaser.GameObjects.GameObject
   ): T {
@@ -106,24 +83,24 @@ export class Tools {
     scene: Phaser.Scene,
     x: number,
     y: number,
-    spriteName: string,
-    spriteMutation: number
+    spriteInfo: SpriteInfo
   ) {
     return new Phaser.GameObjects.Sprite(
       scene,
       x,
       y,
-      spriteName,
-      spriteMutation
+      spriteInfo.name,
+      spriteInfo.mutation
     );
   }
 
   static renderScene(
-    sceneName: string,
+    scene: Phaser.Scene,
     state: State,
+    container: Phaser.GameObjects.Container,
     spriteRenderCB?: (
       sprite: Phaser.GameObjects.Sprite,
-      info: string[],
+      spriteInfo: SpriteInfo,
       statePosition: {
         levelIndex: number;
         rowIndex: number;
@@ -140,19 +117,14 @@ export class Tools {
           const spriteX = columnIndex * config.gridSize;
           const spriteY = rowIndex * config.gridSize;
 
-          const scene = Tools.getSceneByName(sceneName);
-
-          const sprite = Tools.addGameObjectToScene<Phaser.GameObjects.Sprite>(
+          const sprite = Tools.getNewSprite(
             scene,
-            Tools.getNewSprite(
-              scene,
-              ...(Object.values(
-                Tools.getTopLeftSpriteConfig(spriteInfo, spriteX, spriteY)
-              ) as [number, number, string, number])
-            )
+            ...Tools.getTopLeftSpritePosition(spriteX, spriteY, spriteInfo),
+            spriteInfo
           );
-
           sprite.setSize(40, 40);
+
+          container.add(sprite);
 
           spriteRenderCB?.(sprite, spriteInfo, {
             levelIndex,
@@ -162,6 +134,10 @@ export class Tools {
         });
       });
     });
+    return Tools.addGameObjectToScene<Phaser.GameObjects.Container>(
+      scene,
+      container
+    );
   }
 
   static getStateReferenceAtPosition(
@@ -169,7 +145,7 @@ export class Tools {
     row: number,
     column: number
   ) {
-    return Globals.Instance.state.value[level][row][column];
+    return Globals.Instance.state.sprites.value[level][row][column];
   }
 
   static moveSpriteToPosition(
@@ -177,7 +153,7 @@ export class Tools {
       level: number;
       row: number;
       column: number;
-      spriteInfo: Array<string>;
+      spriteInfo: SpriteInfo;
     },
     to: {
       level: number;
@@ -209,12 +185,12 @@ export class Tools {
     level: number,
     row: number,
     column: number,
-    spriteInfo: Array<string>
+    spriteInfo: SpriteInfo
   ) {
-    const temp = Tools.clone<State>(Globals.Instance.state.value);
+    const temp = Tools.clone<State>(Globals.Instance.state.sprites.value);
     temp[level][row][column].source =
       Tools.getSpriteSourceFromSpriteInfo(spriteInfo);
-    Globals.Instance.state.next(temp);
+    Globals.Instance.state.sprites.next(temp);
   }
 
   static getGridPosition(x, y) {
@@ -233,6 +209,23 @@ export class Tools {
     return (
       Phaser.Math.Snap.To(pos, config.gridSize, config.gridSize / 2) -
       config.gridSize / 2
+    );
+  }
+
+  static getUniqueKey() {
+    return Math.random().toString(36).substr(2, 9);
+  }
+
+  static getZoomPosition(x, y, zoomFactor) {
+    return { x: x / zoomFactor, y: y / zoomFactor };
+  }
+
+  static setGlobalScalingFactorBasedOnGameObject(
+    gameObject: Phaser.GameObjects.Sprite | Phaser.GameObjects.Container
+  ) {
+    Globals.Instance.scalingFactor = Math.max(
+      Globals.Instance.game.canvas.width / gameObject.getBounds().width,
+      Globals.Instance.game.canvas.height / gameObject.getBounds().height
     );
   }
 }

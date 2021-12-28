@@ -1,23 +1,45 @@
-import PhaserGUIAction from 'phaser3_gui_inspector';
+import { GameObjects } from 'phaser';
+import { Observable, Subject } from 'rxjs';
 import { Globals } from './Globals';
-import config from './json/config.json';
+import { PlayerScene } from './PlayerScene';
 import { Tools } from './Tools';
+
+export enum GameObjectEvents {
+  pointerdown,
+  pointerup,
+  pointermove,
+  pointerover,
+  pointerout,
+  drag,
+  dragend
+}
 
 export interface SpriteData {
   mutations: number;
   width: number;
   height: number;
   ext: string;
-  interactive: boolean;
+  interactive: { draggable: boolean } | {} | false;
 }
+
+export type SpriteInfo = { name: string; mutation: number };
 
 export type State = { source: string }[][][];
 
 export class Scene extends Phaser.Scene {
-  create() {
-    config.develop && (PhaserGUIAction as any)(this);
+  onSpriteEvent = new Subject<{
+    eventName: string;
+    gameObject: GameObjects.Sprite;
+    event: any;
+    customData: Function;
+  }>();
 
-    Globals.Instance.state.subscribe(() => {
+  get sceneConfig() {
+    throw 'This property needs to be overwritten';
+  }
+
+  create() {
+    Globals.Instance.state.sprites.subscribe(() => {
       const tryRender = () => {
         if (!Globals.Instance.canRerender) {
           console.log('rendering is not possible at the moment');
@@ -31,7 +53,15 @@ export class Scene extends Phaser.Scene {
     });
   }
 
+  on(gameObject: Phaser.GameObjects.Sprite, customData: Function) {
+    Object.keys(GameObjectEvents).forEach((eventName) => {
+      gameObject.on(eventName, (event) => {
+        this.onSpriteEvent.next({ eventName, gameObject, event, customData });
+      });
+    });
+  }
+
   renderUpdate() {
-    throw 'This functions need to be overwritten';
+    throw 'This functions needs to be overwritten';
   }
 }

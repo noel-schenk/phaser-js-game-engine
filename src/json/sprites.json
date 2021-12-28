@@ -4,7 +4,7 @@
         "width": 40,
         "height": 40,
         "ext": "jpg",
-        "interactive": false
+        "interactive": {}
     },
     "undefined": {
         "mutations": 1,
@@ -17,6 +17,29 @@
         "mutations": 3,
         "width": 40,
         "height": 40,
+        "ext": "png",
+        "interactive": {
+            "draggable": true
+        }
+    },
+    "ui/inventory": {
+        "mutations": 1,
+        "width": 160,
+        "height": 160,
+        "ext": "png",
+        "interactive": true
+    },
+    "ui/bag": {
+        "mutations": 1,
+        "width": 40,
+        "height": 40,
+        "ext": "png",
+        "interactive": true
+    },
+    "entity/cow": {
+        "mutations": 18,
+        "width": 60,
+        "height": 60,
         "ext": "png",
         "interactive": true
     }
