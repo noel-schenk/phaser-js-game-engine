@@ -25,6 +25,7 @@ export class LoadingScene extends Scene {
   override renderUpdate() {}
 
   create() {
+    super.create();
     Globals.Instance.game.scene.add(
       Tools.getUniqueKey(),
       HomeOutsideScene,

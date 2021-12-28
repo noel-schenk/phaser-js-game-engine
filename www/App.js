@@ -72902,18 +72902,18 @@
 
   // node_modules/rxjs/dist/esm5/internal/Observable.js
   var Observable = function() {
-    function Observable3(subscribe) {
+    function Observable2(subscribe) {
       if (subscribe) {
         this._subscribe = subscribe;
       }
     }
-    Observable3.prototype.lift = function(operator) {
-      var observable2 = new Observable3();
+    Observable2.prototype.lift = function(operator) {
+      var observable2 = new Observable2();
       observable2.source = this;
       observable2.operator = operator;
       return observable2;
     };
-    Observable3.prototype.subscribe = function(observerOrNext, error, complete) {
+    Observable2.prototype.subscribe = function(observerOrNext, error, complete) {
       var _this = this;
       var subscriber = isSubscriber(observerOrNext) ? observerOrNext : new SafeSubscriber(observerOrNext, error, complete);
       errorContext(function() {
@@ -72922,14 +72922,14 @@
       });
       return subscriber;
     };
-    Observable3.prototype._trySubscribe = function(sink) {
+    Observable2.prototype._trySubscribe = function(sink) {
       try {
         return this._subscribe(sink);
       } catch (err) {
         sink.error(err);
       }
     };
-    Observable3.prototype.forEach = function(next, promiseCtor) {
+    Observable2.prototype.forEach = function(next, promiseCtor) {
       var _this = this;
       promiseCtor = getPromiseCtor(promiseCtor);
       return new promiseCtor(function(resolve, reject) {
@@ -72948,21 +72948,21 @@
         _this.subscribe(subscriber);
       });
     };
-    Observable3.prototype._subscribe = function(subscriber) {
+    Observable2.prototype._subscribe = function(subscriber) {
       var _a;
       return (_a = this.source) === null || _a === void 0 ? void 0 : _a.subscribe(subscriber);
     };
-    Observable3.prototype[observable] = function() {
+    Observable2.prototype[observable] = function() {
       return this;
     };
-    Observable3.prototype.pipe = function() {
+    Observable2.prototype.pipe = function() {
       var operations = [];
       for (var _i = 0; _i < arguments.length; _i++) {
         operations[_i] = arguments[_i];
       }
       return pipeFromArray(operations)(this);
     };
-    Observable3.prototype.toPromise = function(promiseCtor) {
+    Observable2.prototype.toPromise = function(promiseCtor) {
       var _this = this;
       promiseCtor = getPromiseCtor(promiseCtor);
       return new promiseCtor(function(resolve, reject) {
@@ -72976,10 +72976,10 @@
         });
       });
     };
-    Observable3.create = function(subscribe) {
-      return new Observable3(subscribe);
+    Observable2.create = function(subscribe) {
+      return new Observable2(subscribe);
     };
-    return Observable3;
+    return Observable2;
   }();
   function getPromiseCtor(promiseCtor) {
     var _a;
@@ -73192,6 +73192,7 @@
       };
       this.scalingFactor = 1;
       this.canRerender = true;
+      this.offsetToCenter = { x: 0, y: 0 };
     }
     static get Instance() {
       return this._instance || (this._instance = new this());
@@ -76476,7 +76477,37 @@
     width: 60,
     height: 60,
     ext: "png",
-    interactive: true
+    interactive: true,
+    animations: {
+      up: [
+        9,
+        10,
+        11
+      ],
+      right: [
+        3,
+        4,
+        5
+      ],
+      down: [
+        0,
+        1,
+        2
+      ],
+      left: [
+        6,
+        7,
+        8
+      ],
+      idle: [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ]
+    }
   };
   var sprites_default = {
     "ground/grass": ground_grass,
@@ -76509,6 +76540,12 @@
     static getUndefinedSpriteInfo() {
       return { name: "undefined", mutation: 0 };
     }
+    static getSpriteInfoFromSprite(sprite) {
+      return {
+        name: sprite.texture.key,
+        mutation: sprite.anims?.currentFrame?.index || 0
+      };
+    }
     static getSpriteInfoFromSpriteSource(spriteSource) {
       const spriteSplit = spriteSource.split("/");
       const spriteData = {
@@ -76525,7 +76562,7 @@
       const sprite = sprites_default[spriteInfo.name];
       x = x + sprite.width / 2;
       y = y + sprite.height / 2;
-      return [x, y];
+      return { x, y };
     }
     static loadSprites(sceneName) {
       for (const spriteName in sprites_default) {
@@ -76559,7 +76596,7 @@
             const spriteInfo = Tools.getSpriteInfoFromSpriteSource(spriteData.source);
             const spriteX = columnIndex * config_default.gridSize;
             const spriteY = rowIndex * config_default.gridSize;
-            const sprite = Tools.getNewSprite(scene, ...Tools.getTopLeftSpritePosition(spriteX, spriteY, spriteInfo), spriteInfo);
+            const sprite = Tools.getNewSprite(scene, ...Object.values(Tools.getTopLeftSpritePosition(spriteX, spriteY, spriteInfo)), spriteInfo);
             sprite.setSize(40, 40);
             container.add(sprite);
             spriteRenderCB?.(sprite, spriteInfo, {
@@ -76576,7 +76613,8 @@
       return Globals.Instance.state.sprites.value[level][row][column];
     }
     static moveSpriteToPosition(from, to) {
-      if (!Tools.getStateReferenceAtPosition(to.level, to.row, to.column).source) {
+      const spriteStateSource = Tools.getStateReferenceAtPosition(to.level, to.row, to.column).source;
+      if (!spriteStateSource || spriteStateSource === Tools.getSpriteSourceFromSpriteInfo(Tools.getUndefinedSpriteInfo())) {
         Tools.updateStateAtPosition(from.level, from.row, from.column, Tools.getUndefinedSpriteInfo());
         Tools.updateStateAtPosition(to.level, to.row, to.column, from.spriteInfo);
         return true;
@@ -76607,11 +76645,54 @@
     static getUniqueKey() {
       return Math.random().toString(36).substr(2, 9);
     }
-    static getZoomPosition(x, y, zoomFactor) {
-      return { x: x / zoomFactor, y: y / zoomFactor };
-    }
     static setGlobalScalingFactorBasedOnGameObject(gameObject) {
       Globals.Instance.scalingFactor = Math.max(Globals.Instance.game.canvas.width / gameObject.getBounds().width, Globals.Instance.game.canvas.height / gameObject.getBounds().height);
+    }
+    static setGlobalOffsetPositonRelativeToSprite(spriteToCenter) {
+      const defaultX = Globals.Instance.game.canvas.width / 2;
+      const defaultY = Globals.Instance.game.canvas.height / 2;
+      const spriteInfo = Tools.getSpriteInfoFromSprite(spriteToCenter);
+      const offsetPosition = Tools.getTopLeftSpritePosition(defaultX, defaultY, spriteInfo);
+      offsetPosition.x -= spriteToCenter.x * Globals.Instance.scalingFactor;
+      offsetPosition.y -= spriteToCenter.y * Globals.Instance.scalingFactor;
+      Globals.Instance.offsetToCenter = offsetPosition;
+    }
+    static getSpeedForDistance(from, to) {
+      const x = from.x - to.x;
+      const y = from.y - to.y;
+      const distance = 40;
+      const speedInMs = 100;
+      return Math.hypot(x, y) / distance * speedInMs;
+    }
+    static getAngleFromPositions(from, to) {
+      return Math.atan2(to.y - from.y, to.x - from.x) * 180 / Math.PI + 180;
+    }
+    static getDirectionFromPosition(from, to) {
+      let angle = this.getAngleFromPositions(from, to);
+      if (angle > 45 && angle < 135) {
+        return "up";
+      }
+      if (angle > 135 && angle < 225) {
+        return "right";
+      }
+      if (angle > 225 && angle < 315) {
+        return "down";
+      }
+      if (angle > 315 || angle < 45) {
+        return "left";
+      }
+    }
+    static loadSpriteAnimations(sprite) {
+      const animationFrames = sprites_default[sprite.texture.key]?.animations;
+      Object.keys(animationFrames).forEach((direction) => {
+        const animationType = animationFrames[direction];
+        sprite.anims.create({
+          key: direction,
+          frames: Globals.Instance.game.anims.generateFrameNumbers(sprite.texture.key, { frames: animationType }),
+          frameRate: 4,
+          repeat: -1
+        });
+      });
     }
   };
 
@@ -76635,6 +76716,7 @@
       throw "This property needs to be overwritten";
     }
     create() {
+      this.gameObjectContainer = new Phaser.GameObjects.Container(this.scene.scene);
       Globals.Instance.state.sprites.subscribe(() => {
         const tryRender = () => {
           if (!Globals.Instance.canRerender) {
@@ -76642,7 +76724,6 @@
             setTimeout(() => tryRender(), 100);
             return;
           }
-          Tools.removeAllGameObjectsFromScene(this.scene.scene);
           this.renderUpdate();
         };
         tryRender();
@@ -76651,12 +76732,18 @@
     on(gameObject, customData) {
       Object.keys(GameObjectEvents).forEach((eventName) => {
         gameObject.on(eventName, (event) => {
+          event.x = (event.x - Globals.Instance.offsetToCenter.x) / Globals.Instance.scalingFactor;
+          event.y = (event.y - Globals.Instance.offsetToCenter.y) / Globals.Instance.scalingFactor;
           this.onSpriteEvent.next({ eventName, gameObject, event, customData });
         });
       });
     }
+    update() {
+      this.gameObjectContainer.x = Globals.Instance.offsetToCenter.x;
+      this.gameObjectContainer.y = Globals.Instance.offsetToCenter.y;
+      this.gameObjectContainer.scale = Globals.Instance.scalingFactor;
+    }
     renderUpdate() {
-      throw "This functions needs to be overwritten";
     }
   };
 
@@ -76673,10 +76760,11 @@
     preload() {
     }
     create() {
+      super.create();
       const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/bag/0");
       const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/bag/0");
-      Tools.addGameObjectToScene(this.scene.scene, Tools.getNewSprite(this.scene.scene, ...Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo), { name: "ui/bag", mutation: 0 })).on("pointerup", (pointer) => {
-        Tools.addGameObjectToScene(this.scene.scene, Tools.getNewSprite(this.scene.scene, ...Tools.getTopLeftSpritePosition(0, 0, inventorySpriteInfo), { name: "ui/inventory", mutation: 0 }));
+      Tools.addGameObjectToScene(this.scene.scene, Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)), { name: "ui/bag", mutation: 0 })).on("pointerup", (pointer) => {
+        Tools.addGameObjectToScene(this.scene.scene, Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, inventorySpriteInfo)), { name: "ui/inventory", mutation: 0 }));
       });
     }
     renderUpdate() {
@@ -76699,8 +76787,9 @@
       Globals.Instance.activeMainScene = this;
     }
     renderUpdate() {
-      this.spriteContainer = new Phaser3.GameObjects.Container(this.scene.scene, 0, 0);
-      const x = Tools.renderScene(this.scene.scene, Globals.Instance.state.sprites.value, this.spriteContainer, (sprite, info, statePosition) => {
+      Tools.removeAllGameObjectsFromScene(this.scene.scene);
+      this.gameObjectContainer = new Phaser3.GameObjects.Container(this.scene.scene);
+      Tools.renderScene(this.scene.scene, Globals.Instance.state.sprites.value, this.gameObjectContainer, (sprite, info, statePosition) => {
         const spriteData = Tools.getSpriteDataFromSpriteName(info);
         if (spriteData.interactive) {
           sprite.setInteractive(spriteData.interactive);
@@ -76709,23 +76798,21 @@
           return { statePosition, info };
         });
       });
-      Tools.setGlobalScalingFactorBasedOnGameObject(this.spriteContainer);
-      this.spriteContainer.scale = Globals.Instance.scalingFactor;
+      Tools.setGlobalScalingFactorBasedOnGameObject(this.gameObjectContainer);
     }
     create() {
       super.create();
       this.onSpriteEvent.subscribe((params) => {
         const data = params.customData();
-        const zoomPosition = Tools.getZoomPosition(params.event.x, params.event.y, this.spriteContainer.scale);
         switch (params.eventName) {
           case "drag":
             Globals.Instance.canRerender = false;
-            params.gameObject.x = zoomPosition.x;
-            params.gameObject.y = zoomPosition.y;
+            params.gameObject.x = params.event.x;
+            params.gameObject.y = params.event.y;
             break;
           case "dragend":
-            params.gameObject.x = Phaser3.Math.Snap.To(zoomPosition.x, config_default.gridSize, config_default.gridSize / 2);
-            params.gameObject.y = Phaser3.Math.Snap.To(zoomPosition.y, config_default.gridSize, config_default.gridSize / 2);
+            params.gameObject.x = Phaser3.Math.Snap.To(params.event.x, config_default.gridSize, config_default.gridSize / 2);
+            params.gameObject.y = Phaser3.Math.Snap.To(params.event.y, config_default.gridSize, config_default.gridSize / 2);
             const updatedPosition = Tools.getGridPosition(params.gameObject.x, params.gameObject.y);
             Tools.moveSpriteToPosition({
               level: data.statePosition.levelIndex,
@@ -76760,14 +76847,41 @@
     preload() {
     }
     create() {
-      const cowSpriteInfo = Tools.getSpriteInfoFromSpriteSource("entity/cow/0");
-      const playerGameObject = Tools.addGameObjectToScene(this.scene.scene, Tools.getNewSprite(this.scene.scene, ...Tools.getTopLeftSpritePosition(0, 0, cowSpriteInfo), { name: "entity/cow", mutation: 0 }));
-      playerGameObject.scale = Globals.Instance.scalingFactor;
+      super.create();
+      const cowSpriteInfo = Tools.getSpriteInfoFromSpriteSource("entity/cow/1");
+      this.playerSprite = Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, cowSpriteInfo)), cowSpriteInfo);
+      this.add.existing(this.playerSprite);
+      this.gameObjectContainer.add(this.playerSprite);
+      Tools.addGameObjectToScene(this.scene.scene, this.gameObjectContainer);
+      Tools.loadSpriteAnimations(this.playerSprite);
+      Tools.setGlobalOffsetPositonRelativeToSprite(this.playerSprite);
       Globals.Instance.activeMainScene.onSpriteEvent.subscribe((params) => {
         if (params.eventName === "pointerup") {
+          const eventX = params.event.x;
+          const eventY = params.event.y;
+          const positions = {
+            from: { x: this.playerSprite.x, y: this.playerSprite.y },
+            to: { x: eventX, y: eventY }
+          };
+          const direction = Tools.getDirectionFromPosition(positions.from, positions.to);
           switch (params.gameObject.texture.key) {
             case "ground/grass":
-              alert("clicked on grass");
+              this.activeTween?.stop();
+              this.activeTween = this.add.tween({
+                targets: this.playerSprite,
+                x: eventX,
+                y: eventY,
+                ease: "Power1",
+                duration: Tools.getSpeedForDistance(positions.from, positions.to) * Globals.Instance.scalingFactor,
+                completeDelay: 100,
+                onComplete: () => {
+                  this.playerSprite.play("idle");
+                },
+                onUpdate: () => {
+                  Tools.setGlobalOffsetPositonRelativeToSprite(this.playerSprite);
+                }
+              });
+              this.playerSprite.play(direction);
               break;
             default:
               break;
@@ -76794,6 +76908,7 @@
     renderUpdate() {
     }
     create() {
+      super.create();
       Globals.Instance.game.scene.add(Tools.getUniqueKey(), HomeOutsideScene, true);
       Globals.Instance.game.scene.add(Tools.getUniqueKey(), InventoryScene, true);
       Globals.Instance.game.scene.add(Tools.getUniqueKey(), PlayerScene, true);

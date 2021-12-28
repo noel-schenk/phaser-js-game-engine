@@ -41,6 +41,36 @@
         "width": 60,
         "height": 60,
         "ext": "png",
-        "interactive": true
+        "interactive": true,
+        "animations": {
+            "up": [
+                9,
+                10,
+                11
+            ],
+            "right": [
+                3,
+                4,
+                5
+            ],
+            "down": [
+                0,
+                1,
+                2
+            ],
+            "left": [
+                6,
+                7,
+                8
+            ],
+            "idle": [
+                12,
+                13,
+                14,
+                15,
+                16,
+                17
+            ]
+        }
     }
 }

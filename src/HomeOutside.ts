@@ -13,8 +13,6 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 export class HomeOutsideScene extends Scene {
   static sceneConfig = sceneConfig;
 
-  private spriteContainer: Phaser.GameObjects.Container;
-
   constructor() {
     super(sceneConfig);
   }
@@ -24,16 +22,15 @@ export class HomeOutsideScene extends Scene {
   }
 
   override renderUpdate() {
-    this.spriteContainer = new Phaser.GameObjects.Container(
-      this.scene.scene,
-      0,
-      0
+    Tools.removeAllGameObjectsFromScene(this.scene.scene);
+    this.gameObjectContainer = new Phaser.GameObjects.Container(
+      this.scene.scene
     );
 
-    const x = Tools.renderScene(
+    Tools.renderScene(
       this.scene.scene,
       Globals.Instance.state.sprites.value,
-      this.spriteContainer,
+      this.gameObjectContainer,
       (sprite, info, statePosition) => {
         const spriteData = Tools.getSpriteDataFromSpriteName(info);
         if (spriteData.interactive) {
@@ -45,34 +42,28 @@ export class HomeOutsideScene extends Scene {
         });
       }
     );
-    Tools.setGlobalScalingFactorBasedOnGameObject(this.spriteContainer);
-    this.spriteContainer.scale = Globals.Instance.scalingFactor;
+    Tools.setGlobalScalingFactorBasedOnGameObject(this.gameObjectContainer);
   }
 
   create() {
     super.create();
     this.onSpriteEvent.subscribe((params) => {
       const data = params.customData();
-      const zoomPosition = Tools.getZoomPosition(
-        params.event.x,
-        params.event.y,
-        this.spriteContainer.scale
-      );
       switch (params.eventName) {
         case 'drag':
           Globals.Instance.canRerender = false;
 
-          params.gameObject.x = zoomPosition.x;
-          params.gameObject.y = zoomPosition.y;
+          params.gameObject.x = params.event.x;
+          params.gameObject.y = params.event.y;
           break;
         case 'dragend':
           params.gameObject.x = Phaser.Math.Snap.To(
-            zoomPosition.x,
+            params.event.x,
             config.gridSize,
             config.gridSize / 2
           );
           params.gameObject.y = Phaser.Math.Snap.To(
-            zoomPosition.y,
+            params.event.y,
             config.gridSize,
             config.gridSize / 2
           );

@@ -16,6 +16,7 @@ export class InventoryScene extends Scene {
   preload() {}
 
   create() {
+    super.create();
     const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource('ui/bag/0');
     const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource('ui/bag/0');
 
@@ -23,7 +24,9 @@ export class InventoryScene extends Scene {
       this.scene.scene,
       Tools.getNewSprite(
         this.scene.scene,
-        ...Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo),
+        ...(Object.values(
+          Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)
+        ) as [number, number]),
         { name: 'ui/bag', mutation: 0 }
       )
     ).on('pointerup', (pointer) => {
@@ -31,7 +34,9 @@ export class InventoryScene extends Scene {
         this.scene.scene,
         Tools.getNewSprite(
           this.scene.scene,
-          ...Tools.getTopLeftSpritePosition(0, 0, inventorySpriteInfo),
+          ...(Object.values(
+            Tools.getTopLeftSpritePosition(0, 0, inventorySpriteInfo)
+          ) as [number, number]),
           { name: 'ui/inventory', mutation: 0 }
         )
       );

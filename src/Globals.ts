@@ -13,6 +13,7 @@ export class Globals {
   scalingFactor = 1;
   canRerender = true;
   activeMainScene: Scene;
+  offsetToCenter = { x: 0, y: 0 };
 
   private constructor() {}
 
