@@ -76463,21 +76463,21 @@
     width: 160,
     height: 160,
     ext: "png",
-    interactive: true
+    interactive: {}
   };
   var ui_bag = {
     mutations: 1,
     width: 40,
     height: 40,
     ext: "png",
-    interactive: true
+    interactive: {}
   };
   var entity_cow = {
     mutations: 18,
     width: 60,
     height: 60,
     ext: "png",
-    interactive: true,
+    interactive: false,
     animations: {
       up: [
         9,
@@ -76531,7 +76531,7 @@
   var Tools = class {
     constructor() {
     }
-    static getSpriteDataFromSpriteName(spriteInfo) {
+    static getSpriteDataFromSpriteInfo(spriteInfo) {
       return sprites_default[spriteInfo.name];
     }
     static getSpriteSourceFromSpriteInfo(spriteInfo) {
@@ -76557,6 +76557,13 @@
       }
       console.log(`Could not find [${spriteData.name}]`);
       return Tools.getUndefinedSpriteInfo();
+    }
+    static getCenterStripePosition(spriteInfo) {
+      const getCenter = (size) => size / 2 / Globals.Instance.scalingFactor;
+      return [
+        getCenter(Globals.Instance.game.canvas.width),
+        getCenter(Globals.Instance.game.canvas.height)
+      ];
     }
     static getTopLeftSpritePosition(x, y, spriteInfo) {
       const sprite = sprites_default[spriteInfo.name];
@@ -76587,7 +76594,12 @@
       });
     }
     static getNewSprite(scene, x, y, spriteInfo) {
-      return new import_phaser.default.GameObjects.Sprite(scene, x, y, spriteInfo.name, spriteInfo.mutation);
+      const newSprite = new import_phaser.default.GameObjects.Sprite(scene, x, y, spriteInfo.name, spriteInfo.mutation);
+      const spriteData = Tools.getSpriteDataFromSpriteInfo(spriteInfo);
+      if (spriteData.interactive) {
+        newSprite.setInteractive(spriteData.interactive);
+      }
+      return newSprite;
     }
     static renderScene(scene, state, container, spriteRenderCB) {
       state.map((level, levelIndex) => {
@@ -76711,6 +76723,10 @@
     constructor() {
       super(...arguments);
       this.onSpriteEvent = new Subject();
+      this.gameObjectContainerConfig = {
+        scale: true,
+        offset: true
+      };
     }
     get sceneConfig() {
       throw "This property needs to be overwritten";
@@ -76739,9 +76755,11 @@
       });
     }
     update() {
-      this.gameObjectContainer.x = Globals.Instance.offsetToCenter.x;
-      this.gameObjectContainer.y = Globals.Instance.offsetToCenter.y;
-      this.gameObjectContainer.scale = Globals.Instance.scalingFactor;
+      if (this.gameObjectContainerConfig.offset) {
+        this.gameObjectContainer.x = Globals.Instance.offsetToCenter.x;
+        this.gameObjectContainer.y = Globals.Instance.offsetToCenter.y;
+      }
+      this.gameObjectContainerConfig.scale && (this.gameObjectContainer.scale = Globals.Instance.scalingFactor);
     }
     renderUpdate() {
     }
@@ -76761,10 +76779,18 @@
     }
     create() {
       super.create();
+      this.gameObjectContainerConfig.offset = false;
       const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/bag/0");
-      const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/bag/0");
-      Tools.addGameObjectToScene(this.scene.scene, Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)), { name: "ui/bag", mutation: 0 })).on("pointerup", (pointer) => {
-        Tools.addGameObjectToScene(this.scene.scene, Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, inventorySpriteInfo)), { name: "ui/inventory", mutation: 0 }));
+      const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/inventory/0");
+      this.bagSprite = Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)), bagSpriteInfo);
+      this.gameObjectContainer.add(this.bagSprite);
+      Tools.addGameObjectToScene(this.scene.scene, this.gameObjectContainer);
+      this.on(this.bagSprite, void 0);
+      this.onSpriteEvent.subscribe((params) => {
+        if (params.eventName === "pointerup") {
+          this.inventorySprite = Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getCenterStripePosition(inventorySpriteInfo)), inventorySpriteInfo);
+          this.gameObjectContainer.add(this.inventorySprite);
+        }
       });
     }
     renderUpdate() {
@@ -76789,13 +76815,9 @@
     renderUpdate() {
       Tools.removeAllGameObjectsFromScene(this.scene.scene);
       this.gameObjectContainer = new Phaser3.GameObjects.Container(this.scene.scene);
-      Tools.renderScene(this.scene.scene, Globals.Instance.state.sprites.value, this.gameObjectContainer, (sprite, info, statePosition) => {
-        const spriteData = Tools.getSpriteDataFromSpriteName(info);
-        if (spriteData.interactive) {
-          sprite.setInteractive(spriteData.interactive);
-        }
+      Tools.renderScene(this.scene.scene, Globals.Instance.state.sprites.value, this.gameObjectContainer, (sprite, spriteInfo, statePosition) => {
         this.on(sprite, () => {
-          return { statePosition, info };
+          return { statePosition, spriteInfo };
         });
       });
       Tools.setGlobalScalingFactorBasedOnGameObject(this.gameObjectContainer);
@@ -76818,7 +76840,7 @@
               level: data.statePosition.levelIndex,
               row: data.statePosition.rowIndex,
               column: data.statePosition.columnIndex,
-              spriteInfo: data.info
+              spriteInfo: data.spriteInfo
             }, {
               level: data.statePosition.levelIndex,
               row: updatedPosition.row,
@@ -76871,7 +76893,7 @@
                 targets: this.playerSprite,
                 x: eventX,
                 y: eventY,
-                ease: "Power1",
+                ease: "Linear",
                 duration: Tools.getSpeedForDistance(positions.from, positions.to) * Globals.Instance.scalingFactor,
                 completeDelay: 100,
                 onComplete: () => {
@@ -76929,7 +76951,7 @@
       }
     },
     parent: "game",
-    backgroundColor: "#000000",
+    backgroundColor: "#547e64",
     scene: []
   };
   Globals.Instance.game = new Phaser4.Game(gameConfig);

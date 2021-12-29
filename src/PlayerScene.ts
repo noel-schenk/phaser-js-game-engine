@@ -67,7 +67,7 @@ export class PlayerScene extends Scene {
               targets: this.playerSprite,
               x: eventX,
               y: eventY,
-              ease: 'Power1',
+              ease: 'Linear',
               duration:
                 Tools.getSpeedForDistance(positions.from, positions.to) *
                 Globals.Instance.scalingFactor,

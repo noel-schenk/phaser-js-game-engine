@@ -7,7 +7,7 @@ import Phaser from 'phaser';
 export class Tools {
   private constructor() {}
 
-  static getSpriteDataFromSpriteName(spriteInfo: SpriteInfo): SpriteData {
+  static getSpriteDataFromSpriteInfo(spriteInfo: SpriteInfo): SpriteData {
     return Sprites[spriteInfo.name];
   }
 
@@ -39,6 +39,14 @@ export class Tools {
 
     console.log(`Could not find [${spriteData.name}]`);
     return Tools.getUndefinedSpriteInfo();
+  }
+
+  static getCenterStripePosition(spriteInfo: SpriteInfo) {
+    const getCenter = (size) => size / 2 / Globals.Instance.scalingFactor;
+    return [
+      getCenter(Globals.Instance.game.canvas.width),
+      getCenter(Globals.Instance.game.canvas.height)
+    ];
   }
 
   static getTopLeftSpritePosition(
@@ -92,13 +100,21 @@ export class Tools {
     y: number,
     spriteInfo: SpriteInfo
   ) {
-    return new Phaser.GameObjects.Sprite(
+    const newSprite = new Phaser.GameObjects.Sprite(
       scene,
       x,
       y,
       spriteInfo.name,
       spriteInfo.mutation
     );
+
+    const spriteData = Tools.getSpriteDataFromSpriteInfo(spriteInfo);
+
+    if (spriteData.interactive) {
+      newSprite.setInteractive(spriteData.interactive);
+    }
+
+    return newSprite;
   }
 
   static renderScene(

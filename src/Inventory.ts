@@ -9,6 +9,10 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 
 export class InventoryScene extends Scene {
   static sceneConfig = sceneConfig;
+
+  bagSprite: Phaser.GameObjects.Sprite;
+  inventorySprite: Phaser.GameObjects.Sprite;
+
   constructor() {
     super(sceneConfig);
   }
@@ -17,29 +21,41 @@ export class InventoryScene extends Scene {
 
   create() {
     super.create();
+
+    this.gameObjectContainerConfig.offset = false;
+
     const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource('ui/bag/0');
-    const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource('ui/bag/0');
+    const inventorySpriteInfo =
+      Tools.getSpriteInfoFromSpriteSource('ui/inventory/0');
+
+    this.bagSprite = Tools.getNewSprite(
+      this.scene.scene,
+      ...(Object.values(
+        Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)
+      ) as [number, number]),
+      bagSpriteInfo
+    );
+
+    this.gameObjectContainer.add(this.bagSprite);
 
     Tools.addGameObjectToScene<Phaser.GameObjects.Sprite>(
       this.scene.scene,
-      Tools.getNewSprite(
-        this.scene.scene,
-        ...(Object.values(
-          Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)
-        ) as [number, number]),
-        { name: 'ui/bag', mutation: 0 }
-      )
-    ).on('pointerup', (pointer) => {
-      Tools.addGameObjectToScene(
-        this.scene.scene,
-        Tools.getNewSprite(
+      this.gameObjectContainer
+    );
+
+    this.on(this.bagSprite, undefined);
+
+    this.onSpriteEvent.subscribe((params) => {
+      if (params.eventName === 'pointerup') {
+        this.inventorySprite = Tools.getNewSprite(
           this.scene.scene,
           ...(Object.values(
-            Tools.getTopLeftSpritePosition(0, 0, inventorySpriteInfo)
+            Tools.getCenterStripePosition(inventorySpriteInfo)
           ) as [number, number]),
-          { name: 'ui/inventory', mutation: 0 }
-        )
-      );
+          inventorySpriteInfo
+        );
+        this.gameObjectContainer.add(this.inventorySprite);
+      }
     });
   }
 

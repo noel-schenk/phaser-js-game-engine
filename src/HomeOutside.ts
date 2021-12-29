@@ -31,14 +31,9 @@ export class HomeOutsideScene extends Scene {
       this.scene.scene,
       Globals.Instance.state.sprites.value,
       this.gameObjectContainer,
-      (sprite, info, statePosition) => {
-        const spriteData = Tools.getSpriteDataFromSpriteName(info);
-        if (spriteData.interactive) {
-          sprite.setInteractive(spriteData.interactive);
-        }
-
+      (sprite, spriteInfo, statePosition) => {
         this.on(sprite, () => {
-          return { statePosition: statePosition, info: info };
+          return { statePosition: statePosition, spriteInfo: spriteInfo };
         });
       }
     );
@@ -77,7 +72,7 @@ export class HomeOutsideScene extends Scene {
               level: data.statePosition.levelIndex,
               row: data.statePosition.rowIndex,
               column: data.statePosition.columnIndex,
-              spriteInfo: data.info
+              spriteInfo: data.spriteInfo
             },
             {
               level: data.statePosition.levelIndex,

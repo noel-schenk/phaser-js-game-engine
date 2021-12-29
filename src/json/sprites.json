@@ -27,21 +27,21 @@
         "width": 160,
         "height": 160,
         "ext": "png",
-        "interactive": true
+        "interactive": {}
     },
     "ui/bag": {
         "mutations": 1,
         "width": 40,
         "height": 40,
         "ext": "png",
-        "interactive": true
+        "interactive": {}
     },
     "entity/cow": {
         "mutations": 18,
         "width": 60,
         "height": 60,
         "ext": "png",
-        "interactive": true,
+        "interactive": false,
         "animations": {
             "up": [
                 9,

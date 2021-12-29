@@ -41,6 +41,10 @@ export class Scene extends Phaser.Scene {
   }>();
 
   gameObjectContainer: Phaser.GameObjects.Container;
+  gameObjectContainerConfig = {
+    scale: true,
+    offset: true
+  };
 
   get sceneConfig() {
     throw 'This property needs to be overwritten';
@@ -78,9 +82,13 @@ export class Scene extends Phaser.Scene {
   }
 
   update() {
-    this.gameObjectContainer.x = Globals.Instance.offsetToCenter.x;
-    this.gameObjectContainer.y = Globals.Instance.offsetToCenter.y;
-    this.gameObjectContainer.scale = Globals.Instance.scalingFactor;
+    if (this.gameObjectContainerConfig.offset) {
+      this.gameObjectContainer.x = Globals.Instance.offsetToCenter.x;
+      this.gameObjectContainer.y = Globals.Instance.offsetToCenter.y;
+    }
+
+    this.gameObjectContainerConfig.scale &&
+      (this.gameObjectContainer.scale = Globals.Instance.scalingFactor);
   }
 
   renderUpdate() {}
