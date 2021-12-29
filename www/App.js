@@ -580,11 +580,11 @@
           function(module2, exports2, __webpack_require__) {
             "use strict";
             var has = Object.prototype.hasOwnProperty, prefix = "~";
-            function Events() {
+            function Events2() {
             }
             if (Object.create) {
-              Events.prototype = Object.create(null);
-              if (!new Events().__proto__)
+              Events2.prototype = Object.create(null);
+              if (!new Events2().__proto__)
                 prefix = false;
             }
             function EE(fn, context2, once) {
@@ -607,12 +607,12 @@
             }
             function clearEvent(emitter, evt) {
               if (--emitter._eventsCount === 0)
-                emitter._events = new Events();
+                emitter._events = new Events2();
               else
                 delete emitter._events[evt];
             }
             function EventEmitter() {
-              this._events = new Events();
+              this._events = new Events2();
               this._eventsCount = 0;
             }
             EventEmitter.prototype.eventNames = function eventNames() {
@@ -741,7 +741,7 @@
                 if (this._events[evt])
                   clearEvent(this, evt);
               } else {
-                this._events = new Events();
+                this._events = new Events2();
                 this._eventsCount = 0;
               }
               return this;
@@ -1069,7 +1069,7 @@
             var ComponentsToJSON = __webpack_require__(176);
             var DataManager = __webpack_require__(101);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(75);
+            var Events2 = __webpack_require__(75);
             var SceneEvents = __webpack_require__(20);
             var GameObject = new Class({
               Extends: EventEmitter,
@@ -1089,8 +1089,8 @@
                 this.input = null;
                 this.body = null;
                 this.ignoreDestroy = false;
-                this.on(Events.ADDED_TO_SCENE, this.addedToScene, this);
-                this.on(Events.REMOVED_FROM_SCENE, this.removedFromScene, this);
+                this.on(Events2.ADDED_TO_SCENE, this.addedToScene, this);
+                this.on(Events2.REMOVED_FROM_SCENE, this.removedFromScene, this);
                 scene.sys.queueDepthSort();
               },
               setActive: function(value) {
@@ -1196,7 +1196,7 @@
                   this.displayList = displayList;
                   displayList.add(this, true);
                   displayList.queueDepthSort();
-                  this.emit(Events.ADDED_TO_SCENE, this, this.scene);
+                  this.emit(Events2.ADDED_TO_SCENE, this, this.scene);
                   displayList.events.emit(SceneEvents.ADDED_TO_SCENE, this, this.scene);
                 }
                 return this;
@@ -1213,7 +1213,7 @@
                   displayList.remove(this, true);
                   displayList.queueDepthSort();
                   this.displayList = null;
-                  this.emit(Events.REMOVED_FROM_SCENE, this, this.scene);
+                  this.emit(Events2.REMOVED_FROM_SCENE, this, this.scene);
                   displayList.events.emit(SceneEvents.REMOVED_FROM_SCENE, this, this.scene);
                 }
                 return this;
@@ -1234,7 +1234,7 @@
                 if (this.preDestroy) {
                   this.preDestroy.call(this);
                 }
-                this.emit(Events.DESTROY, this, fromScene);
+                this.emit(Events2.DESTROY, this, fromScene);
                 this.removeAllListeners();
                 if (this.postPipelines) {
                   this.resetPostPipeline(true);
@@ -1449,7 +1449,7 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var CONST = __webpack_require__(21);
-            var Events = __webpack_require__(95);
+            var Events2 = __webpack_require__(95);
             var GetFastValue = __webpack_require__(2);
             var GetURL = __webpack_require__(155);
             var MergeXHRSettings = __webpack_require__(240);
@@ -1535,7 +1535,7 @@
                   this.bytesLoaded = event.loaded;
                   this.bytesTotal = event.total;
                   this.percentComplete = Math.min(this.bytesLoaded / this.bytesTotal, 1);
-                  this.loader.emit(Events.FILE_PROGRESS, this, this.percentComplete);
+                  this.loader.emit(Events2.FILE_PROGRESS, this, this.percentComplete);
                 }
               },
               onProcess: function() {
@@ -1571,8 +1571,8 @@
                 }
                 var key = this.key;
                 var type = this.type;
-                this.loader.emit(Events.FILE_COMPLETE, key, type, data);
-                this.loader.emit(Events.FILE_KEY_COMPLETE + type + "-" + key, key, type, data);
+                this.loader.emit(Events2.FILE_COMPLETE, key, type, data);
+                this.loader.emit(Events2.FILE_KEY_COMPLETE + type + "-" + key, key, type, data);
                 this.loader.flagForRemoval(this);
               },
               destroy: function() {
@@ -4218,7 +4218,7 @@
             var Class = __webpack_require__(0);
             var DeepCopy = __webpack_require__(175);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(374);
+            var Events2 = __webpack_require__(374);
             var GetFastValue = __webpack_require__(2);
             var Matrix4 = __webpack_require__(69);
             var RendererEvents = __webpack_require__(91);
@@ -4324,7 +4324,7 @@
                 renderer.on(RendererEvents.PRE_RENDER, this.onPreRender, this);
                 renderer.on(RendererEvents.RENDER, this.onRender, this);
                 renderer.on(RendererEvents.POST_RENDER, this.onPostRender, this);
-                this.emit(Events.BOOT, this);
+                this.emit(Events2.BOOT, this);
                 this.onBoot();
               },
               onBoot: function() {
@@ -4417,7 +4417,7 @@
                   targets[i].resize(width, height);
                 }
                 this.setProjectionMatrix(width, height);
-                this.emit(Events.RESIZE, width, height, this);
+                this.emit(Events2.RESIZE, width, height, this);
                 this.onResize(width, height);
                 return this;
               },
@@ -4459,7 +4459,7 @@
                 var wasBound = this.setVertexBuffer();
                 currentShader.bind(wasBound);
                 this.currentShader = currentShader;
-                this.emit(Events.BIND, this, currentShader);
+                this.emit(Events2.BIND, this, currentShader);
                 this.onActive(currentShader);
                 return this;
               },
@@ -4472,7 +4472,7 @@
                     this.currentShader = shader;
                   }
                 }
-                this.emit(Events.REBIND, this.currentShader);
+                this.emit(Events2.REBIND, this.currentShader);
                 this.onActive(this.currentShader);
                 this.onRebind();
                 this.glReset = false;
@@ -4511,7 +4511,7 @@
                   isPostFlush = false;
                 }
                 if (this.vertexCount > 0) {
-                  this.emit(Events.BEFORE_FLUSH, this, isPostFlush);
+                  this.emit(Events2.BEFORE_FLUSH, this, isPostFlush);
                   this.onBeforeFlush(isPostFlush);
                   var gl = this.gl;
                   var vertexCount = this.vertexCount;
@@ -4526,7 +4526,7 @@
                     gl.drawArrays(this.topology, 0, vertexCount);
                   }
                   this.vertexCount = 0;
-                  this.emit(Events.AFTER_FLUSH, this, isPostFlush);
+                  this.emit(Events2.AFTER_FLUSH, this, isPostFlush);
                   this.onAfterFlush(isPostFlush);
                 }
                 return this;
@@ -4781,7 +4781,7 @@
                 return this;
               },
               destroy: function() {
-                this.emit(Events.DESTROY, this);
+                this.emit(Events2.DESTROY, this);
                 var i;
                 var shaders = this.shaders;
                 for (i = 0; i < shaders.length; i++) {
@@ -8002,7 +8002,7 @@
           },
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(315);
+            var Events2 = __webpack_require__(315);
             var DataManager = new Class({
               initialize: function DataManager2(parent, eventEmitter) {
                 this.parent = parent;
@@ -8014,7 +8014,7 @@
                 this.values = {};
                 this._frozen = false;
                 if (!parent.hasOwnProperty("sys") && this.events) {
-                  this.events.once(Events.DESTROY, this.destroy, this);
+                  this.events.once(Events2.DESTROY, this.destroy, this);
                 }
               },
               get: function(key) {
@@ -8102,13 +8102,13 @@
                       if (!_this._frozen) {
                         var previousValue = list[key];
                         list[key] = value;
-                        events.emit(Events.CHANGE_DATA, parent, key, value, previousValue);
-                        events.emit(Events.CHANGE_DATA_KEY + key, parent, value, previousValue);
+                        events.emit(Events2.CHANGE_DATA, parent, key, value, previousValue);
+                        events.emit(Events2.CHANGE_DATA_KEY + key, parent, value, previousValue);
                       }
                     }
                   });
                   list[key] = data;
-                  events.emit(Events.SET_DATA, parent, key, data);
+                  events.emit(Events2.SET_DATA, parent, key, data);
                 }
                 return this;
               },
@@ -8153,7 +8153,7 @@
                   var data = this.list[key];
                   delete this.list[key];
                   delete this.values[key];
-                  this.events.emit(Events.REMOVE_DATA, this.parent, key, data);
+                  this.events.emit(Events2.REMOVE_DATA, this.parent, key, data);
                 }
                 return this;
               },
@@ -8163,7 +8163,7 @@
                   data = this.list[key];
                   delete this.list[key];
                   delete this.values[key];
-                  this.events.emit(Events.REMOVE_DATA, this.parent, key, data);
+                  this.events.emit(Events2.REMOVE_DATA, this.parent, key, data);
                 }
                 return data;
               },
@@ -8184,9 +8184,9 @@
               },
               destroy: function() {
                 this.reset();
-                this.events.off(Events.CHANGE_DATA);
-                this.events.off(Events.SET_DATA);
-                this.events.off(Events.REMOVE_DATA);
+                this.events.off(Events2.CHANGE_DATA);
+                this.events.off(Events2.SET_DATA);
+                this.events.off(Events2.REMOVE_DATA);
                 this.parent = null;
               },
               freeze: {
@@ -9480,7 +9480,7 @@
           function(module2, exports2, __webpack_require__) {
             var Actions = __webpack_require__(275);
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(75);
+            var Events2 = __webpack_require__(75);
             var EventEmitter = __webpack_require__(9);
             var GetAll = __webpack_require__(207);
             var GetFastValue = __webpack_require__(2);
@@ -9528,8 +9528,8 @@
                 if (config2) {
                   this.createMultiple(config2);
                 }
-                this.on(Events.ADDED_TO_SCENE, this.addedToScene, this);
-                this.on(Events.REMOVED_FROM_SCENE, this.removedFromScene, this);
+                this.on(Events2.ADDED_TO_SCENE, this.addedToScene, this);
+                this.on(Events2.REMOVED_FROM_SCENE, this.removedFromScene, this);
               },
               addedToScene: function() {
                 this.scene.sys.updateList.add(this);
@@ -9704,7 +9704,7 @@
                   child.addToDisplayList(this.scene.sys.displayList);
                   child.addToUpdateList();
                 }
-                child.on(Events.DESTROY, this.remove, this);
+                child.on(Events2.DESTROY, this.remove, this);
                 return this;
               },
               addMultiple: function(children, addToScene) {
@@ -9735,7 +9735,7 @@
                 if (this.removeCallback) {
                   this.removeCallback.call(this, child);
                 }
-                child.off(Events.DESTROY, this.remove, this);
+                child.off(Events2.DESTROY, this.remove, this);
                 if (destroyChild) {
                   child.destroy();
                 } else if (removeFromScene) {
@@ -9754,7 +9754,7 @@
                 var children = this.children;
                 for (var i = 0; i < children.size; i++) {
                   var gameObject = children.entries[i];
-                  gameObject.off(Events.DESTROY, this.remove, this);
+                  gameObject.off(Events2.DESTROY, this.remove, this);
                   if (destroyChild) {
                     gameObject.destroy();
                   } else if (removeFromScene) {
@@ -10009,7 +10009,7 @@
                 if (!this.scene || this.ignoreDestroy) {
                   return;
                 }
-                this.emit(Events.DESTROY, this);
+                this.emit(Events2.DESTROY, this);
                 this.removeAllListeners();
                 this.scene.sys.updateList.remove(this);
                 this.clear(removeFromScene, destroyChildren);
@@ -10361,7 +10361,7 @@
           function(module2, exports2, __webpack_require__) {
             var Composite = {};
             module2.exports = Composite;
-            var Events = __webpack_require__(166);
+            var Events2 = __webpack_require__(166);
             var Common = __webpack_require__(32);
             var Bounds = __webpack_require__(84);
             var Body = __webpack_require__(41);
@@ -10380,7 +10380,7 @@
                 }, options);
               };
               Composite.setModified = function(composite, isModified, updateParents, updateChildren) {
-                Events.trigger(composite, "compositeModified", composite);
+                Events2.trigger(composite, "compositeModified", composite);
                 composite.isModified = isModified;
                 if (updateParents && composite.parent) {
                   Composite.setModified(composite.parent, isModified, updateParents, updateChildren);
@@ -10394,7 +10394,7 @@
               };
               Composite.add = function(composite, object) {
                 var objects = [].concat(object);
-                Events.trigger(composite, "beforeAdd", { object });
+                Events2.trigger(composite, "beforeAdd", { object });
                 for (var i = 0; i < objects.length; i++) {
                   var obj = objects[i];
                   switch (obj.type) {
@@ -10416,12 +10416,12 @@
                       break;
                   }
                 }
-                Events.trigger(composite, "afterAdd", { object });
+                Events2.trigger(composite, "afterAdd", { object });
                 return composite;
               };
               Composite.remove = function(composite, object, deep) {
                 var objects = [].concat(object);
-                Events.trigger(composite, "beforeRemove", { object });
+                Events2.trigger(composite, "beforeRemove", { object });
                 for (var i = 0; i < objects.length; i++) {
                   var obj = objects[i];
                   switch (obj.type) {
@@ -10439,7 +10439,7 @@
                       break;
                   }
                 }
-                Events.trigger(composite, "afterRemove", { object });
+                Events2.trigger(composite, "afterRemove", { object });
                 return composite;
               };
               Composite.addComposite = function(compositeA, compositeB) {
@@ -11211,7 +11211,7 @@
             var Components = __webpack_require__(11);
             var DegToRad = __webpack_require__(36);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(37);
+            var Events2 = __webpack_require__(37);
             var Rectangle = __webpack_require__(10);
             var TransformMatrix = __webpack_require__(25);
             var ValueToColor = __webpack_require__(187);
@@ -11673,7 +11673,7 @@
                 this._customViewport = custom;
               },
               destroy: function() {
-                this.emit(Events.DESTROY, this);
+                this.emit(Events2.DESTROY, this);
                 this.removeAllListeners();
                 this.matrix.destroy();
                 this.culledObjects = [];
@@ -12143,7 +12143,7 @@
           },
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(91);
+            var Events2 = __webpack_require__(91);
             var RenderTarget = new Class({
               initialize: function RenderTarget2(renderer, width, height, scale, minFilter, autoClear, autoResize) {
                 if (scale === void 0) {
@@ -12174,10 +12174,10 @@
               },
               setAutoResize: function(autoResize) {
                 if (autoResize && !this.autoResize) {
-                  this.renderer.on(Events.RESIZE, this.resize, this);
+                  this.renderer.on(Events2.RESIZE, this.resize, this);
                   this.autoResize = true;
                 } else if (!autoResize && this.autoResize) {
-                  this.renderer.off(Events.RESIZE, this.resize, this);
+                  this.renderer.off(Events2.RESIZE, this.resize, this);
                   this.autoResize = false;
                 }
                 return this;
@@ -12255,7 +12255,7 @@
                 var renderer = this.renderer;
                 renderer.deleteFramebuffer(this.framebuffer);
                 renderer.deleteTexture(this.texture);
-                renderer.off(Events.RESIZE, this.resize, this);
+                renderer.off(Events2.RESIZE, this.resize, this);
                 this.renderer = null;
                 this.framebuffer = null;
                 this.texture = null;
@@ -12405,7 +12405,7 @@
             var Class = __webpack_require__(0);
             var Clone = __webpack_require__(77);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(70);
+            var Events2 = __webpack_require__(70);
             var GameEvents = __webpack_require__(22);
             var NOOP = __webpack_require__(1);
             var GetAll = __webpack_require__(207);
@@ -12460,7 +12460,7 @@
               },
               play: function(key, extra) {
                 var sound = this.add(key);
-                sound.once(Events.COMPLETE, sound.destroy, sound);
+                sound.once(Events2.COMPLETE, sound.destroy, sound);
                 if (extra) {
                   if (extra.name) {
                     sound.addMarker(extra);
@@ -12474,7 +12474,7 @@
               },
               playAudioSprite: function(key, spriteName, config2) {
                 var sound = this.addAudioSprite(key);
-                sound.once(Events.COMPLETE, sound.destroy, sound);
+                sound.once(Events2.COMPLETE, sound.destroy, sound);
                 return sound.play(spriteName, config2);
               },
               remove: function(sound) {
@@ -12508,19 +12508,19 @@
                 this.forEachActiveSound(function(sound) {
                   sound.pause();
                 });
-                this.emit(Events.PAUSE_ALL, this);
+                this.emit(Events2.PAUSE_ALL, this);
               },
               resumeAll: function() {
                 this.forEachActiveSound(function(sound) {
                   sound.resume();
                 });
-                this.emit(Events.RESUME_ALL, this);
+                this.emit(Events2.RESUME_ALL, this);
               },
               stopAll: function() {
                 this.forEachActiveSound(function(sound) {
                   sound.stop();
                 });
-                this.emit(Events.STOP_ALL, this);
+                this.emit(Events2.STOP_ALL, this);
               },
               stopByKey: function(key) {
                 var stopped = 0;
@@ -12548,7 +12548,7 @@
                 if (this.unlocked) {
                   this.unlocked = false;
                   this.locked = false;
-                  this.emit(Events.UNLOCKED, this);
+                  this.emit(Events2.UNLOCKED, this);
                 }
                 for (var i = this.sounds.length - 1; i >= 0; i--) {
                   if (this.sounds[i].pendingRemove) {
@@ -12590,7 +12590,7 @@
                   this.forEachActiveSound(function(sound) {
                     sound.calculateRate();
                   });
-                  this.emit(Events.GLOBAL_RATE, this, value);
+                  this.emit(Events2.GLOBAL_RATE, this, value);
                 }
               },
               setDetune: function(value) {
@@ -12606,7 +12606,7 @@
                   this.forEachActiveSound(function(sound) {
                     sound.calculateRate();
                   });
-                  this.emit(Events.GLOBAL_DETUNE, this, value);
+                  this.emit(Events2.GLOBAL_DETUNE, this, value);
                 }
               }
             });
@@ -12615,7 +12615,7 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(70);
+            var Events2 = __webpack_require__(70);
             var Extend = __webpack_require__(17);
             var NOOP = __webpack_require__(1);
             var BaseSound = new Class({
@@ -12768,7 +12768,7 @@
                 if (this.pendingRemove) {
                   return;
                 }
-                this.emit(Events.DESTROY, this);
+                this.emit(Events2.DESTROY, this);
                 this.pendingRemove = true;
                 this.manager = null;
                 this.key = "";
@@ -13724,13 +13724,13 @@
             var Class = __webpack_require__(0);
             var CustomMap = __webpack_require__(102);
             var GetFastValue = __webpack_require__(2);
-            var Events = __webpack_require__(132);
+            var Events2 = __webpack_require__(132);
             var Animation = __webpack_require__(185);
             var AnimationState = new Class({
               initialize: function AnimationState2(parent) {
                 this.parent = parent;
                 this.animationManager = parent.scene.sys.anims;
-                this.animationManager.on(Events.REMOVE_ANIMATION, this.globalRemove, this);
+                this.animationManager.on(Events2.REMOVE_ANIMATION, this.globalRemove, this);
                 this.textureManager = this.animationManager.textureManager;
                 this.anims = null;
                 this.isPlaying = false;
@@ -13944,16 +13944,16 @@
                 }
                 this.setCurrentFrame(this.currentFrame);
                 this.hasStarted = true;
-                this.emitEvents(Events.ANIMATION_START);
+                this.emitEvents(Events2.ANIMATION_START);
               },
               handleRepeat: function() {
                 this.pendingRepeat = false;
-                this.emitEvents(Events.ANIMATION_REPEAT);
+                this.emitEvents(Events2.ANIMATION_REPEAT);
               },
               handleStop: function() {
                 this._pendingStop = 0;
                 this.isPlaying = false;
-                this.emitEvents(Events.ANIMATION_STOP);
+                this.emitEvents(Events2.ANIMATION_STOP);
               },
               handleComplete: function() {
                 this._pendingStop = 0;
@@ -13961,7 +13961,7 @@
                 if (this.hideOnComplete) {
                   this.parent.setVisible(false);
                 }
-                this.emitEvents(Events.ANIMATION_COMPLETE, Events.ANIMATION_COMPLETE_KEY);
+                this.emitEvents(Events2.ANIMATION_COMPLETE, Events2.ANIMATION_COMPLETE_KEY);
               },
               emitEvents: function(event, keyEvent) {
                 var anim = this.currentAnim;
@@ -14027,7 +14027,7 @@
                   this.repeatCounter = this.repeat === -1 ? Number.MAX_VALUE : this.repeat;
                 }
                 anim.getFirstTick(this);
-                this.emitEvents(Events.ANIMATION_RESTART);
+                this.emitEvents(Events2.ANIMATION_RESTART);
                 this.isPlaying = true;
                 this.pendingRepeat = false;
                 this.hasStarted = !includeDelay;
@@ -14143,7 +14143,7 @@
                   }
                 }
                 if (this.isPlaying && this.hasStarted) {
-                  this.emitEvents(Events.ANIMATION_UPDATE);
+                  this.emitEvents(Events2.ANIMATION_UPDATE);
                   if (this._pendingStop === 3 && this._pendingStopValue === animationFrame) {
                     this.stop();
                   }
@@ -14200,7 +14200,7 @@
                 return anim;
               },
               destroy: function() {
-                this.animationManager.off(Events.REMOVE_ANIMATION, this.globalRemove, this);
+                this.animationManager.off(Events2.REMOVE_ANIMATION, this.globalRemove, this);
                 if (this.anims) {
                   this.anims.clear();
                 }
@@ -14222,7 +14222,7 @@
           function(module2, exports2, __webpack_require__) {
             var Sleeping = {};
             module2.exports = Sleeping;
-            var Events = __webpack_require__(166);
+            var Events2 = __webpack_require__(166);
             (function() {
               Sleeping._motionWakeThreshold = 0.18;
               Sleeping._motionSleepThreshold = 0.08;
@@ -14277,24 +14277,24 @@
                   body.angularSpeed = 0;
                   body.motion = 0;
                   if (!wasSleeping) {
-                    Events.trigger(body, "sleepStart");
+                    Events2.trigger(body, "sleepStart");
                   }
                 } else {
                   body.isSleeping = false;
                   body.sleepCounter = 0;
                   if (wasSleeping) {
-                    Events.trigger(body, "sleepEnd");
+                    Events2.trigger(body, "sleepEnd");
                   }
                 }
               };
             })();
           },
           function(module2, exports2, __webpack_require__) {
-            var Events = {};
-            module2.exports = Events;
+            var Events2 = {};
+            module2.exports = Events2;
             var Common = __webpack_require__(32);
             (function() {
-              Events.on = function(object, eventNames, callback) {
+              Events2.on = function(object, eventNames, callback) {
                 var names = eventNames.split(" "), name;
                 for (var i = 0; i < names.length; i++) {
                   name = names[i];
@@ -14304,7 +14304,7 @@
                 }
                 return callback;
               };
-              Events.off = function(object, eventNames, callback) {
+              Events2.off = function(object, eventNames, callback) {
                 if (!eventNames) {
                   object.events = {};
                   return;
@@ -14325,7 +14325,7 @@
                   object.events[names[i]] = newCallbacks;
                 }
               };
-              Events.trigger = function(object, eventNames, event) {
+              Events2.trigger = function(object, eventNames, event) {
                 var names, name, callbacks, eventClone;
                 var events = object.events;
                 if (events && Common.keys(events).length > 0) {
@@ -14773,7 +14773,7 @@
           function(module2, exports2, __webpack_require__) {
             var Clamp = __webpack_require__(18);
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(132);
+            var Events2 = __webpack_require__(132);
             var FindClosestInSorted = __webpack_require__(318);
             var Frame = __webpack_require__(319);
             var GetValue = __webpack_require__(6);
@@ -14797,8 +14797,8 @@
                 this.paused = false;
                 this.calculateDuration(this, this.getTotalFrames(), this.duration, this.frameRate);
                 if (this.manager.on) {
-                  this.manager.on(Events.PAUSE_ALL, this.pause, this);
-                  this.manager.on(Events.RESUME_ALL, this.resume, this);
+                  this.manager.on(Events2.PAUSE_ALL, this.pause, this);
+                  this.manager.on(Events2.RESUME_ALL, this.resume, this);
                 }
               },
               getTotalFrames: function() {
@@ -15071,8 +15071,8 @@
               },
               destroy: function() {
                 if (this.manager.off) {
-                  this.manager.off(Events.PAUSE_ALL, this.pause, this);
-                  this.manager.off(Events.RESUME_ALL, this.resume, this);
+                  this.manager.off(Events2.PAUSE_ALL, this.pause, this);
+                  this.manager.off(Events2.RESUME_ALL, this.resume, this);
                 }
                 this.manager.remove(this.key);
                 for (var i = 0; i < this.frames.length; i++) {
@@ -16163,7 +16163,7 @@
             var Class = __webpack_require__(0);
             var CONST = __webpack_require__(144);
             var DefaultPlugins = __webpack_require__(197);
-            var Events = __webpack_require__(20);
+            var Events2 = __webpack_require__(20);
             var GetPhysicsPlugins = __webpack_require__(419);
             var GetScenePlugins = __webpack_require__(420);
             var GLOBAL_CONST = __webpack_require__(33);
@@ -16206,22 +16206,22 @@
                 var pluginManager = game.plugins;
                 this.plugins = pluginManager;
                 pluginManager.addToScene(this, DefaultPlugins.Global, [DefaultPlugins.CoreScene, GetScenePlugins(this), GetPhysicsPlugins(this)]);
-                this.events.emit(Events.BOOT, this);
+                this.events.emit(Events2.BOOT, this);
                 this.settings.isBooted = true;
               },
               step: function(time, delta) {
                 var events = this.events;
-                events.emit(Events.PRE_UPDATE, time, delta);
-                events.emit(Events.UPDATE, time, delta);
+                events.emit(Events2.PRE_UPDATE, time, delta);
+                events.emit(Events2.UPDATE, time, delta);
                 this.sceneUpdate.call(this.scene, time, delta);
-                events.emit(Events.POST_UPDATE, time, delta);
+                events.emit(Events2.POST_UPDATE, time, delta);
               },
               render: function(renderer) {
                 var displayList = this.displayList;
                 displayList.depthSort();
-                this.events.emit(Events.PRE_RENDER, renderer);
+                this.events.emit(Events2.PRE_RENDER, renderer);
                 this.cameras.render(renderer, displayList);
-                this.events.emit(Events.RENDER, renderer);
+                this.events.emit(Events2.RENDER, renderer);
               },
               queueDepthSort: function() {
                 this.displayList.queueDepthSort();
@@ -16235,7 +16235,7 @@
                 if (this.settings.active) {
                   settings.status = CONST.PAUSED;
                   settings.active = false;
-                  events.emit(Events.PAUSE, this, data);
+                  events.emit(Events2.PAUSE, this, data);
                 }
                 return this;
               },
@@ -16245,7 +16245,7 @@
                 if (!this.settings.active) {
                   settings.status = CONST.RUNNING;
                   settings.active = true;
-                  events.emit(Events.RESUME, this, data);
+                  events.emit(Events2.RESUME, this, data);
                 }
                 return this;
               },
@@ -16255,7 +16255,7 @@
                 settings.status = CONST.SLEEPING;
                 settings.active = false;
                 settings.visible = false;
-                events.emit(Events.SLEEP, this, data);
+                events.emit(Events2.SLEEP, this, data);
                 return this;
               },
               wake: function(data) {
@@ -16264,9 +16264,9 @@
                 settings.status = CONST.RUNNING;
                 settings.active = true;
                 settings.visible = true;
-                events.emit(Events.WAKE, this, data);
+                events.emit(Events2.WAKE, this, data);
                 if (settings.isTransition) {
-                  events.emit(Events.TRANSITION_WAKE, settings.transitionFrom, settings.transitionDuration);
+                  events.emit(Events2.TRANSITION_WAKE, settings.transitionFrom, settings.transitionDuration);
                 }
                 return this;
               },
@@ -16314,23 +16314,23 @@
                 settings.status = CONST.START;
                 settings.active = true;
                 settings.visible = true;
-                events.emit(Events.START, this);
-                events.emit(Events.READY, this, data);
+                events.emit(Events2.START, this);
+                events.emit(Events2.READY, this, data);
               },
               shutdown: function(data) {
                 var events = this.events;
                 var settings = this.settings;
-                events.off(Events.TRANSITION_INIT);
-                events.off(Events.TRANSITION_START);
-                events.off(Events.TRANSITION_COMPLETE);
-                events.off(Events.TRANSITION_OUT);
+                events.off(Events2.TRANSITION_INIT);
+                events.off(Events2.TRANSITION_START);
+                events.off(Events2.TRANSITION_COMPLETE);
+                events.off(Events2.TRANSITION_OUT);
                 settings.status = CONST.SHUTDOWN;
                 settings.active = false;
                 settings.visible = false;
                 if (this.renderer === GLOBAL_CONST.WEBGL) {
                   this.renderer.resetTextures(true);
                 }
-                events.emit(Events.SHUTDOWN, this, data);
+                events.emit(Events2.SHUTDOWN, this, data);
               },
               destroy: function() {
                 var events = this.events;
@@ -16338,7 +16338,7 @@
                 settings.status = CONST.DESTROYED;
                 settings.active = false;
                 settings.visible = false;
-                events.emit(Events.DESTROY, this);
+                events.emit(Events2.DESTROY, this);
                 events.removeAllListeners();
                 var props = ["scene", "game", "anims", "cache", "plugins", "registry", "sound", "textures", "add", "camera", "displayList", "events", "make", "scenePlugin", "updateList"];
                 for (var i = 0; i < props.length; i++) {
@@ -16610,7 +16610,7 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(438);
+            var Events2 = __webpack_require__(438);
             var ProcessQueue = new Class({
               Extends: EventEmitter,
               initialize: function ProcessQueue2() {
@@ -16654,7 +16654,7 @@
                   var idx = active.indexOf(item);
                   if (idx !== -1) {
                     active.splice(idx, 1);
-                    this.emit(Events.PROCESS_QUEUE_REMOVE, item);
+                    this.emit(Events2.PROCESS_QUEUE_REMOVE, item);
                   }
                 }
                 list.length = 0;
@@ -16663,7 +16663,7 @@
                   item = list[i];
                   if (!this.checkQueue || this.checkQueue && active.indexOf(item) === -1) {
                     active.push(item);
-                    this.emit(Events.PROCESS_QUEUE_ADD, item);
+                    this.emit(Events2.PROCESS_QUEUE_ADD, item);
                   }
                 }
                 list.length = 0;
@@ -16878,7 +16878,7 @@
             var BlendModes = __webpack_require__(35);
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
-            var Events = __webpack_require__(75);
+            var Events2 = __webpack_require__(75);
             var GameObject = __webpack_require__(15);
             var Rectangle = __webpack_require__(10);
             var Render = __webpack_require__(1052);
@@ -16975,7 +16975,7 @@
                 return output;
               },
               addHandler: function(gameObject) {
-                gameObject.once(Events.DESTROY, this.remove, this);
+                gameObject.once(Events2.DESTROY, this.remove, this);
                 if (this.exclusive) {
                   if (gameObject.parentContainer) {
                     gameObject.parentContainer.remove(gameObject);
@@ -16985,7 +16985,7 @@
                 }
               },
               removeHandler: function(gameObject) {
-                gameObject.off(Events.DESTROY, this.remove);
+                gameObject.off(Events2.DESTROY, this.remove);
                 if (this.exclusive) {
                   gameObject.parentContainer = null;
                   gameObject.addToDisplayList();
@@ -17791,7 +17791,7 @@
             var ComponentsToJSON = __webpack_require__(176);
             var DataManager = __webpack_require__(101);
             var EventEmitter = __webpack_require__(9);
-            var GameObjectEvents3 = __webpack_require__(75);
+            var GameObjectEvents2 = __webpack_require__(75);
             var List = __webpack_require__(110);
             var Render = __webpack_require__(1071);
             var SceneEvents = __webpack_require__(20);
@@ -17927,14 +17927,14 @@
                 if (!gameObject.displayList) {
                   this.queueDepthSort();
                   gameObject.displayList = this;
-                  gameObject.emit(GameObjectEvents3.ADDED_TO_SCENE, gameObject, this.scene);
+                  gameObject.emit(GameObjectEvents2.ADDED_TO_SCENE, gameObject, this.scene);
                   this.events.emit(SceneEvents.ADDED_TO_SCENE, gameObject, this.scene);
                 }
               },
               removeChildCallback: function(gameObject) {
                 this.queueDepthSort();
                 gameObject.displayList = null;
-                gameObject.emit(GameObjectEvents3.REMOVED_FROM_SCENE, gameObject, this.scene);
+                gameObject.emit(GameObjectEvents2.REMOVED_FROM_SCENE, gameObject, this.scene);
                 this.events.emit(SceneEvents.REMOVED_FROM_SCENE, gameObject, this.scene);
               },
               queueDepthSort: function() {
@@ -17956,7 +17956,7 @@
                 if (!this.scene || this.ignoreDestroy) {
                   return;
                 }
-                this.emit(GameObjectEvents3.DESTROY, this);
+                this.emit(GameObjectEvents2.DESTROY, this);
                 var i = this.list.length;
                 while (i--) {
                   this.list[i].destroy();
@@ -19678,7 +19678,7 @@
             var Class = __webpack_require__(0);
             var Clamp = __webpack_require__(18);
             var Components = __webpack_require__(11);
-            var Events = __webpack_require__(75);
+            var Events2 = __webpack_require__(75);
             var GameEvents = __webpack_require__(22);
             var InputEvents = __webpack_require__(51);
             var GameObject = __webpack_require__(15);
@@ -19820,7 +19820,7 @@
                     this.setTexture(this.videoTexture);
                     this.setSizeToFrame();
                     this.updateDisplayOrigin();
-                    this.emit(Events.VIDEO_CREATED, this, newVideo.videoWidth, newVideo.videoHeight);
+                    this.emit(Events2.VIDEO_CREATED, this, newVideo.videoWidth, newVideo.videoHeight);
                   } else {
                     this.updateTexture();
                   }
@@ -19966,7 +19966,7 @@
               playPromiseSuccessHandler: function() {
                 this._codePaused = false;
                 this.touchLocked = false;
-                this.emit(Events.VIDEO_PLAY, this);
+                this.emit(Events2.VIDEO_PLAY, this);
                 if (this._markerIn > -1) {
                   this.video.currentTime = this._markerIn;
                 }
@@ -19975,34 +19975,34 @@
                 this.scene.sys.input.once(InputEvents.POINTER_DOWN, this.unlockHandler, this);
                 this.touchLocked = true;
                 this.playWhenUnlocked = true;
-                this.emit(Events.VIDEO_ERROR, this, error);
+                this.emit(Events2.VIDEO_ERROR, this, error);
               },
               playHandler: function() {
                 this._codePaused = false;
                 this.touchLocked = false;
-                this.emit(Events.VIDEO_PLAY, this);
+                this.emit(Events2.VIDEO_PLAY, this);
                 this.video.removeEventListener("playing", this._callbacks.play, true);
               },
               loadErrorHandler: function(event) {
                 this.stop();
-                this.emit(Events.VIDEO_ERROR, this, event);
+                this.emit(Events2.VIDEO_ERROR, this, event);
               },
               unlockHandler: function() {
                 this.touchLocked = false;
                 this.playWhenUnlocked = false;
-                this.emit(Events.VIDEO_UNLOCKED, this);
+                this.emit(Events2.VIDEO_UNLOCKED, this);
                 if (this._markerIn > -1) {
                   this.video.currentTime = this._markerIn;
                 }
                 this.video.play();
-                this.emit(Events.VIDEO_PLAY, this);
+                this.emit(Events2.VIDEO_PLAY, this);
               },
               completeHandler: function() {
-                this.emit(Events.VIDEO_COMPLETE, this);
+                this.emit(Events2.VIDEO_COMPLETE, this);
               },
               timeUpdateHandler: function() {
                 if (this.video && this.video.currentTime < this._lastUpdate) {
-                  this.emit(Events.VIDEO_LOOP, this);
+                  this.emit(Events2.VIDEO_LOOP, this);
                   this._lastUpdate = 0;
                 }
               },
@@ -20018,9 +20018,9 @@
                         video.currentTime = this._markerIn;
                         this.updateTexture();
                         this._lastUpdate = currentTime;
-                        this.emit(Events.VIDEO_LOOP, this);
+                        this.emit(Events2.VIDEO_LOOP, this);
                       } else {
-                        this.emit(Events.VIDEO_COMPLETE, this);
+                        this.emit(Events2.VIDEO_COMPLETE, this);
                         this.stop();
                       }
                     }
@@ -20035,7 +20035,7 @@
                   if (this.retry > 0) {
                     this._retryID = window.setTimeout(this.checkVideoProgress.bind(this), this.retryInterval);
                   } else {
-                    this.emit(Events.VIDEO_TIMEOUT, this);
+                    this.emit(Events2.VIDEO_TIMEOUT, this);
                   }
                 }
               },
@@ -20050,7 +20050,7 @@
                   this.setTexture(this.videoTexture);
                   this.setSizeToFrame();
                   this.updateDisplayOrigin();
-                  this.emit(Events.VIDEO_CREATED, this, width, height);
+                  this.emit(Events2.VIDEO_CREATED, this, width, height);
                 } else {
                   var textureSource = this.videoTextureSource;
                   if (textureSource.source !== video) {
@@ -20100,11 +20100,11 @@
               },
               seekingHandler: function() {
                 this._isSeeking = true;
-                this.emit(Events.VIDEO_SEEKING, this);
+                this.emit(Events2.VIDEO_SEEKING, this);
               },
               seekedHandler: function() {
                 this._isSeeking = false;
-                this.emit(Events.VIDEO_SEEKED, this);
+                this.emit(Events2.VIDEO_SEEKED, this);
                 var video = this.video;
                 if (video) {
                   this.updateTexture();
@@ -20241,7 +20241,7 @@
                 if (this._retryID) {
                   window.clearTimeout(this._retryID);
                 }
-                this.emit(Events.VIDEO_STOP, this);
+                this.emit(Events2.VIDEO_STOP, this);
                 return this;
               },
               removeVideoElement: function() {
@@ -22226,7 +22226,7 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(267);
+            var Events2 = __webpack_require__(267);
             var GameObjectCreator = __webpack_require__(16);
             var GameObjectFactory = __webpack_require__(5);
             var TWEEN_CONST = __webpack_require__(100);
@@ -22391,7 +22391,7 @@
               },
               makeActive: function() {
                 this.parent.makeActive(this);
-                this.dispatchTweenEvent(Events.TWEEN_ACTIVE, this.callbacks.onActive);
+                this.dispatchTweenEvent(Events2.TWEEN_ACTIVE, this.callbacks.onActive);
               },
               nextState: function() {
                 if (this.loopCounter > 0) {
@@ -22404,14 +22404,14 @@
                     this.state = TWEEN_CONST.LOOP_DELAY;
                   } else {
                     this.state = TWEEN_CONST.ACTIVE;
-                    this.dispatchTweenEvent(Events.TWEEN_LOOP, this.callbacks.onLoop);
+                    this.dispatchTweenEvent(Events2.TWEEN_LOOP, this.callbacks.onLoop);
                   }
                 } else if (this.completeDelay > 0) {
                   this.state = TWEEN_CONST.COMPLETE_DELAY;
                   this.countdown = this.completeDelay;
                 } else {
                   this.state = TWEEN_CONST.PENDING_REMOVE;
-                  this.dispatchTweenEvent(Events.TWEEN_COMPLETE, this.callbacks.onComplete);
+                  this.dispatchTweenEvent(Events2.TWEEN_COMPLETE, this.callbacks.onComplete);
                 }
               },
               pause: function() {
@@ -22559,7 +22559,7 @@
                   this.countdown = delay;
                 } else {
                   this.state = TWEEN_CONST.PENDING_REMOVE;
-                  this.dispatchTweenEvent(Events.TWEEN_COMPLETE, this.callbacks.onComplete);
+                  this.dispatchTweenEvent(Events2.TWEEN_COMPLETE, this.callbacks.onComplete);
                 }
                 return this;
               },
@@ -22583,7 +22583,7 @@
                       this.parent._toProcess++;
                     }
                   }
-                  this.dispatchTweenEvent(Events.TWEEN_STOP, this.callbacks.onStop);
+                  this.dispatchTweenEvent(Events2.TWEEN_STOP, this.callbacks.onStop);
                   this.removeAllListeners();
                   this.state = TWEEN_CONST.PENDING_REMOVE;
                 }
@@ -22607,7 +22607,7 @@
                       this.startDelay -= delta;
                       if (this.startDelay <= 0) {
                         this.hasStarted = true;
-                        this.dispatchTweenEvent(Events.TWEEN_START, this.callbacks.onStart);
+                        this.dispatchTweenEvent(Events2.TWEEN_START, this.callbacks.onStart);
                       }
                     }
                     var stillRunning = false;
@@ -22625,7 +22625,7 @@
                     this.countdown -= delta;
                     if (this.countdown <= 0) {
                       this.state = TWEEN_CONST.ACTIVE;
-                      this.dispatchTweenEvent(Events.TWEEN_LOOP, this.callbacks.onLoop);
+                      this.dispatchTweenEvent(Events2.TWEEN_LOOP, this.callbacks.onLoop);
                     }
                     break;
                   case TWEEN_CONST.OFFSET_DELAY:
@@ -22638,7 +22638,7 @@
                     this.countdown -= delta;
                     if (this.countdown <= 0) {
                       this.state = TWEEN_CONST.PENDING_REMOVE;
-                      this.dispatchTweenEvent(Events.TWEEN_COMPLETE, this.callbacks.onComplete);
+                      this.dispatchTweenEvent(Events2.TWEEN_COMPLETE, this.callbacks.onComplete);
                     }
                     break;
                 }
@@ -22672,7 +22672,7 @@
                   if (tweenData.flipY) {
                     tweenData.target.toggleFlipY();
                   }
-                  this.dispatchTweenDataEvent(Events.TWEEN_YOYO, tween.callbacks.onYoyo, tweenData);
+                  this.dispatchTweenDataEvent(Events2.TWEEN_YOYO, tween.callbacks.onYoyo, tweenData);
                   tweenData.start = tweenData.getStartValue(tweenData.target, tweenData.key, tweenData.start, tweenData.index, tween.totalTargets, tween);
                   return TWEEN_CONST.PLAYING_BACKWARD;
                 } else if (tweenData.repeatCounter > 0) {
@@ -22693,7 +22693,7 @@
                     tweenData.target[tweenData.key] = tweenData.current;
                     return TWEEN_CONST.REPEAT_DELAY;
                   } else {
-                    this.dispatchTweenDataEvent(Events.TWEEN_REPEAT, tween.callbacks.onRepeat, tweenData);
+                    this.dispatchTweenDataEvent(Events2.TWEEN_REPEAT, tween.callbacks.onRepeat, tweenData);
                     return TWEEN_CONST.PLAYING_FORWARD;
                   }
                 }
@@ -22717,7 +22717,7 @@
                     tweenData.target[tweenData.key] = tweenData.current;
                     return TWEEN_CONST.REPEAT_DELAY;
                   } else {
-                    this.dispatchTweenDataEvent(Events.TWEEN_REPEAT, tween.callbacks.onRepeat, tweenData);
+                    this.dispatchTweenDataEvent(Events2.TWEEN_REPEAT, tween.callbacks.onRepeat, tweenData);
                     return TWEEN_CONST.PLAYING_FORWARD;
                   }
                 }
@@ -22765,7 +22765,7 @@
                       tweenData.current = tweenData.start + (tweenData.end - tweenData.start) * v;
                       target[tweenData.key] = tweenData.current;
                     }
-                    this.dispatchTweenDataEvent(Events.TWEEN_UPDATE, tween.callbacks.onUpdate, tweenData);
+                    this.dispatchTweenDataEvent(Events2.TWEEN_UPDATE, tween.callbacks.onUpdate, tweenData);
                     break;
                   case TWEEN_CONST.DELAY:
                     tweenData.elapsed -= delta;
@@ -22779,7 +22779,7 @@
                     if (tweenData.elapsed <= 0) {
                       tweenData.elapsed = Math.abs(tweenData.elapsed);
                       tweenData.state = TWEEN_CONST.PLAYING_FORWARD;
-                      this.dispatchTweenDataEvent(Events.TWEEN_REPEAT, tween.callbacks.onRepeat, tweenData);
+                      this.dispatchTweenDataEvent(Events2.TWEEN_REPEAT, tween.callbacks.onRepeat, tweenData);
                     }
                     break;
                   case TWEEN_CONST.HOLD_DELAY:
@@ -24463,7 +24463,7 @@
             var Class = __webpack_require__(0);
             var CustomMap = __webpack_require__(102);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(132);
+            var Events2 = __webpack_require__(132);
             var GameEvents = __webpack_require__(22);
             var GetFastValue = __webpack_require__(2);
             var GetValue = __webpack_require__(6);
@@ -24535,7 +24535,7 @@
                 }
                 animation.key = key;
                 this.anims.set(key, animation);
-                this.emit(Events.ADD_ANIMATION, key, animation);
+                this.emit(Events2.ADD_ANIMATION, key, animation);
                 return this;
               },
               exists: function(key) {
@@ -24609,7 +24609,7 @@
                   if (!anim) {
                     anim = new Animation(this, key, config2);
                     this.anims.set(key, anim);
-                    this.emit(Events.ADD_ANIMATION, key, anim);
+                    this.emit(Events2.ADD_ANIMATION, key, anim);
                   }
                 }
                 return anim;
@@ -24704,7 +24704,7 @@
               pauseAll: function() {
                 if (!this.paused) {
                   this.paused = true;
-                  this.emit(Events.PAUSE_ALL);
+                  this.emit(Events2.PAUSE_ALL);
                 }
                 return this;
               },
@@ -24740,7 +24740,7 @@
               remove: function(key) {
                 var anim = this.get(key);
                 if (anim) {
-                  this.emit(Events.REMOVE_ANIMATION, key, anim);
+                  this.emit(Events2.REMOVE_ANIMATION, key, anim);
                   this.anims.delete(key);
                   this.removeMix(key);
                 }
@@ -24749,7 +24749,7 @@
               resumeAll: function() {
                 if (this.paused) {
                   this.paused = false;
-                  this.emit(Events.RESUME_ALL);
+                  this.emit(Events2.RESUME_ALL);
                 }
                 return this;
               },
@@ -24815,7 +24815,7 @@
             var Class = __webpack_require__(0);
             var CustomMap = __webpack_require__(102);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(324);
+            var Events2 = __webpack_require__(324);
             var BaseCache = new Class({
               initialize: function BaseCache2() {
                 this.entries = new CustomMap();
@@ -24823,7 +24823,7 @@
               },
               add: function(key, data) {
                 this.entries.set(key, data);
-                this.events.emit(Events.ADD, this, key, data);
+                this.events.emit(Events2.ADD, this, key, data);
                 return this;
               },
               has: function(key) {
@@ -24839,7 +24839,7 @@
                 var entry = this.get(key);
                 if (entry) {
                   this.entries.delete(key);
-                  this.events.emit(Events.REMOVE, this, key, entry.data);
+                  this.events.emit(Events2.REMOVE, this, key, entry.data);
                 }
                 return this;
               },
@@ -24924,7 +24924,7 @@
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
             var Effects = __webpack_require__(333);
-            var Events = __webpack_require__(37);
+            var Events2 = __webpack_require__(37);
             var Linear = __webpack_require__(135);
             var Rectangle = __webpack_require__(10);
             var Vector2 = __webpack_require__(3);
@@ -25067,7 +25067,7 @@
                 matrix.translate(-originX, -originY);
                 this.shakeEffect.preRender();
                 if (emitFollowEvent) {
-                  this.emit(Events.FOLLOW_UPDATE, this, follow);
+                  this.emit(Events2.FOLLOW_UPDATE, this, follow);
                 }
               },
               setLerp: function(x, y) {
@@ -26488,7 +26488,7 @@
             var Class = __webpack_require__(0);
             var CONST = __webpack_require__(33);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(91);
+            var Events2 = __webpack_require__(91);
             var GetBlendModes = __webpack_require__(370);
             var ScaleEvents = __webpack_require__(104);
             var TextureEvents = __webpack_require__(106);
@@ -26554,7 +26554,7 @@
               resize: function(width, height) {
                 this.width = width;
                 this.height = height;
-                this.emit(Events.RESIZE, width, height);
+                this.emit(Events2.RESIZE, width, height);
               },
               resetTransform: function() {
                 this.currentContext.setTransform(1, 0, 0, 1, 0, 0);
@@ -26588,11 +26588,11 @@
                 }
                 ctx.save();
                 this.drawCount = 0;
-                this.emit(Events.PRE_RENDER);
+                this.emit(Events2.PRE_RENDER);
               },
               render: function(scene, children, camera) {
                 var childCount = children.length;
-                this.emit(Events.RENDER, scene, camera);
+                this.emit(Events2.RENDER, scene, camera);
                 var cx = camera.x;
                 var cy = camera.y;
                 var cw = camera.width;
@@ -26650,7 +26650,7 @@
               postRender: function() {
                 var ctx = this.gameContext;
                 ctx.restore();
-                this.emit(Events.POST_RENDER);
+                this.emit(Events2.POST_RENDER);
                 var state = this.snapshotState;
                 if (state.callback) {
                   CanvasSnapshot(this.gameCanvas, state);
@@ -26871,7 +26871,7 @@
             var Class = __webpack_require__(0);
             var CONST = __webpack_require__(33);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(91);
+            var Events2 = __webpack_require__(91);
             var GameEvents = __webpack_require__(22);
             var IsSizePowerOfTwo = __webpack_require__(138);
             var Matrix4 = __webpack_require__(69);
@@ -27141,7 +27141,7 @@
                 gl.scissor(0, gl.drawingBufferHeight - height, width, height);
                 this.defaultScissor[2] = width;
                 this.defaultScissor[3] = height;
-                this.emit(Events.RESIZE, width, height);
+                this.emit(Events2.RESIZE, width, height);
                 return this;
               },
               getAspectRatio: function() {
@@ -27725,14 +27725,14 @@
                 this.currentCameraMask.mask = null;
                 this.maskStack.length = 0;
                 this.textureFlush = 0;
-                this.emit(Events.PRE_RENDER);
+                this.emit(Events2.PRE_RENDER);
               },
               render: function(scene, children, camera) {
                 if (this.contextLost) {
                   return;
                 }
                 var childCount = children.length;
-                this.emit(Events.RENDER, scene, camera);
+                this.emit(Events2.RENDER, scene, camera);
                 this.preRenderCamera(camera);
                 if (childCount === 0) {
                   this.setBlendMode(CONST.BlendModes.NORMAL);
@@ -27780,7 +27780,7 @@
                   return;
                 }
                 this.flush();
-                this.emit(Events.POST_RENDER);
+                this.emit(Events2.POST_RENDER);
                 var state = this.snapshotState;
                 if (state.callback) {
                   WebGLSnapshot(this.canvas, state);
@@ -29917,7 +29917,7 @@
             module2.exports = RequestAnimationFrame;
           },
           function(module2, exports2, __webpack_require__) {
-            var Events = __webpack_require__(22);
+            var Events2 = __webpack_require__(22);
             var VisibilityHandler = function(game) {
               var hiddenVar;
               var eventEmitter = game.events;
@@ -29936,19 +29936,19 @@
               }
               var onChange = function(event) {
                 if (document.hidden || event.type === "pause") {
-                  eventEmitter.emit(Events.HIDDEN);
+                  eventEmitter.emit(Events2.HIDDEN);
                 } else {
-                  eventEmitter.emit(Events.VISIBLE);
+                  eventEmitter.emit(Events2.VISIBLE);
                 }
               };
               if (hiddenVar) {
                 document.addEventListener(hiddenVar, onChange, false);
               }
               window.onblur = function() {
-                eventEmitter.emit(Events.BLUR);
+                eventEmitter.emit(Events2.BLUR);
               };
               window.onfocus = function() {
-                eventEmitter.emit(Events.FOCUS);
+                eventEmitter.emit(Events2.FOCUS);
               };
               if (window.focus && game.config.autoFocus) {
                 window.focus();
@@ -30836,7 +30836,7 @@
             var Class = __webpack_require__(0);
             var CONST = __webpack_require__(203);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(51);
+            var Events2 = __webpack_require__(51);
             var GameEvents = __webpack_require__(22);
             var Keyboard = __webpack_require__(410);
             var Mouse = __webpack_require__(411);
@@ -30882,24 +30882,24 @@
               boot: function() {
                 this.canvas = this.game.canvas;
                 this.scaleManager = this.game.scale;
-                this.events.emit(Events.MANAGER_BOOT);
+                this.events.emit(Events2.MANAGER_BOOT);
                 this.game.events.on(GameEvents.PRE_RENDER, this.preRender, this);
                 this.game.events.once(GameEvents.DESTROY, this.destroy, this);
               },
               setCanvasOver: function(event) {
                 this.isOver = true;
-                this.events.emit(Events.GAME_OVER, event);
+                this.events.emit(Events2.GAME_OVER, event);
               },
               setCanvasOut: function(event) {
                 this.isOver = false;
-                this.events.emit(Events.GAME_OUT, event);
+                this.events.emit(Events2.GAME_OUT, event);
               },
               preRender: function() {
                 var time = this.game.loop.now;
                 var delta = this.game.loop.delta;
                 var scenes = this.game.scene.getScenes(true, true);
                 this.time = time;
-                this.events.emit(Events.MANAGER_UPDATE);
+                this.events.emit(Events2.MANAGER_UPDATE);
                 for (var i = 0; i < scenes.length; i++) {
                   var scene = scenes[i];
                   if (scene.sys.input && scene.sys.input.updatePoll(time, delta) && this.globalTopOnly) {
@@ -31050,7 +31050,7 @@
               onPointerLockChange: function(event) {
                 var isLocked = this.mouse.locked;
                 this.mousePointer.locked = isLocked;
-                this.events.emit(Events.POINTERLOCK_CHANGE, event, isLocked);
+                this.events.emit(Events2.POINTERLOCK_CHANGE, event, isLocked);
               },
               inputCandidate: function(gameObject, camera) {
                 var input = gameObject.input;
@@ -32265,7 +32265,7 @@
             var CONST = __webpack_require__(201);
             var Class = __webpack_require__(0);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(104);
+            var Events2 = __webpack_require__(104);
             var GameEvents = __webpack_require__(22);
             var GetInnerHeight = __webpack_require__(401);
             var GetTarget = __webpack_require__(407);
@@ -32521,7 +32521,7 @@
                   domStyle.marginLeft = canvasStyle.marginLeft;
                   domStyle.marginTop = canvasStyle.marginTop;
                 }
-                this.emit(Events.RESIZE, this.gameSize, this.baseSize, this.displaySize, previousWidth, previousHeight);
+                this.emit(Events2.RESIZE, this.gameSize, this.baseSize, this.displaySize, previousWidth, previousHeight);
                 return this;
               },
               updateOrientation: function() {
@@ -32530,7 +32530,7 @@
                   var newOrientation = GetScreenOrientation(this.width, this.height);
                   if (newOrientation !== this.orientation) {
                     this.orientation = newOrientation;
-                    this.emit(Events.ORIENTATION_CHANGE, newOrientation);
+                    this.emit(Events2.ORIENTATION_CHANGE, newOrientation);
                   }
                 }
               },
@@ -32626,7 +32626,7 @@
                 }
                 var fullscreen = this.fullscreen;
                 if (!fullscreen.available) {
-                  this.emit(Events.FULLSCREEN_UNSUPPORTED);
+                  this.emit(Events2.FULLSCREEN_UNSUPPORTED);
                   return;
                 }
                 if (!fullscreen.active) {
@@ -32641,11 +32641,11 @@
               fullscreenSuccessHandler: function() {
                 this.getParentBounds();
                 this.refresh();
-                this.emit(Events.ENTER_FULLSCREEN);
+                this.emit(Events2.ENTER_FULLSCREEN);
               },
               fullscreenErrorHandler: function(error) {
                 this.removeFullscreenTarget();
-                this.emit(Events.FULLSCREEN_FAILED, error);
+                this.emit(Events2.FULLSCREEN_FAILED, error);
               },
               getFullscreenTarget: function() {
                 if (!this.fullscreenTarget) {
@@ -32677,7 +32677,7 @@
               stopFullscreen: function() {
                 var fullscreen = this.fullscreen;
                 if (!fullscreen.available) {
-                  this.emit(Events.FULLSCREEN_UNSUPPORTED);
+                  this.emit(Events2.FULLSCREEN_UNSUPPORTED);
                   return false;
                 }
                 if (fullscreen.active) {
@@ -32685,7 +32685,7 @@
                 }
                 this.removeFullscreenTarget();
                 this.getParentBounds();
-                this.emit(Events.LEAVE_FULLSCREEN);
+                this.emit(Events2.LEAVE_FULLSCREEN);
                 this.refresh();
               },
               toggleFullscreen: function(fullscreenOptions) {
@@ -33034,12 +33034,12 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var CONST = __webpack_require__(144);
-            var Events = __webpack_require__(20);
+            var Events2 = __webpack_require__(20);
             var GameEvents = __webpack_require__(22);
             var GetValue = __webpack_require__(6);
             var LoaderEvents = __webpack_require__(95);
             var NOOP = __webpack_require__(1);
-            var Scene2 = __webpack_require__(418);
+            var Scene3 = __webpack_require__(418);
             var Systems = __webpack_require__(204);
             var SceneManager = new Class({
               initialize: function SceneManager2(game, sceneConfig5) {
@@ -33081,7 +33081,7 @@
                   key = entry.key;
                   sceneConfig5 = entry.scene;
                   var newScene;
-                  if (sceneConfig5 instanceof Scene2) {
+                  if (sceneConfig5 instanceof Scene3) {
                     newScene = this.createSceneFromInstance(key, sceneConfig5);
                   } else if (typeof sceneConfig5 === "object") {
                     newScene = this.createSceneFromObject(key, sceneConfig5);
@@ -33158,7 +33158,7 @@
                 }
                 key = this.getKey(key, sceneConfig5);
                 var newScene;
-                if (sceneConfig5 instanceof Scene2) {
+                if (sceneConfig5 instanceof Scene3) {
                   newScene = this.createSceneFromInstance(key, sceneConfig5);
                 } else if (typeof sceneConfig5 === "object") {
                   sceneConfig5.key = key;
@@ -33209,7 +33209,7 @@
                   scene.init.call(scene, settings.data);
                   settings.status = CONST.INIT;
                   if (settings.isTransition) {
-                    sys.events.emit(Events.TRANSITION_INIT, settings.transitionFrom, settings.transitionDuration);
+                    sys.events.emit(Events2.TRANSITION_INIT, settings.transitionFrom, settings.transitionDuration);
                   }
                 }
                 var loader;
@@ -33266,17 +33266,17 @@
                   }
                 }
                 if (settings.isTransition) {
-                  sys.events.emit(Events.TRANSITION_START, settings.transitionFrom, settings.transitionDuration);
+                  sys.events.emit(Events2.TRANSITION_START, settings.transitionFrom, settings.transitionDuration);
                 }
                 if (scene.update) {
                   sys.sceneUpdate = scene.update;
                 }
                 settings.status = CONST.RUNNING;
-                sys.events.emit(Events.CREATE, scene);
+                sys.events.emit(Events2.CREATE, scene);
               },
               createSceneFromFunction: function(key, scene) {
                 var newScene = new scene();
-                if (newScene instanceof Scene2) {
+                if (newScene instanceof Scene3) {
                   var configKey = newScene.sys.settings.key;
                   if (configKey !== "") {
                     key = configKey;
@@ -33301,7 +33301,7 @@
                 return newScene;
               },
               createSceneFromObject: function(key, sceneConfig5) {
-                var newScene = new Scene2(sceneConfig5);
+                var newScene = new Scene3(sceneConfig5);
                 var configKey = newScene.sys.settings.key;
                 if (configKey !== "") {
                   key = configKey;
@@ -33337,7 +33337,7 @@
                 }
                 if (typeof sceneConfig5 === "function") {
                   return key;
-                } else if (sceneConfig5 instanceof Scene2) {
+                } else if (sceneConfig5 instanceof Scene3) {
                   key = sceneConfig5.sys.settings.key;
                 } else if (typeof sceneConfig5 === "object" && sceneConfig5.hasOwnProperty("key")) {
                   key = sceneConfig5.key;
@@ -33661,8 +33661,8 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Systems = __webpack_require__(204);
-            var Scene2 = new Class({
-              initialize: function Scene3(config2) {
+            var Scene3 = new Class({
+              initialize: function Scene4(config2) {
                 this.sys = new Systems(this, config2);
                 this.game;
                 this.anims;
@@ -33693,7 +33693,7 @@
               update: function() {
               }
             });
-            module2.exports = Scene2;
+            module2.exports = Scene3;
           },
           function(module2, exports2, __webpack_require__) {
             var GetFastValue = __webpack_require__(2);
@@ -33777,7 +33777,7 @@
             var Color = __webpack_require__(38);
             var CONST = __webpack_require__(33);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(106);
+            var Events2 = __webpack_require__(106);
             var GameEvents = __webpack_require__(22);
             var GenerateTexture = __webpack_require__(388);
             var GetValue = __webpack_require__(6);
@@ -33797,8 +33797,8 @@
               },
               boot: function() {
                 this._pending = 3;
-                this.on(Events.LOAD, this.updatePending, this);
-                this.on(Events.ERROR, this.updatePending, this);
+                this.on(Events2.LOAD, this.updatePending, this);
+                this.on(Events2.ERROR, this.updatePending, this);
                 var config2 = this.game.config;
                 this.addBase64("__DEFAULT", config2.defaultImage);
                 this.addBase64("__MISSING", config2.missingImage);
@@ -33808,9 +33808,9 @@
               updatePending: function() {
                 this._pending--;
                 if (this._pending === 0) {
-                  this.off(Events.LOAD);
-                  this.off(Events.ERROR);
-                  this.emit(Events.READY);
+                  this.off(Events2.LOAD);
+                  this.off(Events2.ERROR);
+                  this.emit(Events2.READY);
                 }
               },
               checkKey: function(key) {
@@ -33831,7 +33831,7 @@
                 }
                 if (this.list.hasOwnProperty(key.key)) {
                   key.destroy();
-                  this.emit(Events.REMOVE, key.key);
+                  this.emit(Events2.REMOVE, key.key);
                 }
                 return this;
               },
@@ -33846,13 +33846,13 @@
                   var _this = this;
                   var image = new Image();
                   image.onerror = function() {
-                    _this.emit(Events.ERROR, key);
+                    _this.emit(Events2.ERROR, key);
                   };
                   image.onload = function() {
                     var texture = _this.create(key, image);
                     Parser.Image(texture, 0);
-                    _this.emit(Events.ADD, key, texture);
-                    _this.emit(Events.LOAD, key, texture);
+                    _this.emit(Events2.ADD, key, texture);
+                    _this.emit(Events2.LOAD, key, texture);
                   };
                   image.src = data;
                 }
@@ -33887,7 +33887,7 @@
                   if (dataSource) {
                     texture.setDataSource(dataSource);
                   }
-                  this.emit(Events.ADD, key, texture);
+                  this.emit(Events2.ADD, key, texture);
                 }
                 return texture;
               },
@@ -33902,7 +33902,7 @@
                   }
                   texture = this.create(key, glTexture, width, height);
                   texture.add("__BASE", 0, 0, 0, width, height);
-                  this.emit(Events.ADD, key, texture);
+                  this.emit(Events2.ADD, key, texture);
                 }
                 return texture;
               },
@@ -33911,7 +33911,7 @@
                 if (this.checkKey(key)) {
                   texture = this.create(key, renderTexture);
                   texture.add("__BASE", 0, 0, 0, renderTexture.width, renderTexture.height);
-                  this.emit(Events.ADD, key, texture);
+                  this.emit(Events2.ADD, key, texture);
                 }
                 return texture;
               },
@@ -33948,7 +33948,7 @@
                 } else if (this.checkKey(key)) {
                   texture = new CanvasTexture(this, key, source, source.width, source.height);
                   this.list[key] = texture;
-                  this.emit(Events.ADD, key, texture);
+                  this.emit(Events2.ADD, key, texture);
                 }
                 return texture;
               },
@@ -33975,7 +33975,7 @@
                   if (dataSource) {
                     texture.setDataSource(dataSource);
                   }
-                  this.emit(Events.ADD, key, texture);
+                  this.emit(Events2.ADD, key, texture);
                 }
                 return texture;
               },
@@ -33993,7 +33993,7 @@
                   if (dataSource) {
                     texture.setDataSource(dataSource);
                   }
-                  this.emit(Events.ADD, key, texture);
+                  this.emit(Events2.ADD, key, texture);
                 }
                 return texture;
               },
@@ -34005,7 +34005,7 @@
                   if (dataSource) {
                     texture.setDataSource(dataSource);
                   }
-                  this.emit(Events.ADD, key, texture);
+                  this.emit(Events2.ADD, key, texture);
                 }
                 return texture;
               },
@@ -34017,7 +34017,7 @@
                   if (dataSource) {
                     texture.setDataSource(dataSource);
                   }
-                  this.emit(Events.ADD, key, texture);
+                  this.emit(Events2.ADD, key, texture);
                 }
                 return texture;
               },
@@ -34028,7 +34028,7 @@
                   var width = texture.source[0].width;
                   var height = texture.source[0].height;
                   Parser.SpriteSheet(texture, 0, 0, 0, width, height, config2);
-                  this.emit(Events.ADD, key, texture);
+                  this.emit(Events2.ADD, key, texture);
                 }
                 return texture;
               },
@@ -34050,7 +34050,7 @@
                   } else {
                     Parser.SpriteSheet(texture, 0, sheet.cutX, sheet.cutY, sheet.cutWidth, sheet.cutHeight, config2);
                   }
-                  this.emit(Events.ADD, key, texture);
+                  this.emit(Events2.ADD, key, texture);
                   return texture;
                 }
               },
@@ -34524,7 +34524,7 @@
           function(module2, exports2, __webpack_require__) {
             var BaseSoundManager = __webpack_require__(145);
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(70);
+            var Events2 = __webpack_require__(70);
             var HTML5AudioSound = __webpack_require__(429);
             var HTML5AudioSoundManager = new Class({
               Extends: BaseSoundManager,
@@ -34595,7 +34595,7 @@
                     tag.load();
                   });
                 };
-                this.once(Events.UNLOCKED, function() {
+                this.once(Events2.UNLOCKED, function() {
                   this.forEachActiveSound(function(sound) {
                     if (sound.currentMarker === null && sound.duration === 0) {
                       sound.duration = sound.tags[0].duration;
@@ -34657,7 +34657,7 @@
                   this.forEachActiveSound(function(sound) {
                     sound.updateMute();
                   });
-                  this.emit(Events.GLOBAL_MUTE, this, value);
+                  this.emit(Events2.GLOBAL_MUTE, this, value);
                 }
               },
               setVolume: function(value) {
@@ -34673,7 +34673,7 @@
                   this.forEachActiveSound(function(sound) {
                     sound.updateVolume();
                   });
-                  this.emit(Events.GLOBAL_VOLUME, this, value);
+                  this.emit(Events2.GLOBAL_VOLUME, this, value);
                 }
               }
             });
@@ -34703,7 +34703,7 @@
           function(module2, exports2, __webpack_require__) {
             var BaseSound = __webpack_require__(146);
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(70);
+            var Events2 = __webpack_require__(70);
             var Clamp = __webpack_require__(18);
             var HTML5AudioSound = new Class({
               Extends: BaseSound,
@@ -34732,7 +34732,7 @@
                 if (!this.pickAndPlayAudioTag()) {
                   return false;
                 }
-                this.emit(Events.PLAY, this);
+                this.emit(Events2.PLAY, this);
                 return true;
               },
               pause: function() {
@@ -34747,7 +34747,7 @@
                 }
                 this.currentConfig.seek = this.audio.currentTime - (this.currentMarker ? this.currentMarker.start : 0);
                 this.stopAndReleaseAudioTag();
-                this.emit(Events.PAUSE, this);
+                this.emit(Events2.PAUSE, this);
                 return true;
               },
               resume: function() {
@@ -34763,7 +34763,7 @@
                 if (!this.pickAndPlayAudioTag()) {
                   return false;
                 }
-                this.emit(Events.RESUME, this);
+                this.emit(Events2.RESUME, this);
                 return true;
               },
               stop: function() {
@@ -34774,7 +34774,7 @@
                   return false;
                 }
                 this.stopAndReleaseAudioTag();
-                this.emit(Events.STOP, this);
+                this.emit(Events2.STOP, this);
                 return true;
               },
               pickAndPlayAudioTag: function() {
@@ -34894,12 +34894,12 @@
                     currentTime = this.audio.currentTime;
                   }
                   if (currentTime < this.previousTime) {
-                    this.emit(Events.LOOPED, this);
+                    this.emit(Events2.LOOPED, this);
                   }
                 } else if (currentTime >= endTime) {
                   this.reset();
                   this.stopAndReleaseAudioTag();
-                  this.emit(Events.COMPLETE, this);
+                  this.emit(Events2.COMPLETE, this);
                   return;
                 }
                 this.previousTime = currentTime;
@@ -34937,7 +34937,7 @@
                     return;
                   }
                   this.updateMute();
-                  this.emit(Events.MUTE, this, value);
+                  this.emit(Events2.MUTE, this, value);
                 }
               },
               setMute: function(value) {
@@ -34954,7 +34954,7 @@
                     return;
                   }
                   this.updateVolume();
-                  this.emit(Events.VOLUME, this, value);
+                  this.emit(Events2.VOLUME, this, value);
                 }
               },
               setVolume: function(value) {
@@ -34967,11 +34967,11 @@
                 },
                 set: function(value) {
                   this.currentConfig.rate = value;
-                  if (this.manager.isLocked(this, Events.RATE, value)) {
+                  if (this.manager.isLocked(this, Events2.RATE, value)) {
                     return;
                   } else {
                     this.calculateRate();
-                    this.emit(Events.RATE, this, value);
+                    this.emit(Events2.RATE, this, value);
                   }
                 }
               },
@@ -34985,11 +34985,11 @@
                 },
                 set: function(value) {
                   this.currentConfig.detune = value;
-                  if (this.manager.isLocked(this, Events.DETUNE, value)) {
+                  if (this.manager.isLocked(this, Events2.DETUNE, value)) {
                     return;
                   } else {
                     this.calculateRate();
-                    this.emit(Events.DETUNE, this, value);
+                    this.emit(Events2.DETUNE, this, value);
                   }
                 }
               },
@@ -35022,7 +35022,7 @@
                     } else if (this.isPaused) {
                       this.currentConfig.seek = value;
                     }
-                    this.emit(Events.SEEK, this, value);
+                    this.emit(Events2.SEEK, this, value);
                   }
                 }
               },
@@ -35042,7 +35042,7 @@
                   if (this.audio) {
                     this.audio.loop = value;
                   }
-                  this.emit(Events.LOOP, this, value);
+                  this.emit(Events2.LOOP, this, value);
                 }
               },
               setLoop: function(value) {
@@ -35055,7 +35055,7 @@
                 },
                 set: function(value) {
                   this.currentConfig.pan = value;
-                  this.emit(Events.PAN, this, value);
+                  this.emit(Events2.PAN, this, value);
                 }
               },
               setPan: function(value) {
@@ -35197,7 +35197,7 @@
             var Base64ToArrayBuffer = __webpack_require__(433);
             var BaseSoundManager = __webpack_require__(145);
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(70);
+            var Events2 = __webpack_require__(70);
             var GameEvents = __webpack_require__(22);
             var WebAudioSound = __webpack_require__(434);
             var WebAudioSoundManager = new Class({
@@ -35270,17 +35270,17 @@
                   }
                   var success = function(key2, audioBuffer) {
                     cache.add(key2, audioBuffer);
-                    this.emit(Events.DECODED, key2);
+                    this.emit(Events2.DECODED, key2);
                     remaining--;
                     if (remaining === 0) {
-                      this.emit(Events.DECODED_ALL);
+                      this.emit(Events2.DECODED_ALL);
                     }
                   }.bind(this, key);
                   var failure = function(key2, error) {
                     console.error("Error decoding audio: " + key2 + " - ", error ? error.message : "");
                     remaining--;
                     if (remaining === 0) {
-                      this.emit(Events.DECODED_ALL);
+                      this.emit(Events2.DECODED_ALL);
                     }
                   }.bind(this, key);
                   this.context.decodeAudioData(data, success, failure);
@@ -35357,7 +35357,7 @@
                 },
                 set: function(value) {
                   this.masterMuteNode.gain.setValueAtTime(value ? 0 : 1, 0);
-                  this.emit(Events.GLOBAL_MUTE, this, value);
+                  this.emit(Events2.GLOBAL_MUTE, this, value);
                 }
               },
               setVolume: function(value) {
@@ -35370,7 +35370,7 @@
                 },
                 set: function(value) {
                   this.masterVolumeNode.gain.setValueAtTime(value, 0);
-                  this.emit(Events.GLOBAL_VOLUME, this, value);
+                  this.emit(Events2.GLOBAL_VOLUME, this, value);
                 }
               }
             });
@@ -35415,7 +35415,7 @@
           function(module2, exports2, __webpack_require__) {
             var BaseSound = __webpack_require__(146);
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(70);
+            var Events2 = __webpack_require__(70);
             var WebAudioSound = new Class({
               Extends: BaseSound,
               initialize: function WebAudioSound2(manager, key, config2) {
@@ -35455,7 +35455,7 @@
                 }
                 this.stopAndRemoveBufferSource();
                 this.createAndStartBufferSource();
-                this.emit(Events.PLAY, this);
+                this.emit(Events2.PLAY, this);
                 return true;
               },
               pause: function() {
@@ -35467,7 +35467,7 @@
                 }
                 this.currentConfig.seek = this.getCurrentTime();
                 this.stopAndRemoveBufferSource();
-                this.emit(Events.PAUSE, this);
+                this.emit(Events2.PAUSE, this);
                 return true;
               },
               resume: function() {
@@ -35478,7 +35478,7 @@
                   return false;
                 }
                 this.createAndStartBufferSource();
-                this.emit(Events.RESUME, this);
+                this.emit(Events2.RESUME, this);
                 return true;
               },
               stop: function() {
@@ -35486,7 +35486,7 @@
                   return false;
                 }
                 this.stopAndRemoveBufferSource();
-                this.emit(Events.STOP, this);
+                this.emit(Events2.STOP, this);
                 return true;
               },
               createAndStartBufferSource: function() {
@@ -35558,7 +35558,7 @@
                   this.hasEnded = false;
                   BaseSound.prototype.stop.call(this);
                   this.stopAndRemoveBufferSource();
-                  this.emit(Events.COMPLETE, this);
+                  this.emit(Events2.COMPLETE, this);
                 } else if (this.hasLooped) {
                   this.hasLooped = false;
                   this.source = this.loopSource;
@@ -35570,7 +35570,7 @@
                     rate: this.totalRate
                   });
                   this.createAndStartLoopBufferSource();
-                  this.emit(Events.LOOPED, this);
+                  this.emit(Events2.LOOPED, this);
                 }
               },
               destroy: function() {
@@ -35633,7 +35633,7 @@
                 set: function(value) {
                   this.currentConfig.rate = value;
                   this.calculateRate();
-                  this.emit(Events.RATE, this, value);
+                  this.emit(Events2.RATE, this, value);
                 }
               },
               setRate: function(value) {
@@ -35647,7 +35647,7 @@
                 set: function(value) {
                   this.currentConfig.detune = value;
                   this.calculateRate();
-                  this.emit(Events.DETUNE, this, value);
+                  this.emit(Events2.DETUNE, this, value);
                 }
               },
               setDetune: function(value) {
@@ -35661,7 +35661,7 @@
                 set: function(value) {
                   this.currentConfig.mute = value;
                   this.muteNode.gain.setValueAtTime(value ? 0 : 1, 0);
-                  this.emit(Events.MUTE, this, value);
+                  this.emit(Events2.MUTE, this, value);
                 }
               },
               setMute: function(value) {
@@ -35675,7 +35675,7 @@
                 set: function(value) {
                   this.currentConfig.volume = value;
                   this.volumeNode.gain.setValueAtTime(value, 0);
-                  this.emit(Events.VOLUME, this, value);
+                  this.emit(Events2.VOLUME, this, value);
                 }
               },
               setVolume: function(value) {
@@ -35706,7 +35706,7 @@
                       this.stopAndRemoveBufferSource();
                       this.createAndStartBufferSource();
                     }
-                    this.emit(Events.SEEK, this, value);
+                    this.emit(Events2.SEEK, this, value);
                   }
                 }
               },
@@ -35726,7 +35726,7 @@
                       this.createAndStartLoopBufferSource();
                     }
                   }
-                  this.emit(Events.LOOP, this, value);
+                  this.emit(Events2.LOOP, this, value);
                 }
               },
               setLoop: function(value) {
@@ -35746,7 +35746,7 @@
                   if (this.pannerNode) {
                     this.pannerNode.pan.setValueAtTime(value, this.manager.context.currentTime);
                   }
-                  this.emit(Events.PAN, this, value);
+                  this.emit(Events2.PAN, this, value);
                 }
               },
               setPan: function(value) {
@@ -40354,7 +40354,7 @@
           },
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(239);
+            var Events2 = __webpack_require__(239);
             var Button = new Class({
               initialize: function Button2(pad, index) {
                 this.pad = pad;
@@ -40371,13 +40371,13 @@
                 if (value >= this.threshold) {
                   if (!this.pressed) {
                     this.pressed = true;
-                    this.events.emit(Events.BUTTON_DOWN, pad, this, value);
-                    this.pad.emit(Events.GAMEPAD_BUTTON_DOWN, index, value, this);
+                    this.events.emit(Events2.BUTTON_DOWN, pad, this, value);
+                    this.pad.emit(Events2.GAMEPAD_BUTTON_DOWN, index, value, this);
                   }
                 } else if (this.pressed) {
                   this.pressed = false;
-                  this.events.emit(Events.BUTTON_UP, pad, this, value);
-                  this.pad.emit(Events.GAMEPAD_BUTTON_UP, index, value, this);
+                  this.events.emit(Events2.BUTTON_UP, pad, this, value);
+                  this.pad.emit(Events2.GAMEPAD_BUTTON_UP, index, value, this);
                 }
               },
               destroy: function() {
@@ -40568,7 +40568,7 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(154);
+            var Events2 = __webpack_require__(154);
             var Key = new Class({
               Extends: EventEmitter,
               initialize: function Key2(plugin, keyCode) {
@@ -40615,9 +40615,9 @@
                   this.duration = 0;
                   this._justDown = true;
                   this._justUp = false;
-                  this.emit(Events.DOWN, this, event);
+                  this.emit(Events2.DOWN, this, event);
                 } else if (this.emitOnRepeat) {
-                  this.emit(Events.DOWN, this, event);
+                  this.emit(Events2.DOWN, this, event);
                 }
               },
               onUp: function(event) {
@@ -40633,7 +40633,7 @@
                 this._justDown = false;
                 this._justUp = true;
                 this._tick = -1;
-                this.emit(Events.UP, this, event);
+                this.emit(Events2.UP, this, event);
               },
               reset: function() {
                 this.preventDefault = true;
@@ -40670,7 +40670,7 @@
           },
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(154);
+            var Events2 = __webpack_require__(154);
             var GetFastValue = __webpack_require__(2);
             var ProcessKeyCombo = __webpack_require__(514);
             var ResetKeyCombo = __webpack_require__(516);
@@ -40712,7 +40712,7 @@
                   }
                   var matched = ProcessKeyCombo(event, _this);
                   if (matched) {
-                    _this.manager.emit(Events.COMBO_MATCH, _this, event);
+                    _this.manager.emit(Events2.COMBO_MATCH, _this, event);
                     if (_this.resetOnMatch) {
                       ResetKeyCombo(_this);
                     } else if (_this.deleteOnMatch) {
@@ -40721,7 +40721,7 @@
                   }
                 };
                 this.onKeyDown = onKeyDownHandler;
-                this.manager.on(Events.ANY_KEY_DOWN, this.onKeyDown);
+                this.manager.on(Events2.ANY_KEY_DOWN, this.onKeyDown);
               },
               progress: {
                 get: function() {
@@ -40731,7 +40731,7 @@
               destroy: function() {
                 this.enabled = false;
                 this.keyCodes = [];
-                this.manager.off(Events.ANY_KEY_DOWN, this.onKeyDown);
+                this.manager.off(Events2.ANY_KEY_DOWN, this.onKeyDown);
                 this.manager = null;
               }
             });
@@ -40937,7 +40937,7 @@
           },
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(95);
+            var Events2 = __webpack_require__(95);
             var File = __webpack_require__(23);
             var GetFastValue = __webpack_require__(2);
             var GetURL = __webpack_require__(155);
@@ -40985,7 +40985,7 @@
                 audio.onerror = null;
                 this.filesLoaded++;
                 this.percentComplete = Math.min(this.filesLoaded / this.filesTotal, 1);
-                this.loader.emit(Events.FILE_PROGRESS, this, this.percentComplete);
+                this.loader.emit(Events2.FILE_PROGRESS, this, this.percentComplete);
                 if (this.filesLoaded === this.filesTotal) {
                   this.onLoad();
                 }
@@ -41389,7 +41389,7 @@
             var CONST = __webpack_require__(62);
             var DistanceBetween = __webpack_require__(50);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(245);
+            var Events2 = __webpack_require__(245);
             var FuzzyEqual = __webpack_require__(124);
             var FuzzyGreaterThan = __webpack_require__(354);
             var FuzzyLessThan = __webpack_require__(355);
@@ -41578,12 +41578,12 @@
               },
               pause: function() {
                 this.isPaused = true;
-                this.emit(Events.PAUSE);
+                this.emit(Events2.PAUSE);
                 return this;
               },
               resume: function() {
                 this.isPaused = false;
-                this.emit(Events.RESUME);
+                this.emit(Events2.RESUME);
                 return this;
               },
               addCollider: function(object1, object2, collideCallback, processCallback, callbackContext) {
@@ -41660,7 +41660,7 @@
                       collider.update();
                     }
                   }
-                  this.emit(Events.WORLD_STEP, fixedDelta);
+                  this.emit(Events2.WORLD_STEP, fixedDelta);
                 }
                 while (this._elapsed >= msPerFrame) {
                   this._elapsed -= msPerFrame;
@@ -41689,7 +41689,7 @@
                     collider.update();
                   }
                 }
-                this.emit(Events.WORLD_STEP, delta);
+                this.emit(Events2.WORLD_STEP, delta);
                 this.stepsLastFrame++;
               },
               postUpdate: function() {
@@ -41889,10 +41889,10 @@
                 if (result) {
                   if (overlapOnly) {
                     if (body1.onOverlap || body2.onOverlap) {
-                      this.emit(Events.OVERLAP, body1.gameObject, body2.gameObject, body1, body2);
+                      this.emit(Events2.OVERLAP, body1.gameObject, body2.gameObject, body1, body2);
                     }
                   } else if (body1.onCollide || body2.onCollide) {
-                    this.emit(Events.COLLIDE, body1.gameObject, body2.gameObject, body1, body2);
+                    this.emit(Events2.COLLIDE, body1.gameObject, body2.gameObject, body1, body2);
                   }
                 }
                 return result;
@@ -41934,7 +41934,7 @@
                 body2.overlapR = overlap;
                 if (overlapOnly || overlap === 0 || body1.immovable && body2.immovable || body1.customSeparateX || body2.customSeparateX) {
                   if (overlap !== 0 && (body1.onOverlap || body2.onOverlap)) {
-                    this.emit(Events.OVERLAP, body1.gameObject, body2.gameObject, body1, body2);
+                    this.emit(Events2.OVERLAP, body1.gameObject, body2.gameObject, body1, body2);
                   }
                   return overlap !== 0;
                 }
@@ -41976,7 +41976,7 @@
                 body2.velocity.x *= body2.bounce.x;
                 body2.velocity.y *= body2.bounce.y;
                 if (body1.onCollide || body2.onCollide) {
-                  this.emit(Events.COLLIDE, body1.gameObject, body2.gameObject, body1, body2);
+                  this.emit(Events2.COLLIDE, body1.gameObject, body2.gameObject, body1, body2);
                 }
                 return true;
               },
@@ -42238,9 +42238,9 @@
                       collideCallback.call(callbackContext, sprite, tile);
                     }
                     if (overlapOnly && body.onOverlap) {
-                      this.emit(Events.TILE_OVERLAP, sprite, tile, body);
+                      this.emit(Events2.TILE_OVERLAP, sprite, tile, body);
                     } else if (body.onCollide) {
-                      this.emit(Events.TILE_COLLIDE, sprite, tile, body);
+                      this.emit(Events2.TILE_COLLIDE, sprite, tile, body);
                     }
                   }
                 }
@@ -42296,7 +42296,7 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var CONST = __webpack_require__(62);
-            var Events = __webpack_require__(245);
+            var Events2 = __webpack_require__(245);
             var RadToDeg = __webpack_require__(196);
             var Rectangle = __webpack_require__(10);
             var RectangleContains = __webpack_require__(57);
@@ -42509,7 +42509,7 @@
                   this.angle = Math.atan2(vy, vx);
                   this.speed = Math.sqrt(vx * vx + vy * vy);
                   if (this.collideWorldBounds && this.checkWorldBounds() && this.onWorldBounds) {
-                    this.world.emit(Events.WORLD_BOUNDS, this, this.blocked.up, this.blocked.down, this.blocked.left, this.blocked.right);
+                    this.world.emit(Events2.WORLD_BOUNDS, this, this.blocked.up, this.blocked.down, this.blocked.left, this.blocked.right);
                   }
                 }
                 this._dx = this.position.x - this.prev.x;
@@ -46627,7 +46627,7 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(267);
+            var Events2 = __webpack_require__(267);
             var TweenBuilder = __webpack_require__(163);
             var TWEEN_CONST = __webpack_require__(100);
             var Timeline = new Class({
@@ -46790,7 +46790,7 @@
                   this.resetTweens(false);
                   this.state = TWEEN_CONST.ACTIVE;
                 }
-                this.dispatchTimelineEvent(Events.TIMELINE_START, this.callbacks.onStart);
+                this.dispatchTimelineEvent(Events2.TIMELINE_START, this.callbacks.onStart);
               },
               nextState: function() {
                 if (this.loopCounter > 0) {
@@ -46803,14 +46803,14 @@
                     this.state = TWEEN_CONST.LOOP_DELAY;
                   } else {
                     this.state = TWEEN_CONST.ACTIVE;
-                    this.dispatchTimelineEvent(Events.TIMELINE_LOOP, this.callbacks.onLoop);
+                    this.dispatchTimelineEvent(Events2.TIMELINE_LOOP, this.callbacks.onLoop);
                   }
                 } else if (this.completeDelay > 0) {
                   this.state = TWEEN_CONST.COMPLETE_DELAY;
                   this.countdown = this.completeDelay;
                 } else {
                   this.state = TWEEN_CONST.PENDING_REMOVE;
-                  this.dispatchTimelineEvent(Events.TIMELINE_COMPLETE, this.callbacks.onComplete);
+                  this.dispatchTimelineEvent(Events2.TIMELINE_COMPLETE, this.callbacks.onComplete);
                 }
               },
               update: function(timestamp, delta) {
@@ -46834,7 +46834,7 @@
                         stillRunning--;
                       }
                     }
-                    this.dispatchTimelineEvent(Events.TIMELINE_UPDATE, this.callbacks.onUpdate);
+                    this.dispatchTimelineEvent(Events2.TIMELINE_UPDATE, this.callbacks.onUpdate);
                     if (stillRunning === 0) {
                       this.nextState();
                     }
@@ -46843,14 +46843,14 @@
                     this.countdown -= delta;
                     if (this.countdown <= 0) {
                       this.state = TWEEN_CONST.ACTIVE;
-                      this.dispatchTimelineEvent(Events.TIMELINE_LOOP, this.callbacks.onLoop);
+                      this.dispatchTimelineEvent(Events2.TIMELINE_LOOP, this.callbacks.onLoop);
                     }
                     break;
                   case TWEEN_CONST.COMPLETE_DELAY:
                     this.countdown -= delta;
                     if (this.countdown <= 0) {
                       this.state = TWEEN_CONST.PENDING_REMOVE;
-                      this.dispatchTimelineEvent(Events.TIMELINE_COMPLETE, this.callbacks.onComplete);
+                      this.dispatchTimelineEvent(Events2.TIMELINE_COMPLETE, this.callbacks.onComplete);
                     }
                     break;
                 }
@@ -46866,14 +46866,14 @@
                 this.paused = true;
                 this._pausedState = this.state;
                 this.state = TWEEN_CONST.PAUSED;
-                this.emit(Events.TIMELINE_PAUSE, this);
+                this.emit(Events2.TIMELINE_PAUSE, this);
                 return this;
               },
               resume: function() {
                 if (this.state === TWEEN_CONST.PAUSED) {
                   this.paused = false;
                   this.state = this._pausedState;
-                  this.emit(Events.TIMELINE_RESUME, this);
+                  this.emit(Events2.TIMELINE_RESUME, this);
                 }
                 return this;
               },
@@ -50019,7 +50019,7 @@
           function(module2, exports2, __webpack_require__) {
             var Clamp = __webpack_require__(18);
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(37);
+            var Events2 = __webpack_require__(37);
             var Fade = new Class({
               initialize: function Fade2(camera) {
                 this.camera = camera;
@@ -50076,7 +50076,7 @@
                 this._elapsed = 0;
                 this._onUpdate = callback;
                 this._onUpdateScope = context2;
-                var eventName = direction ? Events.FADE_OUT_START : Events.FADE_IN_START;
+                var eventName = direction ? Events2.FADE_OUT_START : Events2.FADE_IN_START;
                 this.camera.emit(eventName, this.camera, this, duration, red, green, blue);
                 return this.camera;
               },
@@ -50121,7 +50121,7 @@
                 this._onUpdateScope = null;
                 this.isRunning = false;
                 this.isComplete = true;
-                var eventName = this.direction ? Events.FADE_OUT_COMPLETE : Events.FADE_IN_COMPLETE;
+                var eventName = this.direction ? Events2.FADE_OUT_COMPLETE : Events2.FADE_IN_COMPLETE;
                 this.camera.emit(eventName, this.camera, this);
               },
               reset: function() {
@@ -50140,7 +50140,7 @@
           function(module2, exports2, __webpack_require__) {
             var Clamp = __webpack_require__(18);
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(37);
+            var Events2 = __webpack_require__(37);
             var Flash = new Class({
               initialize: function Flash2(camera) {
                 this.camera = camera;
@@ -50190,7 +50190,7 @@
                 this._elapsed = 0;
                 this._onUpdate = callback;
                 this._onUpdateScope = context2;
-                this.camera.emit(Events.FLASH_START, this.camera, this, duration, red, green, blue);
+                this.camera.emit(Events2.FLASH_START, this.camera, this, duration, red, green, blue);
                 return this.camera;
               },
               update: function(time, delta) {
@@ -50232,7 +50232,7 @@
                 this._onUpdate = null;
                 this._onUpdateScope = null;
                 this.isRunning = false;
-                this.camera.emit(Events.FLASH_COMPLETE, this.camera, this);
+                this.camera.emit(Events2.FLASH_COMPLETE, this.camera, this);
               },
               reset: function() {
                 this.isRunning = false;
@@ -50250,7 +50250,7 @@
             var Clamp = __webpack_require__(18);
             var Class = __webpack_require__(0);
             var EaseMap = __webpack_require__(134);
-            var Events = __webpack_require__(37);
+            var Events2 = __webpack_require__(37);
             var Vector2 = __webpack_require__(3);
             var Pan = new Class({
               initialize: function Pan2(camera) {
@@ -50300,7 +50300,7 @@
                 this._elapsed = 0;
                 this._onUpdate = callback;
                 this._onUpdateScope = context2;
-                this.camera.emit(Events.PAN_START, this.camera, this, duration, x, y);
+                this.camera.emit(Events2.PAN_START, this.camera, this, duration, x, y);
                 return cam;
               },
               update: function(time, delta) {
@@ -50332,7 +50332,7 @@
                 this._onUpdate = null;
                 this._onUpdateScope = null;
                 this.isRunning = false;
-                this.camera.emit(Events.PAN_COMPLETE, this.camera, this);
+                this.camera.emit(Events2.PAN_COMPLETE, this.camera, this);
               },
               reset: function() {
                 this.isRunning = false;
@@ -50703,7 +50703,7 @@
           function(module2, exports2, __webpack_require__) {
             var Clamp = __webpack_require__(18);
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(37);
+            var Events2 = __webpack_require__(37);
             var Vector2 = __webpack_require__(3);
             var Shake = new Class({
               initialize: function Shake2(camera) {
@@ -50750,7 +50750,7 @@
                 this._offsetY = 0;
                 this._onUpdate = callback;
                 this._onUpdateScope = context2;
-                this.camera.emit(Events.SHAKE_START, this.camera, this, duration, intensity);
+                this.camera.emit(Events2.SHAKE_START, this.camera, this, duration, intensity);
                 return this.camera;
               },
               preRender: function() {
@@ -50788,7 +50788,7 @@
                 this._onUpdate = null;
                 this._onUpdateScope = null;
                 this.isRunning = false;
-                this.camera.emit(Events.SHAKE_COMPLETE, this.camera, this);
+                this.camera.emit(Events2.SHAKE_COMPLETE, this.camera, this);
               },
               reset: function() {
                 this.isRunning = false;
@@ -50808,7 +50808,7 @@
           function(module2, exports2, __webpack_require__) {
             var Clamp = __webpack_require__(18);
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(37);
+            var Events2 = __webpack_require__(37);
             var EaseMap = __webpack_require__(134);
             var RotateTo = new Class({
               initialize: function RotateTo2(camera) {
@@ -50891,7 +50891,7 @@
                     this.clockwise = false;
                   }
                 }
-                this.camera.emit(Events.ROTATE_START, this.camera, this, duration, tmpDestination);
+                this.camera.emit(Events2.ROTATE_START, this.camera, this, duration, tmpDestination);
                 return cam;
               },
               update: function(time, delta) {
@@ -50940,7 +50940,7 @@
                 this._onUpdate = null;
                 this._onUpdateScope = null;
                 this.isRunning = false;
-                this.camera.emit(Events.ROTATE_COMPLETE, this.camera, this);
+                this.camera.emit(Events2.ROTATE_COMPLETE, this.camera, this);
               },
               reset: function() {
                 this.isRunning = false;
@@ -50960,7 +50960,7 @@
             var Clamp = __webpack_require__(18);
             var Class = __webpack_require__(0);
             var EaseMap = __webpack_require__(134);
-            var Events = __webpack_require__(37);
+            var Events2 = __webpack_require__(37);
             var Zoom = new Class({
               initialize: function Zoom2(camera) {
                 this.camera = camera;
@@ -51007,7 +51007,7 @@
                 this._elapsed = 0;
                 this._onUpdate = callback;
                 this._onUpdateScope = context2;
-                this.camera.emit(Events.ZOOM_START, this.camera, this, duration, zoom);
+                this.camera.emit(Events2.ZOOM_START, this.camera, this, duration, zoom);
                 return cam;
               },
               update: function(time, delta) {
@@ -51033,7 +51033,7 @@
                 this._onUpdate = null;
                 this._onUpdateScope = null;
                 this.isRunning = false;
-                this.camera.emit(Events.ZOOM_COMPLETE, this.camera, this);
+                this.camera.emit(Events2.ZOOM_COMPLETE, this.camera, this);
               },
               reset: function() {
                 this.isRunning = false;
@@ -53858,7 +53858,7 @@
             var Device = __webpack_require__(347);
             var DOMContentLoaded = __webpack_require__(400);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(22);
+            var Events2 = __webpack_require__(22);
             var InputManager = __webpack_require__(409);
             var PluginCache = __webpack_require__(24);
             var PluginManager = __webpack_require__(414);
@@ -53919,10 +53919,10 @@
                 DebugHeader(this);
                 AddToDOM(this.canvas, this.config.parent);
                 this.textures.once(TextureEvents.READY, this.texturesReady, this);
-                this.events.emit(Events.BOOT);
+                this.events.emit(Events2.BOOT);
               },
               texturesReady: function() {
-                this.events.emit(Events.READY);
+                this.events.emit(Events2.READY);
                 this.start();
               },
               start: function() {
@@ -53935,46 +53935,46 @@
                 }
                 VisibilityHandler(this);
                 var eventEmitter = this.events;
-                eventEmitter.on(Events.HIDDEN, this.onHidden, this);
-                eventEmitter.on(Events.VISIBLE, this.onVisible, this);
-                eventEmitter.on(Events.BLUR, this.onBlur, this);
-                eventEmitter.on(Events.FOCUS, this.onFocus, this);
+                eventEmitter.on(Events2.HIDDEN, this.onHidden, this);
+                eventEmitter.on(Events2.VISIBLE, this.onVisible, this);
+                eventEmitter.on(Events2.BLUR, this.onBlur, this);
+                eventEmitter.on(Events2.FOCUS, this.onFocus, this);
               },
               step: function(time, delta) {
                 if (this.pendingDestroy) {
                   return this.runDestroy();
                 }
                 var eventEmitter = this.events;
-                eventEmitter.emit(Events.PRE_STEP, time, delta);
-                eventEmitter.emit(Events.STEP, time, delta);
+                eventEmitter.emit(Events2.PRE_STEP, time, delta);
+                eventEmitter.emit(Events2.STEP, time, delta);
                 this.scene.update(time, delta);
-                eventEmitter.emit(Events.POST_STEP, time, delta);
+                eventEmitter.emit(Events2.POST_STEP, time, delta);
                 var renderer = this.renderer;
                 renderer.preRender();
-                eventEmitter.emit(Events.PRE_RENDER, renderer, time, delta);
+                eventEmitter.emit(Events2.PRE_RENDER, renderer, time, delta);
                 this.scene.render(renderer);
                 renderer.postRender();
-                eventEmitter.emit(Events.POST_RENDER, renderer, time, delta);
+                eventEmitter.emit(Events2.POST_RENDER, renderer, time, delta);
               },
               headlessStep: function(time, delta) {
                 if (this.pendingDestroy) {
                   return this.runDestroy();
                 }
                 var eventEmitter = this.events;
-                eventEmitter.emit(Events.PRE_STEP, time, delta);
-                eventEmitter.emit(Events.STEP, time, delta);
+                eventEmitter.emit(Events2.PRE_STEP, time, delta);
+                eventEmitter.emit(Events2.STEP, time, delta);
                 this.scene.update(time, delta);
-                eventEmitter.emit(Events.POST_STEP, time, delta);
-                eventEmitter.emit(Events.PRE_RENDER);
-                eventEmitter.emit(Events.POST_RENDER);
+                eventEmitter.emit(Events2.POST_STEP, time, delta);
+                eventEmitter.emit(Events2.PRE_RENDER);
+                eventEmitter.emit(Events2.POST_RENDER);
               },
               onHidden: function() {
                 this.loop.pause();
-                this.events.emit(Events.PAUSE);
+                this.events.emit(Events2.PAUSE);
               },
               onVisible: function() {
                 this.loop.resume();
-                this.events.emit(Events.RESUME);
+                this.events.emit(Events2.RESUME);
               },
               onBlur: function() {
                 this.hasFocus = false;
@@ -54000,7 +54000,7 @@
               },
               runDestroy: function() {
                 this.scene.destroy();
-                this.events.emit(Events.DESTROY);
+                this.events.emit(Events2.DESTROY);
                 this.events.removeAllListeners();
                 if (this.renderer) {
                   this.renderer.destroy();
@@ -54773,7 +54773,7 @@
             var Class = __webpack_require__(0);
             var List = __webpack_require__(110);
             var PluginCache = __webpack_require__(24);
-            var GameObjectEvents3 = __webpack_require__(75);
+            var GameObjectEvents2 = __webpack_require__(75);
             var SceneEvents = __webpack_require__(20);
             var StableSort = __webpack_require__(79);
             var DisplayList = new Class({
@@ -54799,14 +54799,14 @@
                 if (!gameObject.displayList) {
                   this.queueDepthSort();
                   gameObject.displayList = this;
-                  gameObject.emit(GameObjectEvents3.ADDED_TO_SCENE, gameObject, this.scene);
+                  gameObject.emit(GameObjectEvents2.ADDED_TO_SCENE, gameObject, this.scene);
                   this.events.emit(SceneEvents.ADDED_TO_SCENE, gameObject, this.scene);
                 }
               },
               removeChildCallback: function(gameObject) {
                 this.queueDepthSort();
                 gameObject.displayList = null;
-                gameObject.emit(GameObjectEvents3.REMOVED_FROM_SCENE, gameObject, this.scene);
+                gameObject.emit(GameObjectEvents2.REMOVED_FROM_SCENE, gameObject, this.scene);
                 this.events.emit(SceneEvents.REMOVED_FROM_SCENE, gameObject, this.scene);
               },
               start: function() {
@@ -61235,7 +61235,7 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(239);
+            var Events2 = __webpack_require__(239);
             var Gamepad = __webpack_require__(511);
             var GetValue = __webpack_require__(6);
             var InputPluginCache = __webpack_require__(153);
@@ -61372,9 +61372,9 @@
                   var event = queue[i];
                   var pad = this.getPad(event.gamepad.index);
                   if (event.type === "gamepadconnected") {
-                    this.emit(Events.CONNECTED, pad, event);
+                    this.emit(Events2.CONNECTED, pad, event);
                   } else if (event.type === "gamepaddisconnected") {
-                    this.emit(Events.DISCONNECTED, pad, event);
+                    this.emit(Events2.DISCONNECTED, pad, event);
                   }
                 }
               },
@@ -61508,7 +61508,7 @@
             var DistanceBetween = __webpack_require__(50);
             var Ellipse = __webpack_require__(111);
             var EllipseContains = __webpack_require__(112);
-            var Events = __webpack_require__(51);
+            var Events2 = __webpack_require__(51);
             var EventEmitter = __webpack_require__(9);
             var GetFastValue = __webpack_require__(2);
             var GEOM_CONST = __webpack_require__(56);
@@ -61564,7 +61564,7 @@
                 this.cameras = this.systems.cameras;
                 this.displayList = this.systems.displayList;
                 this.systems.events.once(SceneEvents.DESTROY, this.destroy, this);
-                this.pluginEvents.emit(Events.BOOT);
+                this.pluginEvents.emit(Events2.BOOT);
               },
               start: function() {
                 var eventEmitter = this.systems.events;
@@ -61573,24 +61573,24 @@
                 eventEmitter.on(SceneEvents.TRANSITION_COMPLETE, this.transitionComplete, this);
                 eventEmitter.on(SceneEvents.PRE_UPDATE, this.preUpdate, this);
                 eventEmitter.once(SceneEvents.SHUTDOWN, this.shutdown, this);
-                this.manager.events.on(Events.GAME_OUT, this.onGameOut, this);
-                this.manager.events.on(Events.GAME_OVER, this.onGameOver, this);
+                this.manager.events.on(Events2.GAME_OUT, this.onGameOut, this);
+                this.manager.events.on(Events2.GAME_OVER, this.onGameOver, this);
                 this.enabled = true;
                 this._dragState = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-                this.pluginEvents.emit(Events.START);
+                this.pluginEvents.emit(Events2.START);
               },
               onGameOver: function(event) {
                 if (this.isActive()) {
-                  this.emit(Events.GAME_OVER, event.timeStamp, event);
+                  this.emit(Events2.GAME_OVER, event.timeStamp, event);
                 }
               },
               onGameOut: function(event) {
                 if (this.isActive()) {
-                  this.emit(Events.GAME_OUT, event.timeStamp, event);
+                  this.emit(Events2.GAME_OUT, event.timeStamp, event);
                 }
               },
               preUpdate: function() {
-                this.pluginEvents.emit(Events.PRE_UPDATE);
+                this.pluginEvents.emit(Events2.PRE_UPDATE);
                 var removeList = this._pendingRemoval;
                 var insertList = this._pendingInsertion;
                 var toRemove = removeList.length;
@@ -61618,7 +61618,7 @@
                 if (!this.isActive()) {
                   return false;
                 }
-                this.pluginEvents.emit(Events.UPDATE, time, delta);
+                this.pluginEvents.emit(Events2.UPDATE, time, delta);
                 if (this._updatedThisFrame) {
                   this._updatedThisFrame = false;
                   return false;
@@ -61811,12 +61811,12 @@
                     continue;
                   }
                   total++;
-                  gameObject.emit(Events.GAMEOBJECT_POINTER_DOWN, pointer, gameObject.input.localX, gameObject.input.localY, _eventContainer);
+                  gameObject.emit(Events2.GAMEOBJECT_POINTER_DOWN, pointer, gameObject.input.localX, gameObject.input.localY, _eventContainer);
                   if (_eventData.cancelled || !gameObject.input) {
                     aborted = true;
                     break;
                   }
-                  this.emit(Events.GAMEOBJECT_DOWN, pointer, gameObject, _eventContainer);
+                  this.emit(Events2.GAMEOBJECT_DOWN, pointer, gameObject, _eventContainer);
                   if (_eventData.cancelled || !gameObject.input) {
                     aborted = true;
                     break;
@@ -61824,9 +61824,9 @@
                 }
                 if (!aborted && this.manager) {
                   if (pointer.downElement === this.manager.game.canvas) {
-                    this.emit(Events.POINTER_DOWN, pointer, currentlyOver);
+                    this.emit(Events2.POINTER_DOWN, pointer, currentlyOver);
                   } else {
-                    this.emit(Events.POINTER_DOWN_OUTSIDE, pointer);
+                    this.emit(Events2.POINTER_DOWN_OUTSIDE, pointer);
                   }
                 }
                 return total;
@@ -61866,8 +61866,8 @@
                   input.dragStartYGlobal = pointer.worldY;
                   input.dragX = input.dragStartXGlobal - input.dragStartX;
                   input.dragY = input.dragStartYGlobal - input.dragStartY;
-                  gameObject.emit(Events.GAMEOBJECT_DRAG_START, pointer, input.dragX, input.dragY);
-                  this.emit(Events.DRAG_START, pointer, gameObject);
+                  gameObject.emit(Events2.GAMEOBJECT_DRAG_START, pointer, input.dragX, input.dragY);
+                  this.emit(Events2.DRAG_START, pointer, gameObject);
                 }
                 this.setDragState(pointer, 4);
                 return list.length;
@@ -61919,23 +61919,23 @@
                   if (target) {
                     var index = dropZones.indexOf(target);
                     if (index === 0) {
-                      gameObject.emit(Events.GAMEOBJECT_DRAG_OVER, pointer, target);
-                      this.emit(Events.DRAG_OVER, pointer, gameObject, target);
+                      gameObject.emit(Events2.GAMEOBJECT_DRAG_OVER, pointer, target);
+                      this.emit(Events2.DRAG_OVER, pointer, gameObject, target);
                     } else if (index > 0) {
-                      gameObject.emit(Events.GAMEOBJECT_DRAG_LEAVE, pointer, target);
-                      this.emit(Events.DRAG_LEAVE, pointer, gameObject, target);
+                      gameObject.emit(Events2.GAMEOBJECT_DRAG_LEAVE, pointer, target);
+                      this.emit(Events2.DRAG_LEAVE, pointer, gameObject, target);
                       input.target = dropZones[0];
                       target = input.target;
-                      gameObject.emit(Events.GAMEOBJECT_DRAG_ENTER, pointer, target);
-                      this.emit(Events.DRAG_ENTER, pointer, gameObject, target);
+                      gameObject.emit(Events2.GAMEOBJECT_DRAG_ENTER, pointer, target);
+                      this.emit(Events2.DRAG_ENTER, pointer, gameObject, target);
                     } else {
-                      gameObject.emit(Events.GAMEOBJECT_DRAG_LEAVE, pointer, target);
-                      this.emit(Events.DRAG_LEAVE, pointer, gameObject, target);
+                      gameObject.emit(Events2.GAMEOBJECT_DRAG_LEAVE, pointer, target);
+                      this.emit(Events2.DRAG_LEAVE, pointer, gameObject, target);
                       if (dropZones[0]) {
                         input.target = dropZones[0];
                         target = input.target;
-                        gameObject.emit(Events.GAMEOBJECT_DRAG_ENTER, pointer, target);
-                        this.emit(Events.DRAG_ENTER, pointer, gameObject, target);
+                        gameObject.emit(Events2.GAMEOBJECT_DRAG_ENTER, pointer, target);
+                        this.emit(Events2.DRAG_ENTER, pointer, gameObject, target);
                       } else {
                         input.target = null;
                       }
@@ -61943,8 +61943,8 @@
                   } else if (!target && dropZones[0]) {
                     input.target = dropZones[0];
                     target = input.target;
-                    gameObject.emit(Events.GAMEOBJECT_DRAG_ENTER, pointer, target);
-                    this.emit(Events.DRAG_ENTER, pointer, gameObject, target);
+                    gameObject.emit(Events2.GAMEOBJECT_DRAG_ENTER, pointer, target);
+                    this.emit(Events2.DRAG_ENTER, pointer, gameObject, target);
                   }
                   var dragX;
                   var dragY;
@@ -61962,8 +61962,8 @@
                     dragX = dxRotated + input.dragStartX;
                     dragY = dyRotated + input.dragStartY;
                   }
-                  gameObject.emit(Events.GAMEOBJECT_DRAG, pointer, dragX, dragY);
-                  this.emit(Events.DRAG, pointer, gameObject, dragX, dragY);
+                  gameObject.emit(Events2.GAMEOBJECT_DRAG, pointer, dragX, dragY);
+                  this.emit(Events2.DRAG, pointer, gameObject, dragX, dragY);
                 }
                 return list.length;
               },
@@ -61979,14 +61979,14 @@
                     var dropped = false;
                     var target = input.target;
                     if (target) {
-                      gameObject.emit(Events.GAMEOBJECT_DROP, pointer, target);
-                      this.emit(Events.DROP, pointer, gameObject, target);
+                      gameObject.emit(Events2.GAMEOBJECT_DROP, pointer, target);
+                      this.emit(Events2.DROP, pointer, gameObject, target);
                       input.target = null;
                       dropped = true;
                     }
                     if (gameObject.input) {
-                      gameObject.emit(Events.GAMEOBJECT_DRAG_END, pointer, input.dragX, input.dragY, dropped);
-                      this.emit(Events.DRAG_END, pointer, gameObject, dropped);
+                      gameObject.emit(Events2.GAMEOBJECT_DRAG_END, pointer, input.dragX, input.dragY, dropped);
+                      this.emit(Events2.DRAG_END, pointer, gameObject, dropped);
                     }
                   }
                 }
@@ -62007,12 +62007,12 @@
                     continue;
                   }
                   total++;
-                  gameObject.emit(Events.GAMEOBJECT_POINTER_MOVE, pointer, gameObject.input.localX, gameObject.input.localY, _eventContainer);
+                  gameObject.emit(Events2.GAMEOBJECT_POINTER_MOVE, pointer, gameObject.input.localX, gameObject.input.localY, _eventContainer);
                   if (_eventData.cancelled || !gameObject.input) {
                     aborted = true;
                     break;
                   }
-                  this.emit(Events.GAMEOBJECT_MOVE, pointer, gameObject, _eventContainer);
+                  this.emit(Events2.GAMEOBJECT_MOVE, pointer, gameObject, _eventContainer);
                   if (_eventData.cancelled || !gameObject.input) {
                     aborted = true;
                     break;
@@ -62022,7 +62022,7 @@
                   }
                 }
                 if (!aborted) {
-                  this.emit(Events.POINTER_MOVE, pointer, currentlyOver);
+                  this.emit(Events2.POINTER_MOVE, pointer, currentlyOver);
                 }
                 return total;
               },
@@ -62042,19 +62042,19 @@
                     continue;
                   }
                   total++;
-                  gameObject.emit(Events.GAMEOBJECT_POINTER_WHEEL, pointer, dx, dy, dz, _eventContainer);
+                  gameObject.emit(Events2.GAMEOBJECT_POINTER_WHEEL, pointer, dx, dy, dz, _eventContainer);
                   if (_eventData.cancelled || !gameObject.input) {
                     aborted = true;
                     break;
                   }
-                  this.emit(Events.GAMEOBJECT_WHEEL, pointer, gameObject, dx, dy, dz, _eventContainer);
+                  this.emit(Events2.GAMEOBJECT_WHEEL, pointer, gameObject, dx, dy, dz, _eventContainer);
                   if (_eventData.cancelled || !gameObject.input) {
                     aborted = true;
                     break;
                   }
                 }
                 if (!aborted) {
-                  this.emit(Events.POINTER_WHEEL, pointer, currentlyOver, dx, dy, dz);
+                  this.emit(Events2.POINTER_WHEEL, pointer, currentlyOver, dx, dy, dz);
                 }
                 return total;
               },
@@ -62076,20 +62076,20 @@
                     }
                     justOver.push(gameObject);
                     manager.setCursor(gameObject.input);
-                    gameObject.emit(Events.GAMEOBJECT_POINTER_OVER, pointer, gameObject.input.localX, gameObject.input.localY, _eventContainer);
+                    gameObject.emit(Events2.GAMEOBJECT_POINTER_OVER, pointer, gameObject.input.localX, gameObject.input.localY, _eventContainer);
                     totalInteracted++;
                     if (_eventData.cancelled || !gameObject.input) {
                       aborted = true;
                       break;
                     }
-                    this.emit(Events.GAMEOBJECT_OVER, pointer, gameObject, _eventContainer);
+                    this.emit(Events2.GAMEOBJECT_OVER, pointer, gameObject, _eventContainer);
                     if (_eventData.cancelled || !gameObject.input) {
                       aborted = true;
                       break;
                     }
                   }
                   if (!aborted) {
-                    this.emit(Events.POINTER_OVER, pointer, justOver);
+                    this.emit(Events2.POINTER_OVER, pointer, justOver);
                   }
                 }
                 this._over[pointer.id] = justOver;
@@ -62113,19 +62113,19 @@
                       continue;
                     }
                     manager.resetCursor(gameObject.input);
-                    gameObject.emit(Events.GAMEOBJECT_POINTER_OUT, pointer, _eventContainer);
+                    gameObject.emit(Events2.GAMEOBJECT_POINTER_OUT, pointer, _eventContainer);
                     totalInteracted++;
                     if (_eventData.cancelled || !gameObject.input) {
                       aborted = true;
                       break;
                     }
-                    this.emit(Events.GAMEOBJECT_OUT, pointer, gameObject, _eventContainer);
+                    this.emit(Events2.GAMEOBJECT_OUT, pointer, gameObject, _eventContainer);
                     if (_eventData.cancelled || !gameObject.input) {
                       aborted = true;
                       break;
                     }
                     if (!aborted) {
-                      this.emit(Events.POINTER_OUT, pointer, previouslyOver);
+                      this.emit(Events2.POINTER_OUT, pointer, previouslyOver);
                     }
                   }
                   this._over[pointer.id] = [];
@@ -62170,20 +62170,20 @@
                       continue;
                     }
                     manager.resetCursor(gameObject.input);
-                    gameObject.emit(Events.GAMEOBJECT_POINTER_OUT, pointer, _eventContainer);
+                    gameObject.emit(Events2.GAMEOBJECT_POINTER_OUT, pointer, _eventContainer);
                     totalInteracted++;
                     if (_eventData.cancelled || !gameObject.input) {
                       aborted = true;
                       break;
                     }
-                    this.emit(Events.GAMEOBJECT_OUT, pointer, gameObject, _eventContainer);
+                    this.emit(Events2.GAMEOBJECT_OUT, pointer, gameObject, _eventContainer);
                     if (_eventData.cancelled || !gameObject.input) {
                       aborted = true;
                       break;
                     }
                   }
                   if (!aborted) {
-                    this.emit(Events.POINTER_OUT, pointer, justOut);
+                    this.emit(Events2.POINTER_OUT, pointer, justOut);
                   }
                 }
                 total = justOver.length;
@@ -62197,20 +62197,20 @@
                       continue;
                     }
                     manager.setCursor(gameObject.input);
-                    gameObject.emit(Events.GAMEOBJECT_POINTER_OVER, pointer, gameObject.input.localX, gameObject.input.localY, _eventContainer);
+                    gameObject.emit(Events2.GAMEOBJECT_POINTER_OVER, pointer, gameObject.input.localX, gameObject.input.localY, _eventContainer);
                     totalInteracted++;
                     if (_eventData.cancelled || !gameObject.input) {
                       aborted = true;
                       break;
                     }
-                    this.emit(Events.GAMEOBJECT_OVER, pointer, gameObject, _eventContainer);
+                    this.emit(Events2.GAMEOBJECT_OVER, pointer, gameObject, _eventContainer);
                     if (_eventData.cancelled || !gameObject.input) {
                       aborted = true;
                       break;
                     }
                   }
                   if (!aborted) {
-                    this.emit(Events.POINTER_OVER, pointer, justOver);
+                    this.emit(Events2.POINTER_OVER, pointer, justOver);
                   }
                 }
                 previouslyOver = stillOver.concat(justOver);
@@ -62228,12 +62228,12 @@
                   if (!gameObject.input) {
                     continue;
                   }
-                  gameObject.emit(Events.GAMEOBJECT_POINTER_UP, pointer, gameObject.input.localX, gameObject.input.localY, _eventContainer);
+                  gameObject.emit(Events2.GAMEOBJECT_POINTER_UP, pointer, gameObject.input.localX, gameObject.input.localY, _eventContainer);
                   if (_eventData.cancelled || !gameObject.input) {
                     aborted = true;
                     break;
                   }
-                  this.emit(Events.GAMEOBJECT_UP, pointer, gameObject, _eventContainer);
+                  this.emit(Events2.GAMEOBJECT_UP, pointer, gameObject, _eventContainer);
                   if (_eventData.cancelled || !gameObject.input) {
                     aborted = true;
                     break;
@@ -62241,9 +62241,9 @@
                 }
                 if (!aborted && this.manager) {
                   if (pointer.upElement === this.manager.game.canvas) {
-                    this.emit(Events.POINTER_UP, pointer, currentlyOver);
+                    this.emit(Events2.POINTER_UP, pointer, currentlyOver);
                   } else {
-                    this.emit(Events.POINTER_UP_OUTSIDE, pointer);
+                    this.emit(Events2.POINTER_UP_OUTSIDE, pointer);
                   }
                 }
                 return currentlyOver.length;
@@ -62564,7 +62564,7 @@
                 this.enabled = this.settings.transitionAllowInput;
               },
               shutdown: function() {
-                this.pluginEvents.emit(Events.SHUTDOWN);
+                this.pluginEvents.emit(Events2.SHUTDOWN);
                 this._temp.length = 0;
                 this._list.length = 0;
                 this._draggable.length = 0;
@@ -62583,13 +62583,13 @@
                 eventEmitter.off(SceneEvents.TRANSITION_OUT, this.transitionOut, this);
                 eventEmitter.off(SceneEvents.TRANSITION_COMPLETE, this.transitionComplete, this);
                 eventEmitter.off(SceneEvents.PRE_UPDATE, this.preUpdate, this);
-                manager.events.off(Events.GAME_OUT, this.onGameOut, this);
-                manager.events.off(Events.GAME_OVER, this.onGameOver, this);
+                manager.events.off(Events2.GAME_OUT, this.onGameOut, this);
+                manager.events.off(Events2.GAME_OVER, this.onGameOver, this);
                 eventEmitter.off(SceneEvents.SHUTDOWN, this.shutdown, this);
               },
               destroy: function() {
                 this.shutdown();
-                this.pluginEvents.emit(Events.DESTROY);
+                this.pluginEvents.emit(Events2.DESTROY);
                 this.pluginEvents.removeAllListeners();
                 this.scene.sys.events.off(SceneEvents.START, this.start, this);
                 this.scene = null;
@@ -62718,7 +62718,7 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(154);
+            var Events2 = __webpack_require__(154);
             var GameEvents = __webpack_require__(22);
             var GetValue = __webpack_require__(6);
             var InputEvents = __webpack_require__(51);
@@ -62948,10 +62948,10 @@
                     }
                     if (!event.cancelled && (!key || !repeat)) {
                       if (KeyMap[code]) {
-                        this.emit(Events.KEY_DOWN + KeyMap[code], event);
+                        this.emit(Events2.KEY_DOWN + KeyMap[code], event);
                       }
                       if (!event.cancelled) {
-                        this.emit(Events.ANY_KEY_DOWN, event);
+                        this.emit(Events2.ANY_KEY_DOWN, event);
                       }
                     }
                   } else {
@@ -62960,10 +62960,10 @@
                     }
                     if (!event.cancelled) {
                       if (KeyMap[code]) {
-                        this.emit(Events.KEY_UP + KeyMap[code], event);
+                        this.emit(Events2.KEY_UP + KeyMap[code], event);
                       }
                       if (!event.cancelled) {
-                        this.emit(Events.ANY_KEY_UP, event);
+                        this.emit(Events2.ANY_KEY_UP, event);
                       }
                     }
                   }
@@ -64906,7 +64906,7 @@
             var CONST = __webpack_require__(21);
             var CustomSet = __webpack_require__(149);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(95);
+            var Events2 = __webpack_require__(95);
             var FileTypesManager = __webpack_require__(8);
             var GetFastValue = __webpack_require__(2);
             var PluginCache = __webpack_require__(24);
@@ -64991,7 +64991,7 @@
                   var item = file[i];
                   if (!this.keyExists(item)) {
                     this.list.set(item);
-                    this.emit(Events.ADD, item.key, item.type, this, item);
+                    this.emit(Events2.ADD, item.key, item.type, this, item);
                     if (this.isLoading()) {
                       this.totalToLoad++;
                       this.updateProgress();
@@ -65076,7 +65076,7 @@
                 this.totalFailed = 0;
                 this.totalComplete = 0;
                 this.totalToLoad = this.list.size;
-                this.emit(Events.START, this);
+                this.emit(Events2.START, this);
                 if (this.list.size === 0) {
                   this.loadComplete();
                 } else {
@@ -65090,7 +65090,7 @@
               },
               updateProgress: function() {
                 this.progress = 1 - (this.list.size + this.inflight.size) / this.totalToLoad;
-                this.emit(Events.PROGRESS, this.progress);
+                this.emit(Events2.PROGRESS, this.progress);
               },
               update: function() {
                 if (this.state === CONST.LOADER_LOADING && this.list.size > 0 && this.inflight.size < this.maxParallelDownloads) {
@@ -65121,12 +65121,12 @@
                 if (success) {
                   this.totalComplete++;
                   this.queue.set(file);
-                  this.emit(Events.FILE_LOAD, file);
+                  this.emit(Events2.FILE_LOAD, file);
                   file.onProcess();
                 } else {
                   this.totalFailed++;
                   this._deleteQueue.set(file);
-                  this.emit(Events.FILE_LOAD_ERROR, file);
+                  this.emit(Events2.FILE_LOAD_ERROR, file);
                   this.fileProcessComplete(file);
                 }
               },
@@ -65153,7 +65153,7 @@
                 }
               },
               loadComplete: function() {
-                this.emit(Events.POST_PROCESS, this);
+                this.emit(Events2.POST_PROCESS, this);
                 this.list.clear();
                 this.inflight.clear();
                 this.queue.clear();
@@ -65162,7 +65162,7 @@
                 this.systems.events.off(SceneEvents.UPDATE, this.update, this);
                 this._deleteQueue.iterateLocal("destroy");
                 this._deleteQueue.clear();
-                this.emit(Events.COMPLETE, this, this.totalComplete, this.totalFailed);
+                this.emit(Events2.COMPLETE, this, this.totalComplete, this.totalFailed);
               },
               flagForRemoval: function(file) {
                 this._deleteQueue.set(file);
@@ -67074,7 +67074,7 @@
             var Composite = __webpack_require__(118);
             var Constraint = __webpack_require__(128);
             var Detector = __webpack_require__(273);
-            var Events = __webpack_require__(272);
+            var Events2 = __webpack_require__(272);
             var InputEvents = __webpack_require__(51);
             var Merge = __webpack_require__(127);
             var Sleeping = __webpack_require__(165);
@@ -67107,7 +67107,7 @@
                 this.body = null;
                 this.part = null;
                 this.constraint = Constraint.create(Merge(options, defaults));
-                this.world.on(Events.BEFORE_UPDATE, this.update, this);
+                this.world.on(Events2.BEFORE_UPDATE, this.update, this);
                 scene.sys.input.on(InputEvents.POINTER_DOWN, this.onDown, this);
                 scene.sys.input.on(InputEvents.POINTER_UP, this.onUp, this);
               },
@@ -67131,7 +67131,7 @@
                   var body = bodies[i];
                   if (!body.ignorePointer && Bounds.contains(body.bounds, pos) && Detector.canCollide(body.collisionFilter, constraint.collisionFilter)) {
                     if (this.hitTestBody(body, pos)) {
-                      this.world.emit(Events.DRAG_START, body, this.part, this);
+                      this.world.emit(Events2.DRAG_START, body, this.part, this);
                       return true;
                     }
                   }
@@ -67180,7 +67180,7 @@
                   constraint.pointA.x = pos.x;
                   constraint.pointA.y = pos.y;
                   Sleeping.set(body, false);
-                  this.world.emit(Events.DRAG, body, this);
+                  this.world.emit(Events2.DRAG, body, this);
                 }
               },
               stopDrag: function() {
@@ -67192,7 +67192,7 @@
                 this.body = null;
                 this.part = null;
                 if (body) {
-                  this.world.emit(Events.DRAG_END, body, this);
+                  this.world.emit(Events2.DRAG_END, body, this);
                 }
               },
               destroy: function() {
@@ -67201,7 +67201,7 @@
                 this.constraint = null;
                 this.body = null;
                 this.part = null;
-                this.world.off(Events.BEFORE_UPDATE, this.update);
+                this.world.off(Events2.BEFORE_UPDATE, this.update);
                 this.scene.sys.input.off(InputEvents.POINTER_DOWN, this.onDown, this);
                 this.scene.sys.input.off(InputEvents.POINTER_UP, this.onUp, this);
               }
@@ -67307,7 +67307,7 @@
             var Pairs = __webpack_require__(598);
             var Metrics = __webpack_require__(1523);
             var Grid = __webpack_require__(597);
-            var Events = __webpack_require__(166);
+            var Events2 = __webpack_require__(166);
             var Composite = __webpack_require__(118);
             var Constraint = __webpack_require__(128);
             var Common = __webpack_require__(32);
@@ -67351,7 +67351,7 @@
                 var event = {
                   timestamp: timing.timestamp
                 };
-                Events.trigger(engine, "beforeUpdate", event);
+                Events2.trigger(engine, "beforeUpdate", event);
                 var allBodies = Composite.allBodies(world), allConstraints = Composite.allConstraints(world);
                 Metrics.reset(engine.metrics);
                 if (engine.enableSleeping)
@@ -67381,7 +67381,7 @@
                 if (engine.enableSleeping)
                   Sleeping.afterCollisions(pairs.list, timing.timeScale);
                 if (pairs.collisionStart.length > 0)
-                  Events.trigger(engine, "collisionStart", { pairs: pairs.collisionStart });
+                  Events2.trigger(engine, "collisionStart", { pairs: pairs.collisionStart });
                 Resolver.preSolvePosition(pairs.list);
                 for (i = 0; i < engine.positionIterations; i++) {
                   Resolver.solvePosition(pairs.list, allBodies, timing.timeScale);
@@ -67397,12 +67397,12 @@
                   Resolver.solveVelocity(pairs.list, timing.timeScale);
                 }
                 if (pairs.collisionActive.length > 0)
-                  Events.trigger(engine, "collisionActive", { pairs: pairs.collisionActive });
+                  Events2.trigger(engine, "collisionActive", { pairs: pairs.collisionActive });
                 if (pairs.collisionEnd.length > 0)
-                  Events.trigger(engine, "collisionEnd", { pairs: pairs.collisionEnd });
+                  Events2.trigger(engine, "collisionEnd", { pairs: pairs.collisionEnd });
                 Metrics.update(engine.metrics, engine);
                 Engine._bodiesClearForces(allBodies);
-                Events.trigger(engine, "afterUpdate", event);
+                Events2.trigger(engine, "afterUpdate", event);
                 return engine;
               };
               Engine.merge = function(engineA, engineB) {
@@ -67467,7 +67467,7 @@
             var Composite = __webpack_require__(118);
             var Engine = __webpack_require__(1401);
             var EventEmitter = __webpack_require__(9);
-            var Events = __webpack_require__(272);
+            var Events2 = __webpack_require__(272);
             var GetFastValue = __webpack_require__(2);
             var GetValue = __webpack_require__(6);
             var MatterBody = __webpack_require__(41);
@@ -67726,22 +67726,22 @@
                   });
                 }
                 MatterEvents.on(world, "beforeAdd", function(event) {
-                  _this.emit(Events.BEFORE_ADD, event);
+                  _this.emit(Events2.BEFORE_ADD, event);
                 });
                 MatterEvents.on(world, "afterAdd", function(event) {
-                  _this.emit(Events.AFTER_ADD, event);
+                  _this.emit(Events2.AFTER_ADD, event);
                 });
                 MatterEvents.on(world, "beforeRemove", function(event) {
-                  _this.emit(Events.BEFORE_REMOVE, event);
+                  _this.emit(Events2.BEFORE_REMOVE, event);
                 });
                 MatterEvents.on(world, "afterRemove", function(event) {
-                  _this.emit(Events.AFTER_REMOVE, event);
+                  _this.emit(Events2.AFTER_REMOVE, event);
                 });
                 MatterEvents.on(engine, "beforeUpdate", function(event) {
-                  _this.emit(Events.BEFORE_UPDATE, event);
+                  _this.emit(Events2.BEFORE_UPDATE, event);
                 });
                 MatterEvents.on(engine, "afterUpdate", function(event) {
-                  _this.emit(Events.AFTER_UPDATE, event);
+                  _this.emit(Events2.AFTER_UPDATE, event);
                 });
                 MatterEvents.on(engine, "collisionStart", function(event) {
                   var pairs = event.pairs;
@@ -67751,7 +67751,7 @@
                     bodyA = pairs[0].bodyA;
                     bodyB = pairs[0].bodyB;
                   }
-                  _this.emit(Events.COLLISION_START, event, bodyA, bodyB);
+                  _this.emit(Events2.COLLISION_START, event, bodyA, bodyB);
                 });
                 MatterEvents.on(engine, "collisionActive", function(event) {
                   var pairs = event.pairs;
@@ -67761,7 +67761,7 @@
                     bodyA = pairs[0].bodyA;
                     bodyB = pairs[0].bodyB;
                   }
-                  _this.emit(Events.COLLISION_ACTIVE, event, bodyA, bodyB);
+                  _this.emit(Events2.COLLISION_ACTIVE, event, bodyA, bodyB);
                 });
                 MatterEvents.on(engine, "collisionEnd", function(event) {
                   var pairs = event.pairs;
@@ -67771,7 +67771,7 @@
                     bodyA = pairs[0].bodyA;
                     bodyB = pairs[0].bodyB;
                   }
-                  _this.emit(Events.COLLISION_END, event, bodyA, bodyB);
+                  _this.emit(Events2.COLLISION_END, event, bodyA, bodyB);
                 });
               },
               setBounds: function(x, y, width, height, thickness, left, right, top, bottom) {
@@ -67898,12 +67898,12 @@
               },
               pause: function() {
                 this.enabled = false;
-                this.emit(Events.PAUSE);
+                this.emit(Events2.PAUSE);
                 return this;
               },
               resume: function() {
                 this.enabled = true;
-                this.emit(Events.RESUME);
+                this.emit(Events2.RESUME);
                 return this;
               },
               update: function(time, delta) {
@@ -68633,7 +68633,7 @@
           function(module2, exports2, __webpack_require__) {
             var CONST = __webpack_require__(144);
             var Extend = __webpack_require__(17);
-            var Scene2 = {
+            var Scene3 = {
               Events: __webpack_require__(20),
               GetPhysicsPlugins: __webpack_require__(419),
               GetScenePlugins: __webpack_require__(420),
@@ -68642,13 +68642,13 @@
               Settings: __webpack_require__(421),
               Systems: __webpack_require__(204)
             };
-            Scene2 = Extend(false, Scene2, CONST);
-            module2.exports = Scene2;
+            Scene3 = Extend(false, Scene3, CONST);
+            module2.exports = Scene3;
           },
           function(module2, exports2, __webpack_require__) {
             var Clamp = __webpack_require__(18);
             var Class = __webpack_require__(0);
-            var Events = __webpack_require__(20);
+            var Events2 = __webpack_require__(20);
             var GetFastValue = __webpack_require__(2);
             var PluginCache = __webpack_require__(24);
             var ScenePlugin = new Class({
@@ -68666,15 +68666,15 @@
                 this._onUpdateScope;
                 this._willSleep = false;
                 this._willRemove = false;
-                scene.sys.events.once(Events.BOOT, this.boot, this);
-                scene.sys.events.on(Events.START, this.pluginStart, this);
+                scene.sys.events.once(Events2.BOOT, this.boot, this);
+                scene.sys.events.on(Events2.START, this.pluginStart, this);
               },
               boot: function() {
-                this.systems.events.once(Events.DESTROY, this.destroy, this);
+                this.systems.events.once(Events2.DESTROY, this.destroy, this);
               },
               pluginStart: function() {
                 this._target = null;
-                this.systems.events.once(Events.SHUTDOWN, this.shutdown, this);
+                this.systems.events.once(Events2.SHUTDOWN, this.shutdown, this);
               },
               start: function(key, data) {
                 if (key === void 0) {
@@ -68727,8 +68727,8 @@
                 } else {
                   this.manager.start(key, GetFastValue(config2, "data"));
                 }
-                this.systems.events.emit(Events.TRANSITION_OUT, target, duration);
-                this.systems.events.on(Events.UPDATE, this.step, this);
+                this.systems.events.emit(Events2.TRANSITION_OUT, target, duration);
+                this.systems.events.on(Events2.UPDATE, this.step, this);
                 return true;
               },
               checkValidTransition: function(target) {
@@ -68750,8 +68750,8 @@
               transitionComplete: function() {
                 var targetSys = this._target.sys;
                 var targetSettings = this._target.sys.settings;
-                this.systems.events.off(Events.UPDATE, this.step, this);
-                targetSys.events.emit(Events.TRANSITION_COMPLETE, this.scene);
+                this.systems.events.off(Events2.UPDATE, this.step, this);
+                targetSys.events.emit(Events2.TRANSITION_COMPLETE, this.scene);
                 targetSettings.isTransition = false;
                 targetSettings.transitionFrom = null;
                 this._duration = 0;
@@ -68939,13 +68939,13 @@
               },
               shutdown: function() {
                 var eventEmitter = this.systems.events;
-                eventEmitter.off(Events.SHUTDOWN, this.shutdown, this);
-                eventEmitter.off(Events.POST_UPDATE, this.step, this);
-                eventEmitter.off(Events.TRANSITION_OUT);
+                eventEmitter.off(Events2.SHUTDOWN, this.shutdown, this);
+                eventEmitter.off(Events2.POST_UPDATE, this.step, this);
+                eventEmitter.off(Events2.TRANSITION_OUT);
               },
               destroy: function() {
                 this.shutdown();
-                this.scene.sys.events.off(Events.START, this.start, this);
+                this.scene.sys.events.off(Events2.START, this.start, this);
                 this.scene = null;
                 this.systems = null;
                 this.settings = null;
@@ -70991,7 +70991,7 @@
             module2.exports = SetBody;
           },
           function(module2, exports2, __webpack_require__) {
-            var Events = __webpack_require__(272);
+            var Events2 = __webpack_require__(272);
             var Sleeping = __webpack_require__(165);
             var MatterEvents = __webpack_require__(166);
             var Sleep = {
@@ -71019,7 +71019,7 @@
                 if (value) {
                   var world = this.world;
                   MatterEvents.on(this.body, "sleepStart", function(event) {
-                    world.emit(Events.SLEEP_START, event, this);
+                    world.emit(Events2.SLEEP_START, event, this);
                   });
                 } else {
                   MatterEvents.off(this.body, "sleepStart");
@@ -71030,7 +71030,7 @@
                 if (value) {
                   var world = this.world;
                   MatterEvents.on(this.body, "sleepEnd", function(event) {
-                    world.emit(Events.SLEEP_END, event, this);
+                    world.emit(Events2.SLEEP_END, event, this);
                   });
                 } else {
                   MatterEvents.off(this.body, "sleepEnd");
@@ -76593,12 +76593,17 @@
         child.destroy();
       });
     }
+    static destroySprite(sprite) {
+      sprite.removeAllListeners();
+      sprite.destroy();
+    }
     static getNewSprite(scene, x, y, spriteInfo) {
       const newSprite = new import_phaser.default.GameObjects.Sprite(scene, x, y, spriteInfo.name, spriteInfo.mutation);
       const spriteData = Tools.getSpriteDataFromSpriteInfo(spriteInfo);
       if (spriteData.interactive) {
         newSprite.setInteractive(spriteData.interactive);
       }
+      Tools.loadSpriteAnimations(newSprite);
       return newSprite;
     }
     static renderScene(scene, state, container, spriteRenderCB) {
@@ -76696,28 +76701,35 @@
     }
     static loadSpriteAnimations(sprite) {
       const animationFrames = sprites_default[sprite.texture.key]?.animations;
-      Object.keys(animationFrames).forEach((direction) => {
-        const animationType = animationFrames[direction];
-        sprite.anims.create({
-          key: direction,
-          frames: Globals.Instance.game.anims.generateFrameNumbers(sprite.texture.key, { frames: animationType }),
-          frameRate: 4,
-          repeat: -1
+      if (animationFrames) {
+        Object.keys(animationFrames).forEach((direction) => {
+          const animationType = animationFrames[direction];
+          sprite.anims.create({
+            key: direction,
+            frames: Globals.Instance.game.anims.generateFrameNumbers(sprite.texture.key, { frames: animationType }),
+            frameRate: 4,
+            repeat: -1
+          });
         });
+      }
+    }
+    static orderScenes() {
+      [...Globals.Instance.game.scene.scenes].sort((sceneA, sceneB) => sceneA.data.get("settings").zIndex - sceneB.data.get("settings").zIndex).forEach((scene) => {
+        scene.scene.bringToTop();
       });
     }
   };
 
   // src/Interfaces.ts
-  var GameObjectEvents = /* @__PURE__ */ ((GameObjectEvents3) => {
-    GameObjectEvents3[GameObjectEvents3["pointerdown"] = 0] = "pointerdown";
-    GameObjectEvents3[GameObjectEvents3["pointerup"] = 1] = "pointerup";
-    GameObjectEvents3[GameObjectEvents3["pointermove"] = 2] = "pointermove";
-    GameObjectEvents3[GameObjectEvents3["pointerover"] = 3] = "pointerover";
-    GameObjectEvents3[GameObjectEvents3["pointerout"] = 4] = "pointerout";
-    GameObjectEvents3[GameObjectEvents3["drag"] = 5] = "drag";
-    GameObjectEvents3[GameObjectEvents3["dragend"] = 6] = "dragend";
-    return GameObjectEvents3;
+  var GameObjectEvents = /* @__PURE__ */ ((GameObjectEvents2) => {
+    GameObjectEvents2[GameObjectEvents2["pointerdown"] = 0] = "pointerdown";
+    GameObjectEvents2[GameObjectEvents2["pointerup"] = 1] = "pointerup";
+    GameObjectEvents2[GameObjectEvents2["pointermove"] = 2] = "pointermove";
+    GameObjectEvents2[GameObjectEvents2["pointerover"] = 3] = "pointerover";
+    GameObjectEvents2[GameObjectEvents2["pointerout"] = 4] = "pointerout";
+    GameObjectEvents2[GameObjectEvents2["drag"] = 5] = "drag";
+    GameObjectEvents2[GameObjectEvents2["dragend"] = 6] = "dragend";
+    return GameObjectEvents2;
   })(GameObjectEvents || {});
   var Scene = class extends Phaser.Scene {
     constructor() {
@@ -76727,12 +76739,17 @@
         scale: true,
         offset: true
       };
+      this.settings = {
+        zIndex: 200
+      };
     }
     get sceneConfig() {
       throw "This property needs to be overwritten";
     }
     create() {
       this.gameObjectContainer = new Phaser.GameObjects.Container(this.scene.scene);
+      this.data.set("settings", this.settings);
+      Tools.orderScenes();
       Globals.Instance.state.sprites.subscribe(() => {
         const tryRender = () => {
           if (!Globals.Instance.canRerender) {
@@ -76764,8 +76781,17 @@
     renderUpdate() {
     }
   };
+  var Events = class {
+    constructor(scene) {
+      this.scene = scene;
+      this.init();
+    }
+    init() {
+      throw "This function need to be overritten";
+    }
+  };
 
-  // src/Inventory.ts
+  // src/scenes/InventoryScene.ts
   var sceneConfig = {
     active: false,
     visible: false,
@@ -76774,32 +76800,100 @@
   var InventoryScene = class extends Scene {
     constructor() {
       super(sceneConfig);
+      this.settings = {
+        zIndex: 800
+      };
     }
     preload() {
     }
     create() {
       super.create();
       this.gameObjectContainerConfig.offset = false;
-      const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/bag/0");
-      const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/inventory/0");
-      this.bagSprite = Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)), bagSpriteInfo);
+      this.bagSprite = this.createBag();
       this.gameObjectContainer.add(this.bagSprite);
       Tools.addGameObjectToScene(this.scene.scene, this.gameObjectContainer);
       this.on(this.bagSprite, void 0);
       this.onSpriteEvent.subscribe((params) => {
         if (params.eventName === "pointerup") {
-          this.inventorySprite = Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getCenterStripePosition(inventorySpriteInfo)), inventorySpriteInfo);
-          this.gameObjectContainer.add(this.inventorySprite);
+          const spriteInfo = Tools.getSpriteInfoFromSprite(params.gameObject);
+          switch (spriteInfo.name) {
+            case "ui/bag":
+              this.onBagClick(params);
+              break;
+            case "ui/inventory":
+              this.onInventoryClick(params);
+              break;
+            default:
+              break;
+          }
         }
       });
+    }
+    onInventoryClick(params) {
+      Tools.destroySprite(params.gameObject);
+    }
+    onBagClick(params) {
+      this.inventorySprite = this.createInventory();
+      this.gameObjectContainer.add(this.inventorySprite);
+      this.on(this.inventorySprite, void 0);
+    }
+    createInventory() {
+      const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/inventory/0");
+      return Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getCenterStripePosition(inventorySpriteInfo)), inventorySpriteInfo);
+    }
+    createBag() {
+      const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/bag/0");
+      return Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)), bagSpriteInfo);
     }
     renderUpdate() {
     }
   };
   InventoryScene.sceneConfig = sceneConfig;
 
-  // src/HomeOutside.ts
+  // src/scenes/HomeOutsideScene.ts
   var Phaser3 = __toESM(require_phaser(), 1);
+
+  // src/events/SpriteEvents.ts
+  var SpriteEvents = class extends Events {
+    init() {
+      this.scene.onSpriteEvent.subscribe((params) => {
+        switch (params.eventName) {
+          case "drag":
+            this.onDrag(params);
+            break;
+          case "dragend":
+            this.onDragEnd(params);
+            break;
+          default:
+            break;
+        }
+      });
+    }
+    onDrag(params) {
+      Globals.Instance.canRerender = false;
+      params.gameObject.x = params.event.x;
+      params.gameObject.y = params.event.y;
+    }
+    onDragEnd(params) {
+      const data = params.customData();
+      params.gameObject.x = Phaser.Math.Snap.To(params.event.x, config_default.gridSize, config_default.gridSize / 2);
+      params.gameObject.y = Phaser.Math.Snap.To(params.event.y, config_default.gridSize, config_default.gridSize / 2);
+      const updatedPosition = Tools.getGridPosition(params.gameObject.x, params.gameObject.y);
+      Tools.moveSpriteToPosition({
+        level: data.statePosition.levelIndex,
+        row: data.statePosition.rowIndex,
+        column: data.statePosition.columnIndex,
+        spriteInfo: data.spriteInfo
+      }, {
+        level: data.statePosition.levelIndex,
+        row: updatedPosition.row,
+        column: updatedPosition.column
+      }) ? void 0 : this.scene.renderUpdate();
+      Globals.Instance.canRerender = true;
+    }
+  };
+
+  // src/scenes/HomeOutsideScene.ts
   var sceneConfig2 = {
     active: false,
     visible: false,
@@ -76808,6 +76902,9 @@
   var HomeOutsideScene = class extends Scene {
     constructor() {
       super(sceneConfig2);
+      this.settings = {
+        zIndex: 200
+      };
     }
     preload() {
       Globals.Instance.activeMainScene = this;
@@ -76824,39 +76921,53 @@
     }
     create() {
       super.create();
-      this.onSpriteEvent.subscribe((params) => {
-        const data = params.customData();
-        switch (params.eventName) {
-          case "drag":
-            Globals.Instance.canRerender = false;
-            params.gameObject.x = params.event.x;
-            params.gameObject.y = params.event.y;
-            break;
-          case "dragend":
-            params.gameObject.x = Phaser3.Math.Snap.To(params.event.x, config_default.gridSize, config_default.gridSize / 2);
-            params.gameObject.y = Phaser3.Math.Snap.To(params.event.y, config_default.gridSize, config_default.gridSize / 2);
-            const updatedPosition = Tools.getGridPosition(params.gameObject.x, params.gameObject.y);
-            Tools.moveSpriteToPosition({
-              level: data.statePosition.levelIndex,
-              row: data.statePosition.rowIndex,
-              column: data.statePosition.columnIndex,
-              spriteInfo: data.spriteInfo
-            }, {
-              level: data.statePosition.levelIndex,
-              row: updatedPosition.row,
-              column: updatedPosition.column
-            }) ? void 0 : this.renderUpdate();
-            Globals.Instance.canRerender = true;
-            break;
-          default:
-            break;
-        }
-      });
+      new SpriteEvents(this);
     }
   };
   HomeOutsideScene.sceneConfig = sceneConfig2;
 
-  // src/PlayerScene.ts
+  // src/events/PlayerEvents.ts
+  var PlayerEvents = class extends Events {
+    init() {
+      Globals.Instance.activeMainScene.onSpriteEvent.subscribe((params) => {
+        if (params.eventName === "pointerup") {
+          this.onClick(params);
+        }
+      });
+    }
+    onClick(params) {
+      switch (params.gameObject.texture.key) {
+        case "ground/grass":
+          this.onClickGroundGrass(params);
+          break;
+      }
+    }
+    onClickGroundGrass(params) {
+      const positions = {
+        from: { x: this.scene.playerSprite.x, y: this.scene.playerSprite.y },
+        to: { x: params.event.x, y: params.event.y }
+      };
+      const direction = Tools.getDirectionFromPosition(positions.from, positions.to);
+      this.activeTween?.stop();
+      this.activeTween = this.scene.add.tween({
+        targets: this.scene.playerSprite,
+        x: params.event.x,
+        y: params.event.y,
+        ease: "Linear",
+        duration: Tools.getSpeedForDistance(positions.from, positions.to) * Globals.Instance.scalingFactor,
+        completeDelay: 100,
+        onComplete: () => {
+          this.scene.playerSprite.play("idle");
+        },
+        onUpdate: () => {
+          Tools.setGlobalOffsetPositonRelativeToSprite(this.scene.playerSprite);
+        }
+      });
+      this.scene.playerSprite.play(direction);
+    }
+  };
+
+  // src/scenes/PlayerScene.ts
   var sceneConfig3 = {
     active: false,
     visible: false,
@@ -76865,56 +76976,27 @@
   var PlayerScene = class extends Scene {
     constructor() {
       super(sceneConfig3);
+      this.settings = {
+        zIndex: 400
+      };
     }
     preload() {
     }
     create() {
       super.create();
-      const cowSpriteInfo = Tools.getSpriteInfoFromSpriteSource("entity/cow/1");
+      const cowSpriteInfo = Tools.getSpriteInfoFromSpriteSource("entity/cow/0");
       this.playerSprite = Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, cowSpriteInfo)), cowSpriteInfo);
       this.add.existing(this.playerSprite);
       this.gameObjectContainer.add(this.playerSprite);
       Tools.addGameObjectToScene(this.scene.scene, this.gameObjectContainer);
-      Tools.loadSpriteAnimations(this.playerSprite);
       Tools.setGlobalOffsetPositonRelativeToSprite(this.playerSprite);
-      Globals.Instance.activeMainScene.onSpriteEvent.subscribe((params) => {
-        if (params.eventName === "pointerup") {
-          const eventX = params.event.x;
-          const eventY = params.event.y;
-          const positions = {
-            from: { x: this.playerSprite.x, y: this.playerSprite.y },
-            to: { x: eventX, y: eventY }
-          };
-          const direction = Tools.getDirectionFromPosition(positions.from, positions.to);
-          switch (params.gameObject.texture.key) {
-            case "ground/grass":
-              this.activeTween?.stop();
-              this.activeTween = this.add.tween({
-                targets: this.playerSprite,
-                x: eventX,
-                y: eventY,
-                ease: "Linear",
-                duration: Tools.getSpeedForDistance(positions.from, positions.to) * Globals.Instance.scalingFactor,
-                completeDelay: 100,
-                onComplete: () => {
-                  this.playerSprite.play("idle");
-                },
-                onUpdate: () => {
-                  Tools.setGlobalOffsetPositonRelativeToSprite(this.playerSprite);
-                }
-              });
-              this.playerSprite.play(direction);
-              break;
-            default:
-              break;
-          }
-        }
-      });
+      this.playerSprite.play("idle");
+      new PlayerEvents(this);
     }
   };
   PlayerScene.sceneConfig = sceneConfig3;
 
-  // src/LoadingScene.ts
+  // src/scenes/LoadingScene.ts
   var sceneConfig4 = {
     active: false,
     visible: false,
@@ -76923,11 +77005,12 @@
   var LoadingScene = class extends Scene {
     constructor() {
       super(sceneConfig4);
+      this.settings = {
+        zIndex: 900
+      };
     }
     preload() {
       Tools.loadSprites(this.scene.key);
-    }
-    renderUpdate() {
     }
     create() {
       super.create();

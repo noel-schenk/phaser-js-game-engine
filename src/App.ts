@@ -2,7 +2,7 @@ import * as Phaser from 'phaser';
 import { GlobalKeyEvents } from './GlobalKeyEvents';
 import { Globals } from './Globals';
 import Demo from './json/demo.json';
-import { LoadingScene } from './LoadingScene';
+import { LoadingScene } from './scenes/LoadingScene';
 import { Tools } from './Tools';
 
 const gameConfig: Phaser.Types.Core.GameConfig = {

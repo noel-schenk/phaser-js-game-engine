@@ -94,6 +94,11 @@ export class Tools {
     });
   }
 
+  static destroySprite(sprite: Phaser.GameObjects.Sprite) {
+    sprite.removeAllListeners();
+    sprite.destroy();
+  }
+
   static getNewSprite(
     scene: Phaser.Scene,
     x: number,
@@ -113,6 +118,8 @@ export class Tools {
     if (spriteData.interactive) {
       newSprite.setInteractive(spriteData.interactive);
     }
+
+    Tools.loadSpriteAnimations(newSprite);
 
     return newSprite;
   }
@@ -319,17 +326,31 @@ export class Tools {
   static loadSpriteAnimations(sprite: Phaser.GameObjects.Sprite) {
     const animationFrames = Sprites[sprite.texture.key]?.animations;
 
-    Object.keys(animationFrames).forEach((direction) => {
-      const animationType = animationFrames[direction];
-      sprite.anims.create({
-        key: direction,
-        frames: Globals.Instance.game.anims.generateFrameNumbers(
-          sprite.texture.key,
-          { frames: animationType }
-        ),
-        frameRate: 4,
-        repeat: -1
+    if (animationFrames) {
+      Object.keys(animationFrames).forEach((direction) => {
+        const animationType = animationFrames[direction];
+        sprite.anims.create({
+          key: direction,
+          frames: Globals.Instance.game.anims.generateFrameNumbers(
+            sprite.texture.key,
+            { frames: animationType }
+          ),
+          frameRate: 4,
+          repeat: -1
+        });
       });
-    });
+    }
+  }
+
+  static orderScenes() {
+    [...Globals.Instance.game.scene.scenes]
+      .sort(
+        (sceneA, sceneB) =>
+          sceneA.data.get('settings').zIndex -
+          sceneB.data.get('settings').zIndex
+      )
+      .forEach((scene) => {
+        scene.scene.bringToTop();
+      });
   }
 }

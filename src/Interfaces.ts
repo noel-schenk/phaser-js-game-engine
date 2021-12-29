@@ -1,4 +1,3 @@
-import { GameObjects } from 'phaser';
 import { Subject } from 'rxjs';
 import { Globals } from './Globals';
 import { Tools } from './Tools';
@@ -32,18 +31,24 @@ export type SpriteInfo = { name: string; mutation: number };
 
 export type State = { source: string }[][][];
 
+export type SpriteEvent = {
+  eventName: string;
+  gameObject: Phaser.GameObjects.Sprite;
+  event: any;
+  customData: Function;
+};
+
 export class Scene extends Phaser.Scene {
-  onSpriteEvent = new Subject<{
-    eventName: string;
-    gameObject: GameObjects.Sprite;
-    event: any;
-    customData: Function;
-  }>();
+  onSpriteEvent = new Subject<SpriteEvent>();
 
   gameObjectContainer: Phaser.GameObjects.Container;
   gameObjectContainerConfig = {
     scale: true,
     offset: true
+  };
+
+  settings = {
+    zIndex: 200
   };
 
   get sceneConfig() {
@@ -54,6 +59,11 @@ export class Scene extends Phaser.Scene {
     this.gameObjectContainer = new Phaser.GameObjects.Container(
       this.scene.scene
     );
+
+    this.data.set('settings', this.settings);
+
+    Tools.orderScenes();
+
     Globals.Instance.state.sprites.subscribe(() => {
       const tryRender = () => {
         if (!Globals.Instance.canRerender) {
@@ -92,4 +102,17 @@ export class Scene extends Phaser.Scene {
   }
 
   renderUpdate() {}
+}
+
+export class Events<T extends Scene> {
+  scene: T;
+
+  constructor(scene: T) {
+    this.scene = scene;
+    this.init();
+  }
+
+  init() {
+    throw 'This function need to be overritten';
+  }
 }

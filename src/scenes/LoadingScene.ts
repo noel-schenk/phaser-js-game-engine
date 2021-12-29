@@ -1,9 +1,9 @@
 import * as Phaser from 'phaser';
-import { Tools } from './Tools';
-import { Globals } from './Globals';
-import { Scene } from './Interfaces';
-import { InventoryScene } from './Inventory';
-import { HomeOutsideScene } from './HomeOutside';
+import { Tools } from '../Tools';
+import { Globals } from '../Globals';
+import { Scene } from '../Interfaces';
+import { InventoryScene } from './InventoryScene';
+import { HomeOutsideScene } from './HomeOutsideScene';
 import { PlayerScene } from './PlayerScene';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
@@ -14,6 +14,11 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 
 export class LoadingScene extends Scene {
   static sceneConfig = sceneConfig;
+
+  override settings = {
+    zIndex: 900
+  };
+
   constructor() {
     super(sceneConfig);
   }
@@ -21,8 +26,6 @@ export class LoadingScene extends Scene {
   preload() {
     Tools.loadSprites(this.scene.key);
   }
-
-  override renderUpdate() {}
 
   create() {
     super.create();
