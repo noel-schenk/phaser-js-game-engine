@@ -44,21 +44,24 @@ export class SpriteEvents extends Events<Scene> {
       params.gameObject.y
     );
 
-    Tools.moveSpriteToPosition(
-      {
-        level: data.statePosition.levelIndex,
-        row: data.statePosition.rowIndex,
-        column: data.statePosition.columnIndex,
-        spriteInfo: data.spriteInfo
-      },
-      {
-        level: data.statePosition.levelIndex,
-        row: updatedPosition.row,
-        column: updatedPosition.column
-      }
-    )
-      ? undefined
-      : this.scene.renderUpdate();
+    if (
+      Tools.moveSpriteToPosition(
+        {
+          level: data.statePosition.levelIndex,
+          row: data.statePosition.rowIndex,
+          column: data.statePosition.columnIndex,
+          spriteInfo: data.spriteInfo
+        },
+        {
+          level: data.statePosition.levelIndex,
+          row: updatedPosition.row,
+          column: updatedPosition.column
+        }
+      )
+    ) {
+      Globals.Instance.stateTransaction.sprites.next();
+      this.scene.renderUpdate();
+    }
     Globals.Instance.canRerender = true;
   }
 }

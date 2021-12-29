@@ -5,6 +5,7 @@
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
   var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
@@ -19,6 +20,10 @@
   };
   var __toESM = (module, isNodeMode) => {
     return __reExport(__markAsModule(__defProp(module != null ? __create(__getProtoOf(module)) : {}, "default", !isNodeMode && module && module.__esModule ? { get: () => module.default, enumerable: true } : { value: module, enumerable: true })), module);
+  };
+  var __publicField = (obj, key, value) => {
+    __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+    return value;
   };
 
   // node_modules/phaser/dist/phaser.js
@@ -1067,7 +1072,7 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var ComponentsToJSON = __webpack_require__(176);
-            var DataManager = __webpack_require__(101);
+            var DataManager2 = __webpack_require__(101);
             var EventEmitter = __webpack_require__(9);
             var Events2 = __webpack_require__(75);
             var SceneEvents = __webpack_require__(20);
@@ -1107,34 +1112,34 @@
               },
               setDataEnabled: function() {
                 if (!this.data) {
-                  this.data = new DataManager(this);
+                  this.data = new DataManager2(this);
                 }
                 return this;
               },
               setData: function(key, value) {
                 if (!this.data) {
-                  this.data = new DataManager(this);
+                  this.data = new DataManager2(this);
                 }
                 this.data.set(key, value);
                 return this;
               },
               incData: function(key, value) {
                 if (!this.data) {
-                  this.data = new DataManager(this);
+                  this.data = new DataManager2(this);
                 }
                 this.data.inc(key, value);
                 return this;
               },
               toggleData: function(key) {
                 if (!this.data) {
-                  this.data = new DataManager(this);
+                  this.data = new DataManager2(this);
                 }
                 this.data.toggle(key);
                 return this;
               },
               getData: function(key) {
                 if (!this.data) {
-                  this.data = new DataManager(this);
+                  this.data = new DataManager2(this);
                 }
                 return this.data.get(key);
               },
@@ -8003,8 +8008,8 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Events2 = __webpack_require__(315);
-            var DataManager = new Class({
-              initialize: function DataManager2(parent, eventEmitter) {
+            var DataManager2 = new Class({
+              initialize: function DataManager3(parent, eventEmitter) {
                 this.parent = parent;
                 this.events = eventEmitter;
                 if (!eventEmitter) {
@@ -8209,7 +8214,7 @@
                 }
               }
             });
-            module2.exports = DataManager;
+            module2.exports = DataManager2;
           },
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
@@ -17789,7 +17794,7 @@
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
             var ComponentsToJSON = __webpack_require__(176);
-            var DataManager = __webpack_require__(101);
+            var DataManager2 = __webpack_require__(101);
             var EventEmitter = __webpack_require__(9);
             var GameObjectEvents2 = __webpack_require__(75);
             var List = __webpack_require__(110);
@@ -17852,34 +17857,34 @@
               },
               setDataEnabled: function() {
                 if (!this.data) {
-                  this.data = new DataManager(this);
+                  this.data = new DataManager2(this);
                 }
                 return this;
               },
               setData: function(key, value) {
                 if (!this.data) {
-                  this.data = new DataManager(this);
+                  this.data = new DataManager2(this);
                 }
                 this.data.set(key, value);
                 return this;
               },
               incData: function(key, value) {
                 if (!this.data) {
-                  this.data = new DataManager(this);
+                  this.data = new DataManager2(this);
                 }
                 this.data.inc(key, value);
                 return this;
               },
               toggleData: function(key) {
                 if (!this.data) {
-                  this.data = new DataManager(this);
+                  this.data = new DataManager2(this);
                 }
                 this.data.toggle(key);
                 return this;
               },
               getData: function(key) {
                 if (!this.data) {
-                  this.data = new DataManager(this);
+                  this.data = new DataManager2(this);
                 }
                 return this.data.get(key);
               },
@@ -33042,7 +33047,7 @@
             var Scene3 = __webpack_require__(418);
             var Systems = __webpack_require__(204);
             var SceneManager = new Class({
-              initialize: function SceneManager2(game, sceneConfig5) {
+              initialize: function SceneManager2(game, sceneConfig) {
                 this.game = game;
                 this.keys = {};
                 this.scenes = [];
@@ -33053,14 +33058,14 @@
                 this.isProcessing = false;
                 this.isBooted = false;
                 this.customViewports = 0;
-                if (sceneConfig5) {
-                  if (!Array.isArray(sceneConfig5)) {
-                    sceneConfig5 = [sceneConfig5];
+                if (sceneConfig) {
+                  if (!Array.isArray(sceneConfig)) {
+                    sceneConfig = [sceneConfig];
                   }
-                  for (var i = 0; i < sceneConfig5.length; i++) {
+                  for (var i = 0; i < sceneConfig.length; i++) {
                     this._pending.push({
                       key: "default",
-                      scene: sceneConfig5[i],
+                      scene: sceneConfig[i],
                       autoStart: i === 0,
                       data: {}
                     });
@@ -33075,18 +33080,18 @@
                 var i;
                 var entry;
                 var key;
-                var sceneConfig5;
+                var sceneConfig;
                 for (i = 0; i < this._pending.length; i++) {
                   entry = this._pending[i];
                   key = entry.key;
-                  sceneConfig5 = entry.scene;
+                  sceneConfig = entry.scene;
                   var newScene;
-                  if (sceneConfig5 instanceof Scene3) {
-                    newScene = this.createSceneFromInstance(key, sceneConfig5);
-                  } else if (typeof sceneConfig5 === "object") {
-                    newScene = this.createSceneFromObject(key, sceneConfig5);
-                  } else if (typeof sceneConfig5 === "function") {
-                    newScene = this.createSceneFromFunction(key, sceneConfig5);
+                  if (sceneConfig instanceof Scene3) {
+                    newScene = this.createSceneFromInstance(key, sceneConfig);
+                  } else if (typeof sceneConfig === "object") {
+                    newScene = this.createSceneFromObject(key, sceneConfig);
+                  } else if (typeof sceneConfig === "function") {
+                    newScene = this.createSceneFromFunction(key, sceneConfig);
                   }
                   key = newScene.sys.settings.key;
                   this.keys[key] = newScene;
@@ -33137,7 +33142,7 @@
                 }
                 this._queue.length = 0;
               },
-              add: function(key, sceneConfig5, autoStart, data) {
+              add: function(key, sceneConfig, autoStart, data) {
                 if (autoStart === void 0) {
                   autoStart = false;
                 }
@@ -33147,7 +33152,7 @@
                 if (this.isProcessing || !this.isBooted) {
                   this._pending.push({
                     key,
-                    scene: sceneConfig5,
+                    scene: sceneConfig,
                     autoStart,
                     data
                   });
@@ -33156,15 +33161,15 @@
                   }
                   return null;
                 }
-                key = this.getKey(key, sceneConfig5);
+                key = this.getKey(key, sceneConfig);
                 var newScene;
-                if (sceneConfig5 instanceof Scene3) {
-                  newScene = this.createSceneFromInstance(key, sceneConfig5);
-                } else if (typeof sceneConfig5 === "object") {
-                  sceneConfig5.key = key;
-                  newScene = this.createSceneFromObject(key, sceneConfig5);
-                } else if (typeof sceneConfig5 === "function") {
-                  newScene = this.createSceneFromFunction(key, sceneConfig5);
+                if (sceneConfig instanceof Scene3) {
+                  newScene = this.createSceneFromInstance(key, sceneConfig);
+                } else if (typeof sceneConfig === "object") {
+                  sceneConfig.key = key;
+                  newScene = this.createSceneFromObject(key, sceneConfig);
+                } else if (typeof sceneConfig === "function") {
+                  newScene = this.createSceneFromFunction(key, sceneConfig);
                 }
                 newScene.sys.settings.data = data;
                 key = newScene.sys.settings.key;
@@ -33300,8 +33305,8 @@
                 newScene.sys.init(this.game);
                 return newScene;
               },
-              createSceneFromObject: function(key, sceneConfig5) {
-                var newScene = new Scene3(sceneConfig5);
+              createSceneFromObject: function(key, sceneConfig) {
+                var newScene = new Scene3(sceneConfig);
                 var configKey = newScene.sys.settings.key;
                 if (configKey !== "") {
                   key = configKey;
@@ -33311,17 +33316,17 @@
                 newScene.sys.init(this.game);
                 var defaults = ["init", "preload", "create", "update", "render"];
                 for (var i = 0; i < defaults.length; i++) {
-                  var sceneCallback = GetValue(sceneConfig5, defaults[i], null);
+                  var sceneCallback = GetValue(sceneConfig, defaults[i], null);
                   if (sceneCallback) {
                     newScene[defaults[i]] = sceneCallback;
                   }
                 }
-                if (sceneConfig5.hasOwnProperty("extend")) {
-                  for (var propertyKey in sceneConfig5.extend) {
-                    if (!sceneConfig5.extend.hasOwnProperty(propertyKey)) {
+                if (sceneConfig.hasOwnProperty("extend")) {
+                  for (var propertyKey in sceneConfig.extend) {
+                    if (!sceneConfig.extend.hasOwnProperty(propertyKey)) {
                       continue;
                     }
-                    var value = sceneConfig5.extend[propertyKey];
+                    var value = sceneConfig.extend[propertyKey];
                     if (propertyKey === "data" && newScene.hasOwnProperty("data") && typeof value === "object") {
                       newScene.data.merge(value);
                     } else if (propertyKey !== "sys") {
@@ -33331,16 +33336,16 @@
                 }
                 return newScene;
               },
-              getKey: function(key, sceneConfig5) {
+              getKey: function(key, sceneConfig) {
                 if (!key) {
                   key = "default";
                 }
-                if (typeof sceneConfig5 === "function") {
+                if (typeof sceneConfig === "function") {
                   return key;
-                } else if (sceneConfig5 instanceof Scene3) {
-                  key = sceneConfig5.sys.settings.key;
-                } else if (typeof sceneConfig5 === "object" && sceneConfig5.hasOwnProperty("key")) {
-                  key = sceneConfig5.key;
+                } else if (sceneConfig instanceof Scene3) {
+                  key = sceneConfig.sys.settings.key;
+                } else if (typeof sceneConfig === "object" && sceneConfig.hasOwnProperty("key")) {
+                  key = sceneConfig.key;
                 }
                 if (this.keys.hasOwnProperty(key)) {
                   throw new Error("Cannot add a Scene with duplicate key: " + key);
@@ -53460,13 +53465,13 @@
           },
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
-            var DataManager = __webpack_require__(101);
+            var DataManager2 = __webpack_require__(101);
             var PluginCache = __webpack_require__(24);
             var SceneEvents = __webpack_require__(20);
             var DataManagerPlugin = new Class({
-              Extends: DataManager,
+              Extends: DataManager2,
               initialize: function DataManagerPlugin2(scene) {
-                DataManager.call(this, scene, scene.sys.events);
+                DataManager2.call(this, scene, scene.sys.events);
                 this.scene = scene;
                 this.systems = scene.sys;
                 scene.sys.events.once(SceneEvents.BOOT, this.boot, this);
@@ -53483,7 +53488,7 @@
                 this.systems.events.off(SceneEvents.SHUTDOWN, this.shutdown, this);
               },
               destroy: function() {
-                DataManager.prototype.destroy.call(this);
+                DataManager2.prototype.destroy.call(this);
                 this.events.off(SceneEvents.START, this.start, this);
                 this.scene = null;
                 this.systems = null;
@@ -53853,7 +53858,7 @@
             var Config = __webpack_require__(346);
             var CreateDOMContainer = __webpack_require__(921);
             var CreateRenderer = __webpack_require__(366);
-            var DataManager = __webpack_require__(101);
+            var DataManager2 = __webpack_require__(101);
             var DebugHeader = __webpack_require__(384);
             var Device = __webpack_require__(347);
             var DOMContentLoaded = __webpack_require__(400);
@@ -53887,7 +53892,7 @@
                 this.anims = new AnimationManager(this);
                 this.textures = new TextureManager(this);
                 this.cache = new CacheManager(this);
-                this.registry = new DataManager(this);
+                this.registry = new DataManager2(this);
                 this.input = new InputManager(this, this.config);
                 this.scene = new SceneManager(this, this.config.sceneConfig);
                 this.device = Device;
@@ -64917,7 +64922,7 @@
               initialize: function LoaderPlugin2(scene) {
                 EventEmitter.call(this);
                 var gameConfig2 = scene.sys.game.config;
-                var sceneConfig5 = scene.sys.settings.loader;
+                var sceneConfig = scene.sys.settings.loader;
                 this.scene = scene;
                 this.systems = scene.sys;
                 this.cacheManager = scene.sys.cache;
@@ -64927,12 +64932,12 @@
                 this.prefix = "";
                 this.path = "";
                 this.baseURL = "";
-                this.setBaseURL(GetFastValue(sceneConfig5, "baseURL", gameConfig2.loaderBaseURL));
-                this.setPath(GetFastValue(sceneConfig5, "path", gameConfig2.loaderPath));
-                this.setPrefix(GetFastValue(sceneConfig5, "prefix", gameConfig2.loaderPrefix));
-                this.maxParallelDownloads = GetFastValue(sceneConfig5, "maxParallelDownloads", gameConfig2.loaderMaxParallelDownloads);
-                this.xhr = XHRSettings(GetFastValue(sceneConfig5, "responseType", gameConfig2.loaderResponseType), GetFastValue(sceneConfig5, "async", gameConfig2.loaderAsync), GetFastValue(sceneConfig5, "user", gameConfig2.loaderUser), GetFastValue(sceneConfig5, "password", gameConfig2.loaderPassword), GetFastValue(sceneConfig5, "timeout", gameConfig2.loaderTimeout), GetFastValue(sceneConfig5, "withCredentials", gameConfig2.loaderWithCredentials));
-                this.crossOrigin = GetFastValue(sceneConfig5, "crossOrigin", gameConfig2.loaderCrossOrigin);
+                this.setBaseURL(GetFastValue(sceneConfig, "baseURL", gameConfig2.loaderBaseURL));
+                this.setPath(GetFastValue(sceneConfig, "path", gameConfig2.loaderPath));
+                this.setPrefix(GetFastValue(sceneConfig, "prefix", gameConfig2.loaderPrefix));
+                this.maxParallelDownloads = GetFastValue(sceneConfig, "maxParallelDownloads", gameConfig2.loaderMaxParallelDownloads);
+                this.xhr = XHRSettings(GetFastValue(sceneConfig, "responseType", gameConfig2.loaderResponseType), GetFastValue(sceneConfig, "async", gameConfig2.loaderAsync), GetFastValue(sceneConfig, "user", gameConfig2.loaderUser), GetFastValue(sceneConfig, "password", gameConfig2.loaderPassword), GetFastValue(sceneConfig, "timeout", gameConfig2.loaderTimeout), GetFastValue(sceneConfig, "withCredentials", gameConfig2.loaderWithCredentials));
+                this.crossOrigin = GetFastValue(sceneConfig, "crossOrigin", gameConfig2.loaderCrossOrigin);
                 this.totalToLoad = 0;
                 this.progress = 0;
                 this.list = new CustomSet();
@@ -65191,10 +65196,10 @@
                 this.inflight.clear();
                 this.queue.clear();
                 var gameConfig2 = this.systems.game.config;
-                var sceneConfig5 = this.systems.settings.loader;
-                this.setBaseURL(GetFastValue(sceneConfig5, "baseURL", gameConfig2.loaderBaseURL));
-                this.setPath(GetFastValue(sceneConfig5, "path", gameConfig2.loaderPath));
-                this.setPrefix(GetFastValue(sceneConfig5, "prefix", gameConfig2.loaderPrefix));
+                var sceneConfig = this.systems.settings.loader;
+                this.setBaseURL(GetFastValue(sceneConfig, "baseURL", gameConfig2.loaderBaseURL));
+                this.setPath(GetFastValue(sceneConfig, "path", gameConfig2.loaderPath));
+                this.setPrefix(GetFastValue(sceneConfig, "prefix", gameConfig2.loaderPrefix));
                 this.state = CONST.LOADER_IDLE;
               },
               shutdown: function() {
@@ -65295,8 +65300,8 @@
               },
               getConfig: function() {
                 var gameConfig2 = this.systems.game.config.physics;
-                var sceneConfig5 = this.systems.settings.physics;
-                var config2 = Merge(GetFastValue(sceneConfig5, "arcade", {}), GetFastValue(gameConfig2, "arcade", {}));
+                var sceneConfig = this.systems.settings.physics;
+                var config2 = Merge(GetFastValue(sceneConfig, "arcade", {}), GetFastValue(gameConfig2, "arcade", {}));
                 return config2;
               },
               overlap: function(object1, object2, overlapCallback, processCallback, callbackContext) {
@@ -68766,8 +68771,8 @@
                   this.manager.stop(this.key);
                 }
               },
-              add: function(key, sceneConfig5, autoStart, data) {
-                return this.manager.add(key, sceneConfig5, autoStart, data);
+              add: function(key, sceneConfig, autoStart, data) {
+                return this.manager.add(key, sceneConfig, autoStart, data);
               },
               launch: function(key, data) {
                 if (key && key !== this.key) {
@@ -69067,7 +69072,7 @@
                 camera = scene.cameras.main;
               }
               var tiles = GetTilesWithin(0, 0, layer.width, layer.height, null, layer);
-              var sprites2 = [];
+              var sprites = [];
               var i;
               for (i = 0; i < tiles.length; i++) {
                 var tile = tiles[i];
@@ -69075,7 +69080,7 @@
                   var point = tilemapLayer.tileToWorldXY(tile.x, tile.y, void 0, camera, layer);
                   spriteConfig.x = point.x;
                   spriteConfig.y = point.y;
-                  sprites2.push(scene.make.sprite(spriteConfig));
+                  sprites.push(scene.make.sprite(spriteConfig));
                 }
               }
               if (typeof replacements === "number") {
@@ -69087,7 +69092,7 @@
                   ReplaceByIndex(indexes[i], replacements[i], 0, 0, layer.width, layer.height, layer);
                 }
               }
-              return sprites2;
+              return sprites;
             };
             module2.exports = CreateFromTiles;
           },
@@ -71403,8 +71408,8 @@
               },
               getConfig: function() {
                 var gameConfig2 = this.systems.game.config.physics;
-                var sceneConfig5 = this.systems.settings.physics;
-                var config2 = Merge(GetFastValue(sceneConfig5, "matter", {}), GetFastValue(gameConfig2, "matter", {}));
+                var sceneConfig = this.systems.settings.physics;
+                var config2 = Merge(GetFastValue(sceneConfig, "matter", {}), GetFastValue(gameConfig2, "matter", {}));
                 return config2;
               },
               enableAttractorPlugin: function() {
@@ -72442,6 +72447,109 @@
     }
   });
 
+  // node_modules/deepmerge/dist/cjs.js
+  var require_cjs = __commonJS({
+    "node_modules/deepmerge/dist/cjs.js"(exports, module) {
+      "use strict";
+      var isMergeableObject = function isMergeableObject2(value) {
+        return isNonNullObject(value) && !isSpecial(value);
+      };
+      function isNonNullObject(value) {
+        return !!value && typeof value === "object";
+      }
+      function isSpecial(value) {
+        var stringValue = Object.prototype.toString.call(value);
+        return stringValue === "[object RegExp]" || stringValue === "[object Date]" || isReactElement(value);
+      }
+      var canUseSymbol = typeof Symbol === "function" && Symbol.for;
+      var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for("react.element") : 60103;
+      function isReactElement(value) {
+        return value.$$typeof === REACT_ELEMENT_TYPE;
+      }
+      function emptyTarget(val) {
+        return Array.isArray(val) ? [] : {};
+      }
+      function cloneUnlessOtherwiseSpecified(value, options) {
+        return options.clone !== false && options.isMergeableObject(value) ? deepmerge(emptyTarget(value), value, options) : value;
+      }
+      function defaultArrayMerge(target, source, options) {
+        return target.concat(source).map(function(element) {
+          return cloneUnlessOtherwiseSpecified(element, options);
+        });
+      }
+      function getMergeFunction(key, options) {
+        if (!options.customMerge) {
+          return deepmerge;
+        }
+        var customMerge = options.customMerge(key);
+        return typeof customMerge === "function" ? customMerge : deepmerge;
+      }
+      function getEnumerableOwnPropertySymbols(target) {
+        return Object.getOwnPropertySymbols ? Object.getOwnPropertySymbols(target).filter(function(symbol) {
+          return target.propertyIsEnumerable(symbol);
+        }) : [];
+      }
+      function getKeys(target) {
+        return Object.keys(target).concat(getEnumerableOwnPropertySymbols(target));
+      }
+      function propertyIsOnObject(object, property) {
+        try {
+          return property in object;
+        } catch (_) {
+          return false;
+        }
+      }
+      function propertyIsUnsafe(target, key) {
+        return propertyIsOnObject(target, key) && !(Object.hasOwnProperty.call(target, key) && Object.propertyIsEnumerable.call(target, key));
+      }
+      function mergeObject(target, source, options) {
+        var destination = {};
+        if (options.isMergeableObject(target)) {
+          getKeys(target).forEach(function(key) {
+            destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
+          });
+        }
+        getKeys(source).forEach(function(key) {
+          if (propertyIsUnsafe(target, key)) {
+            return;
+          }
+          if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
+            destination[key] = getMergeFunction(key, options)(target[key], source[key], options);
+          } else {
+            destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
+          }
+        });
+        return destination;
+      }
+      function deepmerge(target, source, options) {
+        options = options || {};
+        options.arrayMerge = options.arrayMerge || defaultArrayMerge;
+        options.isMergeableObject = options.isMergeableObject || isMergeableObject;
+        options.cloneUnlessOtherwiseSpecified = cloneUnlessOtherwiseSpecified;
+        var sourceIsArray = Array.isArray(source);
+        var targetIsArray = Array.isArray(target);
+        var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
+        if (!sourceAndTargetTypesMatch) {
+          return cloneUnlessOtherwiseSpecified(source, options);
+        } else if (sourceIsArray) {
+          return options.arrayMerge(target, source, options);
+        } else {
+          return mergeObject(target, source, options);
+        }
+      }
+      deepmerge.all = function deepmergeAll(array, options) {
+        if (!Array.isArray(array)) {
+          throw new Error("first argument should be an array");
+        }
+        return array.reduce(function(prev, next) {
+          return deepmerge(prev, next, options);
+        }, {});
+      };
+      var deepmerge_1 = deepmerge;
+      module.exports = deepmerge_1;
+    }
+  });
+
   // src/App.ts
   var Phaser4 = __toESM(require_phaser(), 1);
 
@@ -73150,25 +73258,25 @@
 
   // node_modules/rxjs/dist/esm5/internal/BehaviorSubject.js
   var BehaviorSubject = function(_super) {
-    __extends(BehaviorSubject2, _super);
-    function BehaviorSubject2(_value) {
+    __extends(BehaviorSubject3, _super);
+    function BehaviorSubject3(_value) {
       var _this = _super.call(this) || this;
       _this._value = _value;
       return _this;
     }
-    Object.defineProperty(BehaviorSubject2.prototype, "value", {
+    Object.defineProperty(BehaviorSubject3.prototype, "value", {
       get: function() {
         return this.getValue();
       },
       enumerable: false,
       configurable: true
     });
-    BehaviorSubject2.prototype._subscribe = function(subscriber) {
+    BehaviorSubject3.prototype._subscribe = function(subscriber) {
       var subscription = _super.prototype._subscribe.call(this, subscriber);
       !subscription.closed && subscriber.next(this._value);
       return subscription;
     };
-    BehaviorSubject2.prototype.getValue = function() {
+    BehaviorSubject3.prototype.getValue = function() {
       var _a = this, hasError = _a.hasError, thrownError = _a.thrownError, _value = _a._value;
       if (hasError) {
         throw thrownError;
@@ -73176,3263 +73284,36 @@
       this._throwIfClosed();
       return _value;
     };
-    BehaviorSubject2.prototype.next = function(value) {
+    BehaviorSubject3.prototype.next = function(value) {
       _super.prototype.next.call(this, this._value = value);
     };
-    return BehaviorSubject2;
+    return BehaviorSubject3;
   }(Subject);
 
   // src/Globals.ts
   var Globals = class {
+    game;
+    sprites = Array();
+    state = {
+      sprites: new BehaviorSubject(void 0),
+      entities: new BehaviorSubject(void 0)
+    };
+    stateTransaction = {
+      sprites: new Subject(),
+      entities: new Subject()
+    };
+    scalingFactor = 1;
+    canRerender = true;
+    activeMainScene;
+    offsetToCenter = { x: 0, y: 0 };
+    activePlayer;
     constructor() {
-      this.sprites = Array();
-      this.state = {
-        sprites: new BehaviorSubject(void 0),
-        entities: new BehaviorSubject(void 0)
-      };
-      this.scalingFactor = 1;
-      this.canRerender = true;
-      this.offsetToCenter = { x: 0, y: 0 };
     }
     static get Instance() {
       return this._instance || (this._instance = new this());
     }
   };
-
-  // src/json/demo.json
-  var sprites = [
-    [
-      [
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        }
-      ],
-      [
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        }
-      ],
-      [
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        }
-      ],
-      [
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        }
-      ],
-      [
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        }
-      ],
-      [
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        }
-      ],
-      [
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        }
-      ],
-      [
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        }
-      ],
-      [
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        }
-      ],
-      [
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        },
-        {
-          source: "ground/grass/0"
-        }
-      ]
-    ],
-    [
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: "object/beehive/0"
-        },
-        {
-          source: ""
-        },
-        {
-          source: "object/beehive/2"
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ]
-    ],
-    [
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ]
-    ],
-    [
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ]
-    ],
-    [
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ]
-    ],
-    [
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ]
-    ],
-    [
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ]
-    ],
-    [
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ]
-    ],
-    [
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ]
-    ],
-    [
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ],
-      [
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        },
-        {
-          source: ""
-        }
-      ]
-    ]
-  ];
-  var entities = [
-    {
-      source: "entity/cow/1",
-      x: "200",
-      y: "200"
-    }
-  ];
-  var demo_default = {
-    sprites,
-    entities
-  };
+  __publicField(Globals, "_instance");
 
   // src/json/sprites.json
   var ground_grass = {
@@ -76478,6 +73359,7 @@
     height: 60,
     ext: "png",
     interactive: false,
+    speed: 10,
     animations: {
       up: [
         9,
@@ -76509,13 +73391,49 @@
       ]
     }
   };
+  var entity_wolf = {
+    mutations: 15,
+    width: 40,
+    height: 40,
+    ext: "png",
+    interactive: false,
+    speed: 120,
+    animations: {
+      up: [
+        9,
+        10,
+        11
+      ],
+      right: [
+        3,
+        4,
+        5
+      ],
+      down: [
+        0,
+        1,
+        2
+      ],
+      left: [
+        6,
+        7,
+        8
+      ],
+      idle: [
+        12,
+        13,
+        14
+      ]
+    }
+  };
   var sprites_default = {
     "ground/grass": ground_grass,
     undefined: undefined2,
     "object/beehive": object_beehive,
     "ui/inventory": ui_inventory,
     "ui/bag": ui_bag,
-    "entity/cow": entity_cow
+    "entity/cow": entity_cow,
+    "entity/wolf": entity_wolf
   };
 
   // src/json/config.json
@@ -76571,18 +73489,15 @@
       y = y + sprite.height / 2;
       return { x, y };
     }
-    static loadSprites(sceneName) {
+    static loadSprites(scene) {
       for (const spriteName in sprites_default) {
         const sprite = sprites_default[spriteName];
         Globals.Instance.sprites.push(spriteName);
-        Tools.getSceneByName(sceneName).load.spritesheet(spriteName, `/sprites/${spriteName}.${sprite.ext}`, {
+        scene.load.spritesheet(spriteName, `/sprites/${spriteName}.${sprite.ext}`, {
           frameWidth: sprite.width,
           frameHeight: sprite.height
         });
       }
-    }
-    static getSceneByName(sceneName) {
-      return Globals.Instance.game.scene.getScene(sceneName);
     }
     static addGameObjectToScene(scene, gameObject) {
       return scene.add.existing(gameObject);
@@ -76605,26 +73520,6 @@
       }
       Tools.loadSpriteAnimations(newSprite);
       return newSprite;
-    }
-    static renderScene(scene, state, container, spriteRenderCB) {
-      state.map((level, levelIndex) => {
-        level.map((row, rowIndex) => {
-          row.map((spriteData, columnIndex) => {
-            const spriteInfo = Tools.getSpriteInfoFromSpriteSource(spriteData.source);
-            const spriteX = columnIndex * config_default.gridSize;
-            const spriteY = rowIndex * config_default.gridSize;
-            const sprite = Tools.getNewSprite(scene, ...Object.values(Tools.getTopLeftSpritePosition(spriteX, spriteY, spriteInfo)), spriteInfo);
-            sprite.setSize(40, 40);
-            container.add(sprite);
-            spriteRenderCB?.(sprite, spriteInfo, {
-              levelIndex,
-              rowIndex,
-              columnIndex
-            });
-          });
-        });
-      });
-      return Tools.addGameObjectToScene(scene, container);
     }
     static getStateReferenceAtPosition(level, row, column) {
       return Globals.Instance.state.sprites.value[level][row][column];
@@ -76660,7 +73555,7 @@
       return import_phaser.default.Math.Snap.To(pos, config_default.gridSize, config_default.gridSize / 2) - config_default.gridSize / 2;
     }
     static getUniqueKey() {
-      return Math.random().toString(36).substr(2, 9);
+      return Math.random().toString(36).substring(2, 9);
     }
     static setGlobalScalingFactorBasedOnGameObject(gameObject) {
       Globals.Instance.scalingFactor = Math.max(Globals.Instance.game.canvas.width / gameObject.getBounds().width, Globals.Instance.game.canvas.height / gameObject.getBounds().height);
@@ -76674,12 +73569,13 @@
       offsetPosition.y -= spriteToCenter.y * Globals.Instance.scalingFactor;
       Globals.Instance.offsetToCenter = offsetPosition;
     }
-    static getSpeedForDistance(from, to) {
+    static getSpeedForDistance(from, to, spriteInfo) {
       const x = from.x - to.x;
       const y = from.y - to.y;
+      const speed = 200 - sprites_default[spriteInfo?.name]?.speed;
       const distance = 40;
-      const speedInMs = 100;
-      return Math.hypot(x, y) / distance * speedInMs;
+      const speedInMs = speed || 100;
+      return Math.hypot(x, y) / distance * speedInMs * Globals.Instance.scalingFactor;
     }
     static getAngleFromPositions(from, to) {
       return Math.atan2(to.y - from.y, to.x - from.x) * 180 / Math.PI + 180;
@@ -76718,6 +73614,12 @@
         scene.scene.bringToTop();
       });
     }
+    static getStateFromGlobalStateEvent() {
+      return {
+        entities: Globals.Instance.state.entities.value,
+        sprites: Globals.Instance.state.sprites.value
+      };
+    }
   };
 
   // src/Interfaces.ts
@@ -76732,20 +73634,15 @@
     return GameObjectEvents2;
   })(GameObjectEvents || {});
   var Scene = class extends Phaser.Scene {
-    constructor() {
-      super(...arguments);
-      this.onSpriteEvent = new Subject();
-      this.gameObjectContainerConfig = {
-        scale: true,
-        offset: true
-      };
-      this.settings = {
-        zIndex: 200
-      };
-    }
-    get sceneConfig() {
-      throw "This property needs to be overwritten";
-    }
+    onSpriteEvent = new Subject();
+    gameObjectContainer;
+    gameObjectContainerConfig = {
+      scale: true,
+      offset: true
+    };
+    settings = {
+      zIndex: 200
+    };
     create() {
       this.gameObjectContainer = new Phaser.GameObjects.Container(this.scene.scene);
       this.data.set("settings", this.settings);
@@ -76765,6 +73662,9 @@
     on(gameObject, customData) {
       Object.keys(GameObjectEvents).forEach((eventName) => {
         gameObject.on(eventName, (event) => {
+          event.native = { x: 0, y: 0 };
+          event.native.x = event.x;
+          event.native.y = event.y;
           event.x = (event.x - Globals.Instance.offsetToCenter.x) / Globals.Instance.scalingFactor;
           event.y = (event.y - Globals.Instance.offsetToCenter.y) / Globals.Instance.scalingFactor;
           this.onSpriteEvent.next({ eventName, gameObject, event, customData });
@@ -76781,7 +73681,14 @@
     renderUpdate() {
     }
   };
+  __publicField(Scene, "sceneConfig");
+  var MainScene = class extends Scene {
+    preload() {
+      Globals.Instance.activeMainScene = this;
+    }
+  };
   var Events = class {
+    scene;
     constructor(scene) {
       this.scene = scene;
       this.init();
@@ -76791,29 +73698,10 @@
     }
   };
 
-  // src/scenes/InventoryScene.ts
-  var sceneConfig = {
-    active: false,
-    visible: false,
-    key: "InventoryScene"
-  };
-  var InventoryScene = class extends Scene {
-    constructor() {
-      super(sceneConfig);
-      this.settings = {
-        zIndex: 800
-      };
-    }
-    preload() {
-    }
-    create() {
-      super.create();
-      this.gameObjectContainerConfig.offset = false;
-      this.bagSprite = this.createBag();
-      this.gameObjectContainer.add(this.bagSprite);
-      Tools.addGameObjectToScene(this.scene.scene, this.gameObjectContainer);
-      this.on(this.bagSprite, void 0);
-      this.onSpriteEvent.subscribe((params) => {
+  // src/events/InventoryEvents.ts
+  var InventoryEvents = class extends Events {
+    init() {
+      this.scene.onSpriteEvent.subscribe((params) => {
         if (params.eventName === "pointerup") {
           const spriteInfo = Tools.getSpriteInfoFromSprite(params.gameObject);
           switch (spriteInfo.name) {
@@ -76833,13 +73721,41 @@
       Tools.destroySprite(params.gameObject);
     }
     onBagClick(params) {
-      this.inventorySprite = this.createInventory();
-      this.gameObjectContainer.add(this.inventorySprite);
-      this.on(this.inventorySprite, void 0);
+      this.scene.inventorySprite = this.createInventory();
+      this.scene.gameObjectContainer.add(this.scene.inventorySprite);
+      this.scene.on(this.scene.inventorySprite, void 0);
+    }
+    renderInventory() {
     }
     createInventory() {
       const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/inventory/0");
-      return Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getCenterStripePosition(inventorySpriteInfo)), inventorySpriteInfo);
+      const newInventory = Tools.getNewSprite(this.scene.scene.scene, ...Object.values(Tools.getCenterStripePosition(inventorySpriteInfo)), inventorySpriteInfo);
+      this.renderInventory();
+      return newInventory;
+    }
+  };
+  __publicField(InventoryEvents, "inventorySlots", 20);
+
+  // src/scenes/InventoryScene.ts
+  var _InventoryScene = class extends Scene {
+    bagSprite;
+    inventorySprite;
+    settings = {
+      zIndex: 800
+    };
+    constructor() {
+      super(_InventoryScene.sceneConfig);
+    }
+    preload() {
+    }
+    create() {
+      super.create();
+      this.gameObjectContainerConfig.offset = false;
+      this.bagSprite = this.createBag();
+      this.gameObjectContainer.add(this.bagSprite);
+      Tools.addGameObjectToScene(this.scene.scene, this.gameObjectContainer);
+      this.on(this.bagSprite, void 0);
+      new InventoryEvents(this);
     }
     createBag() {
       const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/bag/0");
@@ -76848,7 +73764,12 @@
     renderUpdate() {
     }
   };
-  InventoryScene.sceneConfig = sceneConfig;
+  var InventoryScene = _InventoryScene;
+  __publicField(InventoryScene, "sceneConfig", {
+    active: false,
+    visible: false,
+    key: "InventoryScene"
+  });
 
   // src/scenes/HomeOutsideScene.ts
   var Phaser3 = __toESM(require_phaser(), 1);
@@ -76879,7 +73800,7 @@
       params.gameObject.x = Phaser.Math.Snap.To(params.event.x, config_default.gridSize, config_default.gridSize / 2);
       params.gameObject.y = Phaser.Math.Snap.To(params.event.y, config_default.gridSize, config_default.gridSize / 2);
       const updatedPosition = Tools.getGridPosition(params.gameObject.x, params.gameObject.y);
-      Tools.moveSpriteToPosition({
+      if (Tools.moveSpriteToPosition({
         level: data.statePosition.levelIndex,
         row: data.statePosition.rowIndex,
         column: data.statePosition.columnIndex,
@@ -76888,31 +73809,26 @@
         level: data.statePosition.levelIndex,
         row: updatedPosition.row,
         column: updatedPosition.column
-      }) ? void 0 : this.scene.renderUpdate();
+      })) {
+        Globals.Instance.stateTransaction.sprites.next();
+        this.scene.renderUpdate();
+      }
       Globals.Instance.canRerender = true;
     }
   };
 
   // src/scenes/HomeOutsideScene.ts
-  var sceneConfig2 = {
-    active: false,
-    visible: false,
-    key: "HomeOutsideScene"
-  };
-  var HomeOutsideScene = class extends Scene {
+  var _HomeOutsideScene = class extends MainScene {
+    settings = {
+      zIndex: 200
+    };
     constructor() {
-      super(sceneConfig2);
-      this.settings = {
-        zIndex: 200
-      };
-    }
-    preload() {
-      Globals.Instance.activeMainScene = this;
+      super(_HomeOutsideScene.sceneConfig);
     }
     renderUpdate() {
       Tools.removeAllGameObjectsFromScene(this.scene.scene);
       this.gameObjectContainer = new Phaser3.GameObjects.Container(this.scene.scene);
-      Tools.renderScene(this.scene.scene, Globals.Instance.state.sprites.value, this.gameObjectContainer, (sprite, spriteInfo, statePosition) => {
+      this.renderScene(this.scene.scene, Globals.Instance.state.sprites.value, this.gameObjectContainer, (sprite, spriteInfo, statePosition) => {
         this.on(sprite, () => {
           return { statePosition, spriteInfo };
         });
@@ -76923,8 +73839,33 @@
       super.create();
       new SpriteEvents(this);
     }
+    renderScene(scene, state, container, spriteRenderCB) {
+      state.map((level, levelIndex) => {
+        level.map((row, rowIndex) => {
+          row.map((spriteData, columnIndex) => {
+            const spriteInfo = Tools.getSpriteInfoFromSpriteSource(spriteData.source);
+            const spriteX = columnIndex * config_default.gridSize;
+            const spriteY = rowIndex * config_default.gridSize;
+            const sprite = Tools.getNewSprite(scene, ...Object.values(Tools.getTopLeftSpritePosition(spriteX, spriteY, spriteInfo)), spriteInfo);
+            sprite.setDisplaySize(40, 40);
+            container.add(sprite);
+            spriteRenderCB?.(sprite, spriteInfo, {
+              levelIndex,
+              rowIndex,
+              columnIndex
+            });
+          });
+        });
+      });
+      return Tools.addGameObjectToScene(scene, container);
+    }
   };
-  HomeOutsideScene.sceneConfig = sceneConfig2;
+  var HomeOutsideScene = _HomeOutsideScene;
+  __publicField(HomeOutsideScene, "sceneConfig", {
+    active: false,
+    visible: false,
+    key: "HomeOutsideScene"
+  });
 
   // src/events/PlayerEvents.ts
   var PlayerEvents = class extends Events {
@@ -76948,44 +73889,49 @@
         to: { x: params.event.x, y: params.event.y }
       };
       const direction = Tools.getDirectionFromPosition(positions.from, positions.to);
-      this.activeTween?.stop();
-      this.activeTween = this.scene.add.tween({
+      this.scene.activeTween?.stop();
+      this.scene.activeTween = this.scene.add.tween({
         targets: this.scene.playerSprite,
         x: params.event.x,
         y: params.event.y,
         ease: "Linear",
-        duration: Tools.getSpeedForDistance(positions.from, positions.to) * Globals.Instance.scalingFactor,
+        duration: Tools.getSpeedForDistance(positions.from, positions.to, this.scene.playerSpriteInfo),
         completeDelay: 100,
         onComplete: () => {
           this.scene.playerSprite.play("idle");
         },
         onUpdate: () => {
           Tools.setGlobalOffsetPositonRelativeToSprite(this.scene.playerSprite);
+          this.updatePlayerEntity(params);
         }
       });
       this.scene.playerSprite.play(direction);
     }
+    updatePlayerEntity(params) {
+      Globals.Instance.activePlayer.x = this.scene.playerSprite.x;
+      Globals.Instance.activePlayer.y = this.scene.playerSprite.y;
+      Globals.Instance.state.entities.next(Globals.Instance.state.entities.value);
+      Globals.Instance.stateTransaction.entities.next();
+    }
   };
 
   // src/scenes/PlayerScene.ts
-  var sceneConfig3 = {
-    active: false,
-    visible: false,
-    key: "PlayerScene"
-  };
-  var PlayerScene = class extends Scene {
+  var _PlayerScene = class extends Scene {
+    activeTween;
+    playerSprite;
+    playerSpriteInfo;
+    settings = {
+      zIndex: 400
+    };
     constructor() {
-      super(sceneConfig3);
-      this.settings = {
-        zIndex: 400
-      };
+      super(_PlayerScene.sceneConfig);
     }
     preload() {
     }
     create() {
       super.create();
-      const cowSpriteInfo = Tools.getSpriteInfoFromSpriteSource("entity/cow/0");
-      this.playerSprite = Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, cowSpriteInfo)), cowSpriteInfo);
+      this.playerSpriteInfo = Tools.getSpriteInfoFromSpriteSource(Globals.Instance.activePlayer.source);
+      this.playerSprite = Tools.getNewSprite(this.scene.scene, Globals.Instance.activePlayer.x, Globals.Instance.activePlayer.y, this.playerSpriteInfo);
       this.add.existing(this.playerSprite);
       this.gameObjectContainer.add(this.playerSprite);
       Tools.addGameObjectToScene(this.scene.scene, this.gameObjectContainer);
@@ -76994,32 +73940,127 @@
       new PlayerEvents(this);
     }
   };
-  PlayerScene.sceneConfig = sceneConfig3;
-
-  // src/scenes/LoadingScene.ts
-  var sceneConfig4 = {
+  var PlayerScene = _PlayerScene;
+  __publicField(PlayerScene, "sceneConfig", {
     active: false,
     visible: false,
-    key: "LoadingScene"
+    key: "PlayerScene"
+  });
+
+  // src/scenes/Scenes.ts
+  var Scenes = class {
+    static getSceneByKey(key) {
+      return this.scenes.find((scene) => scene.sceneConfig.key === key);
+    }
   };
-  var LoadingScene = class extends Scene {
+  __publicField(Scenes, "scenes", [
+    HomeOutsideScene,
+    InventoryScene,
+    LoadingScene,
+    PlayerScene
+  ]);
+
+  // src/managers/EntityManager.ts
+  var EntityManager = class {
     constructor() {
-      super(sceneConfig4);
-      this.settings = {
-        zIndex: 900
-      };
+      this.init();
+    }
+    init() {
+      this.loginPlayer();
+    }
+    loginPlayer(promtText) {
+      const activePlayerName = prompt(promtText ? promtText : "Bitte gib deinen Namen ein:", "Dein Spieler name");
+      const activePlayer = Globals.Instance.state.entities.value.find((entity) => entity.name === activePlayerName);
+      if (activePlayer) {
+        Globals.Instance.activePlayer = activePlayer;
+        this.loadPlayerState(activePlayer);
+        return activePlayer;
+      }
+      this.loginPlayer("Leider wurde dieser Spielername nicht gefunden. Bitte versuche es erneut.");
+    }
+    loadPlayerState(activePlayer) {
+      Globals.Instance.game.scene.add(Tools.getUniqueKey(), Scenes.getSceneByKey(activePlayer.sceneName), true);
+    }
+  };
+
+  // src/managers/DataManager.ts
+  var import_deepmerge = __toESM(require_cjs(), 1);
+  var DataManager = class {
+    socket;
+    isReadyCb;
+    isReady;
+    constructor(isReadyCb) {
+      this.isReadyCb = isReadyCb;
+      this.loadWebsocket();
+    }
+    init() {
+      this.listenForLocalChanges();
+      this.listenForServerUpdates();
+    }
+    loadWebsocket() {
+      this.socket = new WebSocket("ws://localhost:9000");
+      this.socket.addEventListener("open", (event) => {
+        this.init();
+      });
+    }
+    sendData(newState) {
+      console.log("send currentState");
+      this.isReady && this.socket.send(JSON.stringify(newState));
+    }
+    listenForLocalChanges() {
+      const getCurrentState = () => ({
+        entities: Globals.Instance.state.entities.value,
+        sprites: Globals.Instance.state.sprites.value
+      });
+      Globals.Instance.stateTransaction.sprites.subscribe(() => this.sendData(getCurrentState()));
+    }
+    listenForServerUpdates() {
+      this.socket.addEventListener("message", (event) => {
+        console.log("got new state");
+        this.updateLocalStates(JSON.parse(event.data));
+        !this.isReady && (this.isReady = true) && this.isReadyCb();
+      });
+    }
+    updateLocalStates(newState) {
+      const activeState = Tools.getStateFromGlobalStateEvent();
+      if (JSON.stringify(activeState) === JSON.stringify(newState)) {
+        return;
+      }
+      const overwriteArrayMerge = (activeState2, newState2) => newState2;
+      const updatedState = (0, import_deepmerge.default)(activeState, newState, {
+        arrayMerge: overwriteArrayMerge
+      });
+      Globals.Instance.state.sprites.next(updatedState.sprites);
+      Globals.Instance.state.entities.next(updatedState.entities);
+    }
+  };
+
+  // src/scenes/LoadingScene.ts
+  var _LoadingScene = class extends Scene {
+    settings = {
+      zIndex: 900
+    };
+    constructor() {
+      super(_LoadingScene.sceneConfig);
     }
     preload() {
-      Tools.loadSprites(this.scene.key);
+      Tools.loadSprites(this.scene.scene);
     }
     create() {
       super.create();
-      Globals.Instance.game.scene.add(Tools.getUniqueKey(), HomeOutsideScene, true);
-      Globals.Instance.game.scene.add(Tools.getUniqueKey(), InventoryScene, true);
-      Globals.Instance.game.scene.add(Tools.getUniqueKey(), PlayerScene, true);
+      new DataManager(() => {
+        Globals.Instance.game.scene.add(Tools.getUniqueKey(), InventoryScene, true);
+        new EntityManager();
+        Globals.Instance.game.scene.add(Tools.getUniqueKey(), PlayerScene, true);
+      });
     }
   };
-  LoadingScene.sceneConfig = sceneConfig4;
+  var LoadingScene = _LoadingScene;
+  __publicField(LoadingScene, "sceneConfig", {
+    active: false,
+    visible: false,
+    key: "LoadingScene"
+  });
 
   // src/App.ts
   var gameConfig = {
@@ -77038,8 +74079,6 @@
     scene: []
   };
   Globals.Instance.game = new Phaser4.Game(gameConfig);
-  Globals.Instance.state.sprites.next(JSON.parse(JSON.stringify(demo_default.sprites)));
-  Globals.Instance.state.entities.next(JSON.parse(JSON.stringify(demo_default.entities)));
   new GlobalKeyEvents();
   Globals.Instance.game.scene.add(Tools.getUniqueKey(), LoadingScene, true);
 })();

@@ -3,38 +3,38 @@ import { Tools } from '../Tools';
 import { Globals } from '../Globals';
 import { Scene } from '../Interfaces';
 import { InventoryScene } from './InventoryScene';
-import { HomeOutsideScene } from './HomeOutsideScene';
+import { EntityManager } from '../managers/EntityManager';
 import { PlayerScene } from './PlayerScene';
-
-const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
-  active: false,
-  visible: false,
-  key: 'LoadingScene'
-};
-
+import { DataManager } from '../managers/DataManager';
 export class LoadingScene extends Scene {
-  static sceneConfig = sceneConfig;
+  static sceneConfig = {
+    active: false,
+    visible: false,
+    key: 'LoadingScene'
+  };
 
   override settings = {
     zIndex: 900
   };
 
   constructor() {
-    super(sceneConfig);
+    super(LoadingScene.sceneConfig);
   }
 
   preload() {
-    Tools.loadSprites(this.scene.key);
+    Tools.loadSprites(this.scene.scene);
   }
 
   create() {
     super.create();
-    Globals.Instance.game.scene.add(
-      Tools.getUniqueKey(),
-      HomeOutsideScene,
-      true
-    );
-    Globals.Instance.game.scene.add(Tools.getUniqueKey(), InventoryScene, true);
-    Globals.Instance.game.scene.add(Tools.getUniqueKey(), PlayerScene, true);
+    new DataManager(() => {
+      Globals.Instance.game.scene.add(
+        Tools.getUniqueKey(),
+        InventoryScene,
+        true
+      );
+      new EntityManager();
+      Globals.Instance.game.scene.add(Tools.getUniqueKey(), PlayerScene, true);
+    });
   }
 }

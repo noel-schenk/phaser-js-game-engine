@@ -1,15 +1,13 @@
-import { Globals } from '../Globals';
+import { InventoryEvents } from '../events/InventoryEvents';
 import { Scene } from '../Interfaces';
 import { Tools } from '../Tools';
 
-const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
-  active: false,
-  visible: false,
-  key: 'InventoryScene'
-};
-
 export class InventoryScene extends Scene {
-  static sceneConfig = sceneConfig;
+  static sceneConfig = {
+    active: false,
+    visible: false,
+    key: 'InventoryScene'
+  };
 
   bagSprite: Phaser.GameObjects.Sprite;
   inventorySprite: Phaser.GameObjects.Sprite;
@@ -19,7 +17,7 @@ export class InventoryScene extends Scene {
   };
 
   constructor() {
-    super(sceneConfig);
+    super(InventoryScene.sceneConfig);
   }
 
   preload() {}
@@ -40,45 +38,7 @@ export class InventoryScene extends Scene {
 
     this.on(this.bagSprite, undefined);
 
-    this.onSpriteEvent.subscribe((params) => {
-      if (params.eventName === 'pointerup') {
-        const spriteInfo = Tools.getSpriteInfoFromSprite(params.gameObject);
-        switch (spriteInfo.name) {
-          case 'ui/bag':
-            this.onBagClick(params);
-            break;
-          case 'ui/inventory':
-            this.onInventoryClick(params);
-            break;
-          default:
-            break;
-        }
-      }
-    });
-  }
-
-  onInventoryClick(params) {
-    Tools.destroySprite(params.gameObject);
-  }
-
-  onBagClick(params) {
-    this.inventorySprite = this.createInventory();
-    this.gameObjectContainer.add(this.inventorySprite);
-    this.on(this.inventorySprite, undefined);
-  }
-
-  createInventory() {
-    const inventorySpriteInfo =
-      Tools.getSpriteInfoFromSpriteSource('ui/inventory/0');
-
-    return Tools.getNewSprite(
-      this.scene.scene,
-      ...(Object.values(Tools.getCenterStripePosition(inventorySpriteInfo)) as [
-        number,
-        number
-      ]),
-      inventorySpriteInfo
-    );
+    new InventoryEvents(this);
   }
 
   createBag() {

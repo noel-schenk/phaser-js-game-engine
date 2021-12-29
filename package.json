@@ -4,18 +4,26 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@types/deepmerge": "^2.2.0",
+    "@types/express": "^4.17.13",
+    "@types/serve-handler": "^6.1.1",
+    "@types/ws": "^8.2.2",
+    "deepmerge": "^4.2.2",
     "esbuild": "^0.14.8",
     "esbuild-serve": "^1.0.1",
     "express": "^4.17.2",
     "phaser": "^3.55.2",
     "prettier": "^2.5.1",
     "rxjs": "^7.5.0",
-    "serve": "^13.0.2"
+    "serve": "^13.0.2",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4",
+    "ws": "^8.4.0"
   },
   "type": "module",
   "scripts": {
     "build": "esbuild ./src/App.ts --bundle --outfile=./dist/App.js",
-    "serve": "node esbuild.config.js -w"
+    "serve": "node --loader ts-node/esm server.ts -w"
   },
   "devDependencies": {
     "phaser3_gui_inspector": "^1.2.1"

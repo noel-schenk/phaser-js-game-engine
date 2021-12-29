@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Globals } from './Globals';
 import { Tools } from './Tools';
 
@@ -29,7 +29,23 @@ export interface SpriteData {
 
 export type SpriteInfo = { name: string; mutation: number };
 
-export type State = { source: string }[][][];
+export type SpriteState = { source: string };
+
+export type EntityState = {
+  source: string;
+  x: number;
+  y: number;
+  name: string;
+  sceneName: string;
+  inventory: {
+    source: string;
+  }[];
+};
+
+export type State = {
+  sprites: SpriteState[][][];
+  entities: EntityState[];
+};
 
 export type SpriteEvent = {
   eventName: string;
@@ -51,9 +67,7 @@ export class Scene extends Phaser.Scene {
     zIndex: 200
   };
 
-  get sceneConfig() {
-    throw 'This property needs to be overwritten';
-  }
+  static sceneConfig: Phaser.Types.Scenes.SettingsConfig;
 
   create() {
     this.gameObjectContainer = new Phaser.GameObjects.Container(
@@ -80,6 +94,10 @@ export class Scene extends Phaser.Scene {
   on(gameObject: Phaser.GameObjects.Sprite, customData: Function) {
     Object.keys(GameObjectEvents).forEach((eventName) => {
       gameObject.on(eventName, (event) => {
+        event.native = { x: 0, y: 0 };
+        event.native.x = event.x;
+        event.native.y = event.y;
+
         event.x =
           (event.x - Globals.Instance.offsetToCenter.x) /
           Globals.Instance.scalingFactor;
@@ -102,6 +120,12 @@ export class Scene extends Phaser.Scene {
   }
 
   renderUpdate() {}
+}
+
+export class MainScene extends Scene {
+  preload() {
+    Globals.Instance.activeMainScene = this;
+  }
 }
 
 export class Events<T extends Scene> {

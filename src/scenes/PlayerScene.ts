@@ -1,26 +1,26 @@
 import * as Phaser from 'phaser';
 import { PlayerEvents } from '../events/PlayerEvents';
 import { Globals } from '../Globals';
-import { Scene } from '../Interfaces';
+import { Scene, SpriteInfo } from '../Interfaces';
 import { Tools } from '../Tools';
 
-const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
-  active: false,
-  visible: false,
-  key: 'PlayerScene'
-};
-
 export class PlayerScene extends Scene {
-  static sceneConfig = sceneConfig;
+  static sceneConfig = {
+    active: false,
+    visible: false,
+    key: 'PlayerScene'
+  };
 
+  activeTween: Phaser.Tweens.Tween;
   playerSprite: Phaser.GameObjects.Sprite;
+  playerSpriteInfo: SpriteInfo;
 
   override settings = {
     zIndex: 400
   };
 
   constructor() {
-    super(sceneConfig);
+    super(PlayerScene.sceneConfig);
   }
 
   preload() {}
@@ -28,14 +28,15 @@ export class PlayerScene extends Scene {
   create() {
     super.create();
 
-    const cowSpriteInfo = Tools.getSpriteInfoFromSpriteSource('entity/cow/0');
+    this.playerSpriteInfo = Tools.getSpriteInfoFromSpriteSource(
+      Globals.Instance.activePlayer.source
+    );
 
     this.playerSprite = Tools.getNewSprite(
       this.scene.scene,
-      ...(Object.values(
-        Tools.getTopLeftSpritePosition(0, 0, cowSpriteInfo)
-      ) as [number, number]),
-      cowSpriteInfo
+      Globals.Instance.activePlayer.x,
+      Globals.Instance.activePlayer.y,
+      this.playerSpriteInfo
     );
 
     this.add.existing(this.playerSprite);

@@ -42,6 +42,7 @@
         "height": 60,
         "ext": "png",
         "interactive": false,
+        "speed": 10,
         "animations": {
             "up": [
                 9,
@@ -70,6 +71,41 @@
                 15,
                 16,
                 17
+            ]
+        }
+    },
+    "entity/wolf": {
+        "mutations": 15,
+        "width": 40,
+        "height": 40,
+        "ext": "png",
+        "interactive": false,
+        "speed": 120,
+        "animations": {
+            "up": [
+                9,
+                10,
+                11
+            ],
+            "right": [
+                3,
+                4,
+                5
+            ],
+            "down": [
+                0,
+                1,
+                2
+            ],
+            "left": [
+                6,
+                7,
+                8
+            ],
+            "idle": [
+                12,
+                13,
+                14
             ]
         }
     }
