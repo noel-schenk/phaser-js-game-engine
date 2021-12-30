@@ -1,13 +1,14 @@
 import { Globals } from '../Globals';
-import { EntityState, SpriteState, State } from '../Interfaces';
+import { State } from '../Interfaces';
 import merge from 'deepmerge';
 import { Tools } from '../Tools';
+import equal from 'fast-deep-equal';
 
 export class DataManager {
   socket: WebSocket;
 
   isReadyCb: Function;
-  isReady: boolean;
+  isReady = false;
 
   constructor(isReadyCb: Function) {
     this.isReadyCb = isReadyCb;
@@ -38,9 +39,11 @@ export class DataManager {
       sprites: Globals.Instance.state.sprites.value
     });
 
-    Globals.Instance.stateTransaction.sprites.subscribe(() =>
-      this.sendData(getCurrentState())
-    );
+    Globals.Instance.stateTransaction.sprites.subscribe(() => this.sendData(getCurrentState()));
+
+    Globals.Instance.stateTransaction.entities.subscribe(() => {
+      this.sendData(getCurrentState());
+    });
   }
 
   private listenForServerUpdates() {
@@ -54,17 +57,16 @@ export class DataManager {
   private updateLocalStates(newState: State) {
     const activeState = Tools.getStateFromGlobalStateEvent();
 
-    if (JSON.stringify(activeState) === JSON.stringify(newState)) {
-      return;
-    }
-
     const overwriteArrayMerge = (activeState, newState) => newState;
 
     const updatedState = merge(activeState, newState, {
       arrayMerge: overwriteArrayMerge
     });
 
-    Globals.Instance.state.sprites.next(updatedState.sprites);
+    if (!equal(updatedState.sprites, activeState.sprites)) {
+      Globals.Instance.state.sprites.next(updatedState.sprites);
+    }
+
     Globals.Instance.state.entities.next(updatedState.entities);
   }
 }

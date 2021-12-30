@@ -20,7 +20,14 @@ export class Globals {
   canRerender = true;
   activeMainScene: Scene;
   offsetToCenter = { x: 0, y: 0 };
-  activePlayer: EntityState; // call state.entities.next() on update
+  activePlayerName: string;
+
+  // call state.entities.next() on update
+  getActivePlayer(): EntityState {
+    return Globals.Instance.state.entities.value.find(
+      (entity: EntityState) => entity.name === Globals.Instance.activePlayerName
+    );
+  }
 
   private constructor() {}
 

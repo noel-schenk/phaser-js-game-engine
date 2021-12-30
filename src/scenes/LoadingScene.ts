@@ -3,9 +3,10 @@ import { Tools } from '../Tools';
 import { Globals } from '../Globals';
 import { Scene } from '../Interfaces';
 import { InventoryScene } from './InventoryScene';
-import { EntityManager } from '../managers/EntityManager';
-import { PlayerScene } from './PlayerScene';
+import { LoginManager } from '../managers/LoginManager';
 import { DataManager } from '../managers/DataManager';
+import { EntityScene } from './EntityScene';
+import { PlayerEvents } from '../events/PlayerEvents';
 export class LoadingScene extends Scene {
   static sceneConfig = {
     active: false,
@@ -28,13 +29,10 @@ export class LoadingScene extends Scene {
   create() {
     super.create();
     new DataManager(() => {
-      Globals.Instance.game.scene.add(
-        Tools.getUniqueKey(),
-        InventoryScene,
-        true
-      );
-      new EntityManager();
-      Globals.Instance.game.scene.add(Tools.getUniqueKey(), PlayerScene, true);
+      Globals.Instance.game.scene.add(Tools.getUniqueKey(), InventoryScene, true);
+      new LoginManager();
+      Globals.Instance.game.scene.add(Tools.getUniqueKey(), EntityScene, true);
+      new PlayerEvents();
     });
   }
 }

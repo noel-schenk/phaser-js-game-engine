@@ -3224,8 +3224,8 @@
     "entities": [
         {
             "source": "entity/cow/0",
-            "x": "200",
-            "y": "200",
+            "x": "100",
+            "y": "100",
             "name": "noel",
             "sceneName": "HomeOutsideScene",
             "inventory": [

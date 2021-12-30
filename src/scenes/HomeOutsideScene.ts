@@ -19,12 +19,10 @@ export class HomeOutsideScene extends MainScene {
     super(HomeOutsideScene.sceneConfig);
   }
 
-  override renderUpdate() {
+  override renderSpriteUpdate() {
     Tools.removeAllGameObjectsFromScene(this.scene.scene);
 
-    this.gameObjectContainer = new Phaser.GameObjects.Container(
-      this.scene.scene
-    );
+    this.gameObjectContainer = new Phaser.GameObjects.Container(this.scene.scene);
 
     this.renderScene(
       this.scene.scene,
@@ -62,17 +60,13 @@ export class HomeOutsideScene extends MainScene {
     state.map((level, levelIndex) => {
       level.map((row, rowIndex) => {
         row.map((spriteData, columnIndex) => {
-          const spriteInfo = Tools.getSpriteInfoFromSpriteSource(
-            spriteData.source
-          );
+          const spriteInfo = Tools.getSpriteInfoFromSpriteSource(spriteData.source);
           const spriteX = columnIndex * config.gridSize;
           const spriteY = rowIndex * config.gridSize;
 
           const sprite = Tools.getNewSprite(
             scene,
-            ...(Object.values(
-              Tools.getTopLeftSpritePosition(spriteX, spriteY, spriteInfo)
-            ) as [number, number]),
+            ...(Object.values(Tools.getTopLeftSpritePosition(spriteX, spriteY, spriteInfo)) as [number, number]),
             spriteInfo
           );
           sprite.setDisplaySize(40, 40);
@@ -87,9 +81,6 @@ export class HomeOutsideScene extends MainScene {
         });
       });
     });
-    return Tools.addGameObjectToScene<Phaser.GameObjects.Container>(
-      scene,
-      container
-    );
+    return Tools.addGameObjectToScene<Phaser.GameObjects.Container>(scene, container);
   }
 }

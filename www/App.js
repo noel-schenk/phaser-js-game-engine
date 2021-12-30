@@ -72550,6 +72550,51 @@
     }
   });
 
+  // node_modules/fast-deep-equal/index.js
+  var require_fast_deep_equal = __commonJS({
+    "node_modules/fast-deep-equal/index.js"(exports, module) {
+      "use strict";
+      module.exports = function equal2(a, b) {
+        if (a === b)
+          return true;
+        if (a && b && typeof a == "object" && typeof b == "object") {
+          if (a.constructor !== b.constructor)
+            return false;
+          var length, i, keys;
+          if (Array.isArray(a)) {
+            length = a.length;
+            if (length != b.length)
+              return false;
+            for (i = length; i-- !== 0; )
+              if (!equal2(a[i], b[i]))
+                return false;
+            return true;
+          }
+          if (a.constructor === RegExp)
+            return a.source === b.source && a.flags === b.flags;
+          if (a.valueOf !== Object.prototype.valueOf)
+            return a.valueOf() === b.valueOf();
+          if (a.toString !== Object.prototype.toString)
+            return a.toString() === b.toString();
+          keys = Object.keys(a);
+          length = keys.length;
+          if (length !== Object.keys(b).length)
+            return false;
+          for (i = length; i-- !== 0; )
+            if (!Object.prototype.hasOwnProperty.call(b, keys[i]))
+              return false;
+          for (i = length; i-- !== 0; ) {
+            var key = keys[i];
+            if (!equal2(a[key], b[key]))
+              return false;
+          }
+          return true;
+        }
+        return a !== a && b !== b;
+      };
+    }
+  });
+
   // src/App.ts
   var Phaser4 = __toESM(require_phaser(), 1);
 
@@ -73291,7 +73336,7 @@
   }(Subject);
 
   // src/Globals.ts
-  var Globals = class {
+  var _Globals = class {
     game;
     sprites = Array();
     state = {
@@ -73306,13 +73351,17 @@
     canRerender = true;
     activeMainScene;
     offsetToCenter = { x: 0, y: 0 };
-    activePlayer;
+    activePlayerName;
+    getActivePlayer() {
+      return _Globals.Instance.state.entities.value.find((entity) => entity.name === _Globals.Instance.activePlayerName);
+    }
     constructor() {
     }
     static get Instance() {
       return this._instance || (this._instance = new this());
     }
   };
+  var Globals = _Globals;
   __publicField(Globals, "_instance");
 
   // src/json/sprites.json
@@ -73478,10 +73527,7 @@
     }
     static getCenterStripePosition(spriteInfo) {
       const getCenter = (size) => size / 2 / Globals.Instance.scalingFactor;
-      return [
-        getCenter(Globals.Instance.game.canvas.width),
-        getCenter(Globals.Instance.game.canvas.height)
-      ];
+      return [getCenter(Globals.Instance.game.canvas.width), getCenter(Globals.Instance.game.canvas.height)];
     }
     static getTopLeftSpritePosition(x, y, spriteInfo) {
       const sprite = sprites_default[spriteInfo.name];
@@ -73620,6 +73666,17 @@
         sprites: Globals.Instance.state.sprites.value
       };
     }
+    static tryRender(cb) {
+      const tryRender = () => {
+        if (!Globals.Instance.canRerender) {
+          console.log("rendering is not possible at the moment");
+          setTimeout(() => tryRender(), 100);
+          return;
+        }
+        cb();
+      };
+      tryRender();
+    }
   };
 
   // src/Interfaces.ts
@@ -73648,15 +73705,10 @@
       this.data.set("settings", this.settings);
       Tools.orderScenes();
       Globals.Instance.state.sprites.subscribe(() => {
-        const tryRender = () => {
-          if (!Globals.Instance.canRerender) {
-            console.log("rendering is not possible at the moment");
-            setTimeout(() => tryRender(), 100);
-            return;
-          }
-          this.renderUpdate();
-        };
-        tryRender();
+        Tools.tryRender(() => this.renderSpriteUpdate());
+      });
+      Globals.Instance.state.entities.subscribe(() => {
+        Tools.tryRender(() => this.renderEntitiesUpdate());
       });
     }
     on(gameObject, customData) {
@@ -73678,7 +73730,9 @@
       }
       this.gameObjectContainerConfig.scale && (this.gameObjectContainer.scale = Globals.Instance.scalingFactor);
     }
-    renderUpdate() {
+    renderSpriteUpdate() {
+    }
+    renderEntitiesUpdate() {
     }
   };
   __publicField(Scene, "sceneConfig");
@@ -73761,8 +73815,6 @@
       const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/bag/0");
       return Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)), bagSpriteInfo);
     }
-    renderUpdate() {
-    }
   };
   var InventoryScene = _InventoryScene;
   __publicField(InventoryScene, "sceneConfig", {
@@ -73811,7 +73863,7 @@
         column: updatedPosition.column
       })) {
         Globals.Instance.stateTransaction.sprites.next();
-        this.scene.renderUpdate();
+        this.scene.renderSpriteUpdate();
       }
       Globals.Instance.canRerender = true;
     }
@@ -73825,7 +73877,7 @@
     constructor() {
       super(_HomeOutsideScene.sceneConfig);
     }
-    renderUpdate() {
+    renderSpriteUpdate() {
       Tools.removeAllGameObjectsFromScene(this.scene.scene);
       this.gameObjectContainer = new Phaser3.GameObjects.Container(this.scene.scene);
       this.renderScene(this.scene.scene, Globals.Instance.state.sprites.value, this.gameObjectContainer, (sprite, spriteInfo, statePosition) => {
@@ -73867,101 +73919,16 @@
     key: "HomeOutsideScene"
   });
 
-  // src/events/PlayerEvents.ts
-  var PlayerEvents = class extends Events {
-    init() {
-      Globals.Instance.activeMainScene.onSpriteEvent.subscribe((params) => {
-        if (params.eventName === "pointerup") {
-          this.onClick(params);
-        }
-      });
-    }
-    onClick(params) {
-      switch (params.gameObject.texture.key) {
-        case "ground/grass":
-          this.onClickGroundGrass(params);
-          break;
-      }
-    }
-    onClickGroundGrass(params) {
-      const positions = {
-        from: { x: this.scene.playerSprite.x, y: this.scene.playerSprite.y },
-        to: { x: params.event.x, y: params.event.y }
-      };
-      const direction = Tools.getDirectionFromPosition(positions.from, positions.to);
-      this.scene.activeTween?.stop();
-      this.scene.activeTween = this.scene.add.tween({
-        targets: this.scene.playerSprite,
-        x: params.event.x,
-        y: params.event.y,
-        ease: "Linear",
-        duration: Tools.getSpeedForDistance(positions.from, positions.to, this.scene.playerSpriteInfo),
-        completeDelay: 100,
-        onComplete: () => {
-          this.scene.playerSprite.play("idle");
-        },
-        onUpdate: () => {
-          Tools.setGlobalOffsetPositonRelativeToSprite(this.scene.playerSprite);
-          this.updatePlayerEntity(params);
-        }
-      });
-      this.scene.playerSprite.play(direction);
-    }
-    updatePlayerEntity(params) {
-      Globals.Instance.activePlayer.x = this.scene.playerSprite.x;
-      Globals.Instance.activePlayer.y = this.scene.playerSprite.y;
-      Globals.Instance.state.entities.next(Globals.Instance.state.entities.value);
-      Globals.Instance.stateTransaction.entities.next();
-    }
-  };
-
-  // src/scenes/PlayerScene.ts
-  var _PlayerScene = class extends Scene {
-    activeTween;
-    playerSprite;
-    playerSpriteInfo;
-    settings = {
-      zIndex: 400
-    };
-    constructor() {
-      super(_PlayerScene.sceneConfig);
-    }
-    preload() {
-    }
-    create() {
-      super.create();
-      this.playerSpriteInfo = Tools.getSpriteInfoFromSpriteSource(Globals.Instance.activePlayer.source);
-      this.playerSprite = Tools.getNewSprite(this.scene.scene, Globals.Instance.activePlayer.x, Globals.Instance.activePlayer.y, this.playerSpriteInfo);
-      this.add.existing(this.playerSprite);
-      this.gameObjectContainer.add(this.playerSprite);
-      Tools.addGameObjectToScene(this.scene.scene, this.gameObjectContainer);
-      Tools.setGlobalOffsetPositonRelativeToSprite(this.playerSprite);
-      this.playerSprite.play("idle");
-      new PlayerEvents(this);
-    }
-  };
-  var PlayerScene = _PlayerScene;
-  __publicField(PlayerScene, "sceneConfig", {
-    active: false,
-    visible: false,
-    key: "PlayerScene"
-  });
-
   // src/scenes/Scenes.ts
   var Scenes = class {
     static getSceneByKey(key) {
       return this.scenes.find((scene) => scene.sceneConfig.key === key);
     }
   };
-  __publicField(Scenes, "scenes", [
-    HomeOutsideScene,
-    InventoryScene,
-    LoadingScene,
-    PlayerScene
-  ]);
+  __publicField(Scenes, "scenes", [HomeOutsideScene, InventoryScene, LoadingScene]);
 
-  // src/managers/EntityManager.ts
-  var EntityManager = class {
+  // src/managers/LoginManager.ts
+  var LoginManager = class {
     constructor() {
       this.init();
     }
@@ -73969,10 +73936,9 @@
       this.loginPlayer();
     }
     loginPlayer(promtText) {
-      const activePlayerName = prompt(promtText ? promtText : "Bitte gib deinen Namen ein:", "Dein Spieler name");
-      const activePlayer = Globals.Instance.state.entities.value.find((entity) => entity.name === activePlayerName);
+      Globals.Instance.activePlayerName = prompt(promtText ? promtText : "Bitte gib deinen Namen ein:", "Dein Spieler name");
+      const activePlayer = Globals.Instance.getActivePlayer();
       if (activePlayer) {
-        Globals.Instance.activePlayer = activePlayer;
         this.loadPlayerState(activePlayer);
         return activePlayer;
       }
@@ -73985,10 +73951,11 @@
 
   // src/managers/DataManager.ts
   var import_deepmerge = __toESM(require_cjs(), 1);
+  var import_fast_deep_equal = __toESM(require_fast_deep_equal(), 1);
   var DataManager = class {
     socket;
     isReadyCb;
-    isReady;
+    isReady = false;
     constructor(isReadyCb) {
       this.isReadyCb = isReadyCb;
       this.loadWebsocket();
@@ -74013,6 +73980,9 @@
         sprites: Globals.Instance.state.sprites.value
       });
       Globals.Instance.stateTransaction.sprites.subscribe(() => this.sendData(getCurrentState()));
+      Globals.Instance.stateTransaction.entities.subscribe(() => {
+        this.sendData(getCurrentState());
+      });
     }
     listenForServerUpdates() {
       this.socket.addEventListener("message", (event) => {
@@ -74023,17 +73993,148 @@
     }
     updateLocalStates(newState) {
       const activeState = Tools.getStateFromGlobalStateEvent();
-      if (JSON.stringify(activeState) === JSON.stringify(newState)) {
-        return;
-      }
       const overwriteArrayMerge = (activeState2, newState2) => newState2;
       const updatedState = (0, import_deepmerge.default)(activeState, newState, {
         arrayMerge: overwriteArrayMerge
       });
-      Globals.Instance.state.sprites.next(updatedState.sprites);
+      if (!(0, import_fast_deep_equal.default)(updatedState.sprites, activeState.sprites)) {
+        Globals.Instance.state.sprites.next(updatedState.sprites);
+      }
       Globals.Instance.state.entities.next(updatedState.entities);
     }
   };
+
+  // src/events/PlayerEvents.ts
+  var _PlayerEvents = class {
+    constructor() {
+      this.init();
+    }
+    init() {
+      Globals.Instance.activeMainScene.onSpriteEvent.subscribe((params) => {
+        if (params.eventName === "pointerup") {
+          this.onClick(params);
+        }
+      });
+    }
+    onClick(params) {
+      switch (params.gameObject.texture.key) {
+        case "ground/grass":
+          this.onClickGroundGrass(params);
+          break;
+      }
+    }
+    onClickGroundGrass(params) {
+      this.updatePlayerEntity(params);
+    }
+    updatePlayerEntity(params) {
+      const activePlayer = Globals.Instance.getActivePlayer();
+      activePlayer.x = params.event.x;
+      activePlayer.y = params.event.y;
+      Globals.Instance.state.entities.next(Globals.Instance.state.entities.value);
+      Globals.Instance.stateTransaction.entities.next();
+    }
+    static whileAnimation(playerSprite) {
+      Tools.setGlobalOffsetPositonRelativeToSprite(playerSprite);
+    }
+    static afterCreate(playerSprite) {
+      _PlayerEvents.playerSprite = playerSprite;
+      Tools.setGlobalOffsetPositonRelativeToSprite(playerSprite);
+      playerSprite.play("idle");
+    }
+  };
+  var PlayerEvents = _PlayerEvents;
+  __publicField(PlayerEvents, "playerSprite");
+
+  // src/scenes/EntityScene.ts
+  var _EntityScene = class extends Scene {
+    isReady = false;
+    settings = {
+      zIndex: 400
+    };
+    constructor() {
+      super(_EntityScene.sceneConfig);
+    }
+    preload() {
+    }
+    create() {
+      super.create();
+      Globals.Instance.state.entities.value.forEach((entityState) => {
+        if (entityState.sceneName === Globals.Instance.activeMainScene.scene.key) {
+          const entitySprite = this.addEntity(entityState);
+          if (this.isPlayer(entityState)) {
+            PlayerEvents.afterCreate(entitySprite);
+          }
+        }
+      });
+      Tools.addGameObjectToScene(this.scene.scene, this.gameObjectContainer);
+      this.isReady = true;
+    }
+    renderEntitiesUpdate() {
+      if (!this.isReady)
+        return;
+      Globals.Instance.state.entities.value.forEach((entityState) => {
+        const existingEntitySprite = this.gameObjectContainer.list.find((entitySprite) => entitySprite.getData("EntityState").name === entityState.name);
+        if (existingEntitySprite) {
+          const entitySpriteInfo = Tools.getSpriteInfoFromSpriteSource(entityState.source);
+          this.animateEntity(existingEntitySprite, entityState, entitySpriteInfo);
+          existingEntitySprite.texture.key = entitySpriteInfo.name;
+          existingEntitySprite.setFrame(entitySpriteInfo.mutation);
+          return;
+        }
+        this.addEntity(entityState);
+      });
+      this.removeDeletedEntities();
+    }
+    animateEntity(entitySprite, entityState, entitySpriteInfo) {
+      const positions = {
+        from: { x: entitySprite.x, y: entitySprite.y },
+        to: { x: entityState.x, y: entityState.y }
+      };
+      const direction = Tools.getDirectionFromPosition(positions.from, positions.to);
+      if (positions.from.x !== positions.to.x || positions.from.y !== positions.to.y) {
+        entitySprite.getData("tween")?.stop().removeAllListeners().remove();
+        const tween = this.scene.scene.add.tween({
+          targets: entitySprite,
+          x: entityState.x,
+          y: entityState.y,
+          ease: "Linear",
+          duration: Tools.getSpeedForDistance(positions.from, positions.to, entitySpriteInfo),
+          completeDelay: 100,
+          onComplete: () => {
+            entitySprite.play("idle");
+          },
+          onUpdate: () => {
+            if (this.isPlayer(entityState)) {
+              PlayerEvents.whileAnimation(entitySprite);
+            }
+          }
+        });
+        entitySprite.setData("tween", tween);
+        entitySprite.play(direction);
+      }
+    }
+    removeDeletedEntities() {
+      const existingEntityNames = Globals.Instance.state.entities.value.map((entity) => entity.name);
+      this.gameObjectContainer.list.filter((entitySprite) => existingEntityNames.includes(entitySprite.getData("EntityState").name));
+    }
+    addEntity(entityState) {
+      const entitySpriteInfo = Tools.getSpriteInfoFromSpriteSource(entityState.source);
+      const entitySprite = Tools.getNewSprite(this.scene.scene, entityState.x, entityState.y, entitySpriteInfo);
+      entitySprite.setData("EntityState", entityState);
+      this.add.existing(entitySprite);
+      this.gameObjectContainer.add(entitySprite);
+      return entitySprite;
+    }
+    isPlayer(entityState) {
+      return entityState.name === Globals.Instance.getActivePlayer().name;
+    }
+  };
+  var EntityScene = _EntityScene;
+  __publicField(EntityScene, "sceneConfig", {
+    active: false,
+    visible: false,
+    key: "EntityScene"
+  });
 
   // src/scenes/LoadingScene.ts
   var _LoadingScene = class extends Scene {
@@ -74050,8 +74151,9 @@
       super.create();
       new DataManager(() => {
         Globals.Instance.game.scene.add(Tools.getUniqueKey(), InventoryScene, true);
-        new EntityManager();
-        Globals.Instance.game.scene.add(Tools.getUniqueKey(), PlayerScene, true);
+        new LoginManager();
+        Globals.Instance.game.scene.add(Tools.getUniqueKey(), EntityScene, true);
+        new PlayerEvents();
       });
     }
   };

@@ -31,10 +31,7 @@ export class InventoryScene extends Scene {
 
     this.gameObjectContainer.add(this.bagSprite);
 
-    Tools.addGameObjectToScene<Phaser.GameObjects.Sprite>(
-      this.scene.scene,
-      this.gameObjectContainer
-    );
+    Tools.addGameObjectToScene<Phaser.GameObjects.Sprite>(this.scene.scene, this.gameObjectContainer);
 
     this.on(this.bagSprite, undefined);
 
@@ -46,12 +43,8 @@ export class InventoryScene extends Scene {
 
     return Tools.getNewSprite(
       this.scene.scene,
-      ...(Object.values(
-        Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)
-      ) as [number, number]),
+      ...(Object.values(Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)) as [number, number]),
       bagSpriteInfo
     );
   }
-
-  override renderUpdate() {}
 }

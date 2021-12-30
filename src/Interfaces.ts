@@ -70,24 +70,18 @@ export class Scene extends Phaser.Scene {
   static sceneConfig: Phaser.Types.Scenes.SettingsConfig;
 
   create() {
-    this.gameObjectContainer = new Phaser.GameObjects.Container(
-      this.scene.scene
-    );
+    this.gameObjectContainer = new Phaser.GameObjects.Container(this.scene.scene);
 
     this.data.set('settings', this.settings);
 
     Tools.orderScenes();
 
     Globals.Instance.state.sprites.subscribe(() => {
-      const tryRender = () => {
-        if (!Globals.Instance.canRerender) {
-          console.log('rendering is not possible at the moment');
-          setTimeout(() => tryRender(), 100);
-          return;
-        }
-        this.renderUpdate();
-      };
-      tryRender();
+      Tools.tryRender(() => this.renderSpriteUpdate());
+    });
+
+    Globals.Instance.state.entities.subscribe(() => {
+      Tools.tryRender(() => this.renderEntitiesUpdate());
     });
   }
 
@@ -98,12 +92,8 @@ export class Scene extends Phaser.Scene {
         event.native.x = event.x;
         event.native.y = event.y;
 
-        event.x =
-          (event.x - Globals.Instance.offsetToCenter.x) /
-          Globals.Instance.scalingFactor;
-        event.y =
-          (event.y - Globals.Instance.offsetToCenter.y) /
-          Globals.Instance.scalingFactor;
+        event.x = (event.x - Globals.Instance.offsetToCenter.x) / Globals.Instance.scalingFactor;
+        event.y = (event.y - Globals.Instance.offsetToCenter.y) / Globals.Instance.scalingFactor;
         this.onSpriteEvent.next({ eventName, gameObject, event, customData });
       });
     });
@@ -115,11 +105,12 @@ export class Scene extends Phaser.Scene {
       this.gameObjectContainer.y = Globals.Instance.offsetToCenter.y;
     }
 
-    this.gameObjectContainerConfig.scale &&
-      (this.gameObjectContainer.scale = Globals.Instance.scalingFactor);
+    this.gameObjectContainerConfig.scale && (this.gameObjectContainer.scale = Globals.Instance.scalingFactor);
   }
 
-  renderUpdate() {}
+  renderSpriteUpdate() {}
+
+  renderEntitiesUpdate() {}
 }
 
 export class MainScene extends Scene {

@@ -3,7 +3,7 @@ import { EntityState } from '../Interfaces';
 import { Scenes } from '../scenes/Scenes';
 import { Tools } from '../Tools';
 
-export class EntityManager {
+export class LoginManager {
   constructor() {
     this.init();
   }
@@ -13,31 +13,22 @@ export class EntityManager {
   }
 
   loginPlayer(promtText?: string) {
-    const activePlayerName = prompt(
+    Globals.Instance.activePlayerName = prompt(
       promtText ? promtText : 'Bitte gib deinen Namen ein:',
       'Dein Spieler name'
     );
-    const activePlayer = Globals.Instance.state.entities.value.find(
-      (entity: EntityState) => entity.name === activePlayerName
-    ) as EntityState;
+    const activePlayer = Globals.Instance.getActivePlayer();
 
     if (activePlayer) {
-      Globals.Instance.activePlayer = activePlayer;
       this.loadPlayerState(activePlayer);
 
       return activePlayer;
     }
 
-    this.loginPlayer(
-      'Leider wurde dieser Spielername nicht gefunden. Bitte versuche es erneut.'
-    );
+    this.loginPlayer('Leider wurde dieser Spielername nicht gefunden. Bitte versuche es erneut.');
   }
 
   loadPlayerState(activePlayer: EntityState) {
-    Globals.Instance.game.scene.add(
-      Tools.getUniqueKey(),
-      Scenes.getSceneByKey(activePlayer.sceneName),
-      true
-    );
+    Globals.Instance.game.scene.add(Tools.getUniqueKey(), Scenes.getSceneByKey(activePlayer.sceneName), true);
   }
 }

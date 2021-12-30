@@ -29,20 +29,9 @@ export class SpriteEvents extends Events<Scene> {
   onDragEnd(params: SpriteEvent) {
     const data = params.customData();
 
-    params.gameObject.x = Phaser.Math.Snap.To(
-      params.event.x,
-      config.gridSize,
-      config.gridSize / 2
-    );
-    params.gameObject.y = Phaser.Math.Snap.To(
-      params.event.y,
-      config.gridSize,
-      config.gridSize / 2
-    );
-    const updatedPosition = Tools.getGridPosition(
-      params.gameObject.x,
-      params.gameObject.y
-    );
+    params.gameObject.x = Phaser.Math.Snap.To(params.event.x, config.gridSize, config.gridSize / 2);
+    params.gameObject.y = Phaser.Math.Snap.To(params.event.y, config.gridSize, config.gridSize / 2);
+    const updatedPosition = Tools.getGridPosition(params.gameObject.x, params.gameObject.y);
 
     if (
       Tools.moveSpriteToPosition(
@@ -60,7 +49,7 @@ export class SpriteEvents extends Events<Scene> {
       )
     ) {
       Globals.Instance.stateTransaction.sprites.next();
-      this.scene.renderUpdate();
+      this.scene.renderSpriteUpdate();
     }
     Globals.Instance.canRerender = true;
   }
