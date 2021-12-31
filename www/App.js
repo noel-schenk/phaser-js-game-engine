@@ -73488,9 +73488,11 @@
   // src/json/config.json
   var develop = true;
   var gridSize = 40;
+  var inventorySize = 20;
   var config_default = {
     develop,
-    gridSize
+    gridSize,
+    inventorySize
   };
 
   // src/Tools.ts
@@ -73525,14 +73527,22 @@
       console.log(`Could not find [${spriteData.name}]`);
       return Tools.getUndefinedSpriteInfo();
     }
-    static getCenterStripePosition(spriteInfo) {
+    static getDisplayCenterPosition() {
       const getCenter = (size) => size / 2 / Globals.Instance.scalingFactor;
-      return [getCenter(Globals.Instance.game.canvas.width), getCenter(Globals.Instance.game.canvas.height)];
+      return { x: getCenter(Globals.Instance.game.canvas.width), y: getCenter(Globals.Instance.game.canvas.height) };
     }
-    static getTopLeftSpritePosition(x, y, spriteInfo) {
+    static getTopLeftSpritePosition(x, y, spriteInfo, spriteScalingFactor = 1) {
       const sprite = sprites_default[spriteInfo.name];
-      x = x + sprite.width / 2;
-      y = y + sprite.height / 2;
+      return Tools.getTopLeftPosition(x, y, sprite.width, sprite.height, spriteScalingFactor);
+    }
+    static getTopLeftPosition(x, y, width, height, spriteScalingFactor = 1) {
+      x = x + width * spriteScalingFactor / 2;
+      y = y + height * spriteScalingFactor / 2;
+      return { x, y };
+    }
+    static getCenterPosition(x, y, width, height, spriteScalingFactor = 1) {
+      x = x - width * spriteScalingFactor / 2;
+      y = y - height * spriteScalingFactor / 2;
       return { x, y };
     }
     static loadSprites(scene) {
@@ -73554,7 +73564,7 @@
         child.destroy();
       });
     }
-    static destroySprite(sprite) {
+    static destroyGameObject(sprite) {
       sprite.removeAllListeners();
       sprite.destroy();
     }
@@ -73564,7 +73574,10 @@
       if (spriteData.interactive) {
         newSprite.setInteractive(spriteData.interactive);
       }
-      Tools.loadSpriteAnimations(newSprite);
+      if (spriteData.animations) {
+        Tools.loadSpriteAnimations(newSprite);
+        newSprite.anims.play("idle");
+      }
       return newSprite;
     }
     static getStateReferenceAtPosition(level, row, column) {
@@ -73772,28 +73785,23 @@
       });
     }
     onInventoryClick(params) {
-      Tools.destroySprite(params.gameObject);
+      Tools.destroyGameObject(this.scene.inventorySprite);
+      this.scene.inventorySlotsContainer.list.forEach((slotItem) => Tools.destroyGameObject(slotItem));
+      Tools.destroyGameObject(this.scene.inventorySlotsContainer);
     }
     onBagClick(params) {
-      this.scene.inventorySprite = this.createInventory();
+      this.scene.inventorySprite = this.scene.createInventory();
       this.scene.gameObjectContainer.add(this.scene.inventorySprite);
+      this.scene.gameObjectContainer.moveDown(this.scene.inventorySprite);
       this.scene.on(this.scene.inventorySprite, void 0);
     }
-    renderInventory() {
-    }
-    createInventory() {
-      const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/inventory/0");
-      const newInventory = Tools.getNewSprite(this.scene.scene.scene, ...Object.values(Tools.getCenterStripePosition(inventorySpriteInfo)), inventorySpriteInfo);
-      this.renderInventory();
-      return newInventory;
-    }
   };
-  __publicField(InventoryEvents, "inventorySlots", 20);
 
   // src/scenes/InventoryScene.ts
   var _InventoryScene = class extends Scene {
     bagSprite;
     inventorySprite;
+    inventorySlotsContainer;
     settings = {
       zIndex: 800
     };
@@ -73814,6 +73822,38 @@
     createBag() {
       const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/bag/0");
       return Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)), bagSpriteInfo);
+    }
+    createInventory() {
+      const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/inventory/0");
+      const newInventory = Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getDisplayCenterPosition()), inventorySpriteInfo);
+      this.renderInventory();
+      return newInventory;
+    }
+    renderInventory() {
+      const displayCenterPosition = Tools.getDisplayCenterPosition();
+      const inventory = Globals.Instance.getActivePlayer().inventory.slice(0, config_default.inventorySize);
+      this.inventorySlotsContainer = new Phaser.GameObjects.Container(this.scene.scene);
+      const inventoryItemSpriteScale = 0.35;
+      const inventoryGapSize = { x: 8.5, y: 8.5 };
+      const inventoryColumns = 5;
+      const inventoryPosition = { x: -12, y: 22 };
+      inventory.length < config_default.inventorySize && console.error("inventory is not valid");
+      inventory.forEach((slot, index) => {
+        const spriteInfo = Tools.getSpriteInfoFromSpriteSource(slot.source);
+        const x = inventoryPosition.x + (index * (config_default.gridSize * inventoryItemSpriteScale + inventoryGapSize.x) - Math.floor(index / inventoryColumns) * (inventoryColumns * (config_default.gridSize * inventoryItemSpriteScale + inventoryGapSize.x)));
+        const y = inventoryPosition.y + Math.floor(index / inventoryColumns) * (config_default.gridSize * inventoryItemSpriteScale + inventoryGapSize.y);
+        const topLeftSlotPosition = Tools.getTopLeftSpritePosition(x, y, spriteInfo, inventoryItemSpriteScale);
+        const sprite = Tools.getNewSprite(this.scene.scene, topLeftSlotPosition.x, topLeftSlotPosition.y, spriteInfo);
+        sprite.scale = inventoryItemSpriteScale;
+        this.inventorySlotsContainer.add(sprite);
+      });
+      const inventorySlotsContainerBounds = this.inventorySlotsContainer.getBounds();
+      this.inventorySlotsContainer.width = inventorySlotsContainerBounds.width;
+      this.inventorySlotsContainer.height = inventorySlotsContainerBounds.height;
+      const inventorySlotsContainerCenterPosition = Tools.getCenterPosition(displayCenterPosition.x, displayCenterPosition.y, this.inventorySlotsContainer.width, this.inventorySlotsContainer.height);
+      this.inventorySlotsContainer.x = inventorySlotsContainerCenterPosition.x;
+      this.inventorySlotsContainer.y = inventorySlotsContainerCenterPosition.y;
+      this.gameObjectContainer.add(this.inventorySlotsContainer);
     }
   };
   var InventoryScene = _InventoryScene;
@@ -74077,8 +74117,10 @@
         if (existingEntitySprite) {
           const entitySpriteInfo = Tools.getSpriteInfoFromSpriteSource(entityState.source);
           this.animateEntity(existingEntitySprite, entityState, entitySpriteInfo);
-          existingEntitySprite.texture.key = entitySpriteInfo.name;
-          existingEntitySprite.setFrame(entitySpriteInfo.mutation);
+          if (existingEntitySprite.texture.key !== entitySpriteInfo.name) {
+            existingEntitySprite.texture.key = entitySpriteInfo.name;
+            existingEntitySprite.setFrame(entitySpriteInfo.mutation);
+          }
           return;
         }
         this.addEntity(entityState);

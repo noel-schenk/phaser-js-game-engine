@@ -52,8 +52,11 @@ export class EntityScene extends Scene {
 
         this.animateEntity(existingEntitySprite, entityState, entitySpriteInfo);
 
-        existingEntitySprite.texture.key = entitySpriteInfo.name;
-        existingEntitySprite.setFrame(entitySpriteInfo.mutation);
+        if (existingEntitySprite.texture.key !== entitySpriteInfo.name) {
+          existingEntitySprite.texture.key = entitySpriteInfo.name;
+          existingEntitySprite.setFrame(entitySpriteInfo.mutation);
+        }
+
         return;
       }
       this.addEntity(entityState);

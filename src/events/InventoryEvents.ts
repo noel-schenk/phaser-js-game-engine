@@ -3,8 +3,6 @@ import { InventoryScene } from '../scenes/InventoryScene';
 import { Tools } from '../Tools';
 
 export class InventoryEvents extends Events<InventoryScene> {
-  static inventorySlots = 20;
-
   init() {
     this.scene.onSpriteEvent.subscribe((params) => {
       if (params.eventName === 'pointerup') {
@@ -24,34 +22,15 @@ export class InventoryEvents extends Events<InventoryScene> {
   }
 
   onInventoryClick(params) {
-    Tools.destroySprite(params.gameObject);
+    Tools.destroyGameObject(this.scene.inventorySprite);
+    this.scene.inventorySlotsContainer.list.forEach((slotItem) => Tools.destroyGameObject(slotItem));
+    Tools.destroyGameObject(this.scene.inventorySlotsContainer);
   }
 
   onBagClick(params) {
-    this.scene.inventorySprite = this.createInventory();
+    this.scene.inventorySprite = this.scene.createInventory();
     this.scene.gameObjectContainer.add(this.scene.inventorySprite);
+    this.scene.gameObjectContainer.moveDown(this.scene.inventorySprite);
     this.scene.on(this.scene.inventorySprite, undefined);
-  }
-
-  renderInventory() {
-    // new Array(InventoryEvents.inventorySlots).fill('').forEach(() => {});
-  }
-
-  createInventory() {
-    const inventorySpriteInfo =
-      Tools.getSpriteInfoFromSpriteSource('ui/inventory/0');
-
-    const newInventory = Tools.getNewSprite(
-      this.scene.scene.scene,
-      ...(Object.values(Tools.getCenterStripePosition(inventorySpriteInfo)) as [
-        number,
-        number
-      ]),
-      inventorySpriteInfo
-    );
-
-    this.renderInventory();
-
-    return newInventory;
   }
 }

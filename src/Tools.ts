@@ -41,16 +41,26 @@ export class Tools {
     return Tools.getUndefinedSpriteInfo();
   }
 
-  static getCenterStripePosition(spriteInfo: SpriteInfo) {
+  static getDisplayCenterPosition() {
     const getCenter = (size) => size / 2 / Globals.Instance.scalingFactor;
-    return [getCenter(Globals.Instance.game.canvas.width), getCenter(Globals.Instance.game.canvas.height)];
+    return { x: getCenter(Globals.Instance.game.canvas.width), y: getCenter(Globals.Instance.game.canvas.height) };
   }
 
-  static getTopLeftSpritePosition(x: number, y: number, spriteInfo: SpriteInfo) {
+  static getTopLeftSpritePosition(x: number, y: number, spriteInfo: SpriteInfo, spriteScalingFactor = 1) {
     const sprite = Sprites[spriteInfo.name];
 
-    x = x + sprite.width / 2;
-    y = y + sprite.height / 2;
+    return Tools.getTopLeftPosition(x, y, sprite.width, sprite.height, spriteScalingFactor);
+  }
+
+  static getTopLeftPosition(x: number, y: number, width: number, height: number, spriteScalingFactor = 1) {
+    x = x + (width * spriteScalingFactor) / 2;
+    y = y + (height * spriteScalingFactor) / 2;
+    return { x, y };
+  }
+
+  static getCenterPosition(x: number, y: number, width: number, height: number, spriteScalingFactor = 1) {
+    x = x - (width * spriteScalingFactor) / 2;
+    y = y - (height * spriteScalingFactor) / 2;
     return { x, y };
   }
 
@@ -79,7 +89,7 @@ export class Tools {
     });
   }
 
-  static destroySprite(sprite: Phaser.GameObjects.Sprite) {
+  static destroyGameObject(sprite: Phaser.GameObjects.GameObject) {
     sprite.removeAllListeners();
     sprite.destroy();
   }
@@ -93,7 +103,11 @@ export class Tools {
       newSprite.setInteractive(spriteData.interactive);
     }
 
-    Tools.loadSpriteAnimations(newSprite);
+    if (spriteData.animations) {
+      Tools.loadSpriteAnimations(newSprite);
+
+      newSprite.anims.play('idle');
+    }
 
     return newSprite;
   }

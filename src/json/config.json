@@ -1,4 +1,5 @@
 {
     "develop": true,
-    "gridSize": 40
+    "gridSize": 40,
+    "inventorySize": 20
 }
