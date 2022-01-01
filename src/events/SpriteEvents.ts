@@ -49,8 +49,12 @@ export class SpriteEvents extends Events<Scene> {
       )
     ) {
       Globals.Instance.stateTransaction.sprites.next();
-      this.scene.renderSpriteUpdate();
+      Globals.Instance.canRerender = true;
+      return true;
     }
+
     Globals.Instance.canRerender = true;
+    this.scene.renderSpriteUpdate();
+    return false;
   }
 }

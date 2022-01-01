@@ -33044,7 +33044,7 @@
             var GetValue = __webpack_require__(6);
             var LoaderEvents = __webpack_require__(95);
             var NOOP = __webpack_require__(1);
-            var Scene3 = __webpack_require__(418);
+            var Scene4 = __webpack_require__(418);
             var Systems = __webpack_require__(204);
             var SceneManager = new Class({
               initialize: function SceneManager2(game, sceneConfig) {
@@ -33086,7 +33086,7 @@
                   key = entry.key;
                   sceneConfig = entry.scene;
                   var newScene;
-                  if (sceneConfig instanceof Scene3) {
+                  if (sceneConfig instanceof Scene4) {
                     newScene = this.createSceneFromInstance(key, sceneConfig);
                   } else if (typeof sceneConfig === "object") {
                     newScene = this.createSceneFromObject(key, sceneConfig);
@@ -33163,7 +33163,7 @@
                 }
                 key = this.getKey(key, sceneConfig);
                 var newScene;
-                if (sceneConfig instanceof Scene3) {
+                if (sceneConfig instanceof Scene4) {
                   newScene = this.createSceneFromInstance(key, sceneConfig);
                 } else if (typeof sceneConfig === "object") {
                   sceneConfig.key = key;
@@ -33281,7 +33281,7 @@
               },
               createSceneFromFunction: function(key, scene) {
                 var newScene = new scene();
-                if (newScene instanceof Scene3) {
+                if (newScene instanceof Scene4) {
                   var configKey = newScene.sys.settings.key;
                   if (configKey !== "") {
                     key = configKey;
@@ -33306,7 +33306,7 @@
                 return newScene;
               },
               createSceneFromObject: function(key, sceneConfig) {
-                var newScene = new Scene3(sceneConfig);
+                var newScene = new Scene4(sceneConfig);
                 var configKey = newScene.sys.settings.key;
                 if (configKey !== "") {
                   key = configKey;
@@ -33342,7 +33342,7 @@
                 }
                 if (typeof sceneConfig === "function") {
                   return key;
-                } else if (sceneConfig instanceof Scene3) {
+                } else if (sceneConfig instanceof Scene4) {
                   key = sceneConfig.sys.settings.key;
                 } else if (typeof sceneConfig === "object" && sceneConfig.hasOwnProperty("key")) {
                   key = sceneConfig.key;
@@ -33666,8 +33666,8 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Systems = __webpack_require__(204);
-            var Scene3 = new Class({
-              initialize: function Scene4(config2) {
+            var Scene4 = new Class({
+              initialize: function Scene5(config2) {
                 this.sys = new Systems(this, config2);
                 this.game;
                 this.anims;
@@ -33698,7 +33698,7 @@
               update: function() {
               }
             });
-            module2.exports = Scene3;
+            module2.exports = Scene4;
           },
           function(module2, exports2, __webpack_require__) {
             var GetFastValue = __webpack_require__(2);
@@ -68638,7 +68638,7 @@
           function(module2, exports2, __webpack_require__) {
             var CONST = __webpack_require__(144);
             var Extend = __webpack_require__(17);
-            var Scene3 = {
+            var Scene4 = {
               Events: __webpack_require__(20),
               GetPhysicsPlugins: __webpack_require__(419),
               GetScenePlugins: __webpack_require__(420),
@@ -68647,8 +68647,8 @@
               Settings: __webpack_require__(421),
               Systems: __webpack_require__(204)
             };
-            Scene3 = Extend(false, Scene3, CONST);
-            module2.exports = Scene3;
+            Scene4 = Extend(false, Scene4, CONST);
+            module2.exports = Scene4;
           },
           function(module2, exports2, __webpack_require__) {
             var Clamp = __webpack_require__(18);
@@ -73559,14 +73559,15 @@
       return scene.add.existing(gameObject);
     }
     static removeAllGameObjectsFromScene(scene) {
-      scene.children.each((child) => {
-        child.removeAllListeners();
-        child.destroy();
-      });
+      while (scene.children.list[0]) {
+        const child = scene.children.list[0];
+        child && Tools.destroyGameObject(child);
+      }
+      console.log(scene.children.list, "should be empty");
     }
-    static destroyGameObject(sprite) {
-      sprite.removeAllListeners();
-      sprite.destroy();
+    static destroyGameObject(gameObject) {
+      gameObject.removeAllListeners();
+      gameObject.destroy();
     }
     static getNewSprite(scene, x, y, spriteInfo) {
       const newSprite = new import_phaser.default.GameObjects.Sprite(scene, x, y, spriteInfo.name, spriteInfo.mutation);
@@ -73586,8 +73587,20 @@
     static moveSpriteToPosition(from, to) {
       const spriteStateSource = Tools.getStateReferenceAtPosition(to.level, to.row, to.column).source;
       if (!spriteStateSource || spriteStateSource === Tools.getSpriteSourceFromSpriteInfo(Tools.getUndefinedSpriteInfo())) {
-        Tools.updateStateAtPosition(from.level, from.row, from.column, Tools.getUndefinedSpriteInfo());
-        Tools.updateStateAtPosition(to.level, to.row, to.column, from.spriteInfo);
+        Tools.updateStateSpritesToNewPosition([
+          {
+            level: from.level,
+            row: from.row,
+            column: from.column,
+            spriteInfo: Tools.getUndefinedSpriteInfo()
+          },
+          {
+            level: to.level,
+            row: to.row,
+            column: to.column,
+            spriteInfo: from.spriteInfo
+          }
+        ]);
         return true;
       }
       console.log("Hier kann dieses Objekt nicht abgelegt werden");
@@ -73596,9 +73609,11 @@
     static clone(object) {
       return JSON.parse(JSON.stringify(object));
     }
-    static updateStateAtPosition(level, row, column, spriteInfo) {
+    static updateStateSpritesToNewPosition(sprites) {
       const temp = Tools.clone(Globals.Instance.state.sprites.value);
-      temp[level][row][column].source = Tools.getSpriteSourceFromSpriteInfo(spriteInfo);
+      sprites.forEach((sprite) => {
+        temp[sprite.level][sprite.row][sprite.column].source = Tools.getSpriteSourceFromSpriteInfo(sprite.spriteInfo);
+      });
       Globals.Instance.state.sprites.next(temp);
     }
     static getGridPosition(x, y) {
@@ -73607,7 +73622,7 @@
     static getGridNumber(pos) {
       return Tools.getPixelGridNumber(pos) / config_default.gridSize;
     }
-    static getPixelGridPosition(x, y) {
+    static getPixelGridPosition({ x, y }) {
       return { x: Tools.getPixelGridNumber(x), y: Tools.getPixelGridNumber(y) };
     }
     static getPixelGridNumber(pos) {
@@ -73690,6 +73705,29 @@
       };
       tryRender();
     }
+    static alignSpritesToGrid(scene, sprites, spriteScale, gapSize, columns) {
+      const spriteContainer = new import_phaser.default.GameObjects.Container(scene);
+      sprites.forEach((sprite, index) => {
+        const spriteInfo = Tools.getSpriteInfoFromSprite(sprite);
+        const x = index * (config_default.gridSize * spriteScale + gapSize.x) - Math.floor(index / columns) * (columns * (config_default.gridSize * spriteScale + gapSize.x));
+        const y = Math.floor(index / columns) * (config_default.gridSize * spriteScale + gapSize.y);
+        const topLeftSlotPosition = Tools.getTopLeftSpritePosition(x, y, spriteInfo, spriteScale);
+        sprite.x = topLeftSlotPosition.x;
+        sprite.y = topLeftSlotPosition.y;
+        sprite.scale = spriteScale;
+        spriteContainer.add(sprite);
+      });
+      return spriteContainer;
+    }
+    static centerContainer(container, offset) {
+      const displayCenterPosition = Tools.getDisplayCenterPosition();
+      const inventorySlotsContainerBounds = container.getBounds();
+      container.width = inventorySlotsContainerBounds.width;
+      container.height = inventorySlotsContainerBounds.height;
+      const inventorySlotsContainerCenterPosition = Tools.getCenterPosition(displayCenterPosition.x, displayCenterPosition.y, container.width, container.height);
+      container.x = inventorySlotsContainerCenterPosition.x + offset.x;
+      container.y = inventorySlotsContainerCenterPosition.y + offset.y;
+    }
   };
 
   // src/Interfaces.ts
@@ -73703,7 +73741,7 @@
     GameObjectEvents2[GameObjectEvents2["dragend"] = 6] = "dragend";
     return GameObjectEvents2;
   })(GameObjectEvents || {});
-  var Scene = class extends Phaser.Scene {
+  var Scene2 = class extends Phaser.Scene {
     onSpriteEvent = new Subject();
     gameObjectContainer;
     gameObjectContainerConfig = {
@@ -73748,10 +73786,21 @@
     renderEntitiesUpdate() {
     }
   };
-  __publicField(Scene, "sceneConfig");
-  var MainScene = class extends Scene {
+  __publicField(Scene2, "sceneConfig");
+  var MainScene = class extends Scene2 {
     preload() {
       Globals.Instance.activeMainScene = this;
+    }
+    create() {
+      super.create();
+      this.clickRadius(200);
+    }
+    clickRadius(radius, x = 0, y = 0) {
+      const coordinates = x & y ? { x, y } : Tools.getDisplayCenterPosition();
+      const circle = this.scene.scene.add.circle(coordinates.x, coordinates.y, radius);
+      circle.fillColor = 4095;
+      circle.width = 200;
+      circle.height = 200;
     }
   };
   var Events = class {
@@ -73786,8 +73835,8 @@
     }
     onInventoryClick(params) {
       Tools.destroyGameObject(this.scene.inventorySprite);
-      this.scene.inventorySlotsContainer.list.forEach((slotItem) => Tools.destroyGameObject(slotItem));
       Tools.destroyGameObject(this.scene.inventorySlotsContainer);
+      delete this.scene.inventorySlotsContainer;
     }
     onBagClick(params) {
       this.scene.inventorySprite = this.scene.createInventory();
@@ -73798,7 +73847,7 @@
   };
 
   // src/scenes/InventoryScene.ts
-  var _InventoryScene = class extends Scene {
+  var _InventoryScene = class extends Scene2 {
     bagSprite;
     inventorySprite;
     inventorySlotsContainer;
@@ -73829,30 +73878,21 @@
       this.renderInventory();
       return newInventory;
     }
+    getSpritesFromInventory(inventory) {
+      return inventory.map((item) => {
+        const spriteInfo = Tools.getSpriteInfoFromSpriteSource(item.source);
+        return Tools.getNewSprite(this.scene.scene, 0, 0, spriteInfo);
+      });
+    }
     renderInventory() {
-      const displayCenterPosition = Tools.getDisplayCenterPosition();
       const inventory = Globals.Instance.getActivePlayer().inventory.slice(0, config_default.inventorySize);
-      this.inventorySlotsContainer = new Phaser.GameObjects.Container(this.scene.scene);
+      inventory.length < config_default.inventorySize && console.error("inventory is not valid");
       const inventoryItemSpriteScale = 0.35;
       const inventoryGapSize = { x: 8.5, y: 8.5 };
       const inventoryColumns = 5;
       const inventoryPosition = { x: -12, y: 22 };
-      inventory.length < config_default.inventorySize && console.error("inventory is not valid");
-      inventory.forEach((slot, index) => {
-        const spriteInfo = Tools.getSpriteInfoFromSpriteSource(slot.source);
-        const x = inventoryPosition.x + (index * (config_default.gridSize * inventoryItemSpriteScale + inventoryGapSize.x) - Math.floor(index / inventoryColumns) * (inventoryColumns * (config_default.gridSize * inventoryItemSpriteScale + inventoryGapSize.x)));
-        const y = inventoryPosition.y + Math.floor(index / inventoryColumns) * (config_default.gridSize * inventoryItemSpriteScale + inventoryGapSize.y);
-        const topLeftSlotPosition = Tools.getTopLeftSpritePosition(x, y, spriteInfo, inventoryItemSpriteScale);
-        const sprite = Tools.getNewSprite(this.scene.scene, topLeftSlotPosition.x, topLeftSlotPosition.y, spriteInfo);
-        sprite.scale = inventoryItemSpriteScale;
-        this.inventorySlotsContainer.add(sprite);
-      });
-      const inventorySlotsContainerBounds = this.inventorySlotsContainer.getBounds();
-      this.inventorySlotsContainer.width = inventorySlotsContainerBounds.width;
-      this.inventorySlotsContainer.height = inventorySlotsContainerBounds.height;
-      const inventorySlotsContainerCenterPosition = Tools.getCenterPosition(displayCenterPosition.x, displayCenterPosition.y, this.inventorySlotsContainer.width, this.inventorySlotsContainer.height);
-      this.inventorySlotsContainer.x = inventorySlotsContainerCenterPosition.x;
-      this.inventorySlotsContainer.y = inventorySlotsContainerCenterPosition.y;
+      this.inventorySlotsContainer = Tools.alignSpritesToGrid(this.scene.scene, this.getSpritesFromInventory(inventory), inventoryItemSpriteScale, inventoryGapSize, inventoryColumns);
+      Tools.centerContainer(this.inventorySlotsContainer, inventoryPosition);
       this.gameObjectContainer.add(this.inventorySlotsContainer);
     }
   };
@@ -73903,9 +73943,12 @@
         column: updatedPosition.column
       })) {
         Globals.Instance.stateTransaction.sprites.next();
-        this.scene.renderSpriteUpdate();
+        Globals.Instance.canRerender = true;
+        return true;
       }
       Globals.Instance.canRerender = true;
+      this.scene.renderSpriteUpdate();
+      return false;
     }
   };
 
@@ -74086,7 +74129,7 @@
   __publicField(PlayerEvents, "playerSprite");
 
   // src/scenes/EntityScene.ts
-  var _EntityScene = class extends Scene {
+  var _EntityScene = class extends Scene2 {
     isReady = false;
     settings = {
       zIndex: 400
@@ -74128,19 +74171,19 @@
       this.removeDeletedEntities();
     }
     animateEntity(entitySprite, entityState, entitySpriteInfo) {
-      const positions = {
+      const coordinates = {
         from: { x: entitySprite.x, y: entitySprite.y },
         to: { x: entityState.x, y: entityState.y }
       };
-      const direction = Tools.getDirectionFromPosition(positions.from, positions.to);
-      if (positions.from.x !== positions.to.x || positions.from.y !== positions.to.y) {
+      const direction = Tools.getDirectionFromPosition(coordinates.from, coordinates.to);
+      if (coordinates.from.x !== coordinates.to.x || coordinates.from.y !== coordinates.to.y) {
         entitySprite.getData("tween")?.stop().removeAllListeners().remove();
         const tween = this.scene.scene.add.tween({
           targets: entitySprite,
           x: entityState.x,
           y: entityState.y,
           ease: "Linear",
-          duration: Tools.getSpeedForDistance(positions.from, positions.to, entitySpriteInfo),
+          duration: Tools.getSpeedForDistance(coordinates.from, coordinates.to, entitySpriteInfo),
           completeDelay: 100,
           onComplete: () => {
             entitySprite.play("idle");
@@ -74179,7 +74222,7 @@
   });
 
   // src/scenes/LoadingScene.ts
-  var _LoadingScene = class extends Scene {
+  var _LoadingScene = class extends Scene2 {
     settings = {
       zIndex: 900
     };

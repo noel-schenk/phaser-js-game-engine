@@ -1,8 +1,8 @@
 import { Globals } from './Globals';
 import Sprites from './json/sprites.json';
 import config from './json/config.json';
-import { EntityState, SpriteData, SpriteInfo, SpriteState, State } from './Interfaces';
-import Phaser from 'phaser';
+import { XY, EntityState, SpriteData, SpriteInfo, SpriteState, State } from './Interfaces';
+import Phaser, { Scene } from 'phaser';
 
 export class Tools {
   private constructor() {}
@@ -83,15 +83,16 @@ export class Tools {
   }
 
   static removeAllGameObjectsFromScene(scene: Phaser.Scene) {
-    scene.children.each((child) => {
-      child.removeAllListeners();
-      child.destroy();
-    });
+    while (scene.children.list[0]) {
+      const child = scene.children.list[0];
+      child && Tools.destroyGameObject(child);
+    }
+    console.log(scene.children.list, 'should be empty');
   }
 
-  static destroyGameObject(sprite: Phaser.GameObjects.GameObject) {
-    sprite.removeAllListeners();
-    sprite.destroy();
+  static destroyGameObject(gameObject: Phaser.GameObjects.GameObject) {
+    gameObject.removeAllListeners();
+    gameObject.destroy();
   }
 
   static getNewSprite(scene: Phaser.Scene, x: number, y: number, spriteInfo: SpriteInfo) {
@@ -134,8 +135,20 @@ export class Tools {
       !spriteStateSource ||
       spriteStateSource === Tools.getSpriteSourceFromSpriteInfo(Tools.getUndefinedSpriteInfo())
     ) {
-      Tools.updateStateAtPosition(from.level, from.row, from.column, Tools.getUndefinedSpriteInfo());
-      Tools.updateStateAtPosition(to.level, to.row, to.column, from.spriteInfo);
+      Tools.updateStateSpritesToNewPosition([
+        {
+          level: from.level,
+          row: from.row,
+          column: from.column,
+          spriteInfo: Tools.getUndefinedSpriteInfo()
+        },
+        {
+          level: to.level,
+          row: to.row,
+          column: to.column,
+          spriteInfo: from.spriteInfo
+        }
+      ]);
       return true;
     }
     console.log('Hier kann dieses Objekt nicht abgelegt werden');
@@ -146,9 +159,13 @@ export class Tools {
     return JSON.parse(JSON.stringify(object));
   }
 
-  static updateStateAtPosition(level: number, row: number, column: number, spriteInfo: SpriteInfo) {
+  static updateStateSpritesToNewPosition(
+    sprites: Array<{ level: number; row: number; column: number; spriteInfo: SpriteInfo }>
+  ) {
     const temp = Tools.clone<SpriteState[][][]>(Globals.Instance.state.sprites.value);
-    temp[level][row][column].source = Tools.getSpriteSourceFromSpriteInfo(spriteInfo);
+    sprites.forEach((sprite) => {
+      temp[sprite.level][sprite.row][sprite.column].source = Tools.getSpriteSourceFromSpriteInfo(sprite.spriteInfo);
+    });
     Globals.Instance.state.sprites.next(temp);
   }
 
@@ -160,7 +177,7 @@ export class Tools {
     return Tools.getPixelGridNumber(pos) / config.gridSize;
   }
 
-  static getPixelGridPosition(x, y) {
+  static getPixelGridPosition({ x, y }: XY) {
     return { x: Tools.getPixelGridNumber(x), y: Tools.getPixelGridNumber(y) };
   }
 
@@ -192,7 +209,7 @@ export class Tools {
     Globals.Instance.offsetToCenter = offsetPosition;
   }
 
-  static getSpeedForDistance(from: { x: number; y: number }, to: { x: number; y: number }, spriteInfo?: SpriteInfo) {
+  static getSpeedForDistance(from: XY, to: XY, spriteInfo?: SpriteInfo) {
     const x = from.x - to.x;
     const y = from.y - to.y;
 
@@ -204,11 +221,11 @@ export class Tools {
     return (Math.hypot(x, y) / distance) * speedInMs * Globals.Instance.scalingFactor;
   }
 
-  static getAngleFromPositions(from: { x: number; y: number }, to: { x: number; y: number }) {
+  static getAngleFromPositions(from: XY, to: XY) {
     return (Math.atan2(to.y - from.y, to.x - from.x) * 180) / Math.PI + 180;
   }
 
-  static getDirectionFromPosition(from: { x: number; y: number }, to: { x: number; y: number }) {
+  static getDirectionFromPosition(from: XY, to: XY) {
     let angle = this.getAngleFromPositions(from, to);
 
     if (angle > 45 && angle < 135) {
@@ -266,5 +283,50 @@ export class Tools {
       cb();
     };
     tryRender();
+  }
+
+  static alignSpritesToGrid(
+    scene: Phaser.Scene,
+    sprites: Array<Phaser.GameObjects.Sprite>,
+    spriteScale: number,
+    gapSize: XY,
+    columns: number
+  ) {
+    const spriteContainer = new Phaser.GameObjects.Container(scene);
+
+    sprites.forEach((sprite, index) => {
+      const spriteInfo = Tools.getSpriteInfoFromSprite(sprite);
+      const x =
+        index * (config.gridSize * spriteScale + gapSize.x) -
+        Math.floor(index / columns) * (columns * (config.gridSize * spriteScale + gapSize.x));
+      const y = Math.floor(index / columns) * (config.gridSize * spriteScale + gapSize.y);
+
+      const topLeftSlotPosition = Tools.getTopLeftSpritePosition(x, y, spriteInfo, spriteScale);
+
+      sprite.x = topLeftSlotPosition.x;
+      sprite.y = topLeftSlotPosition.y;
+      sprite.scale = spriteScale;
+
+      spriteContainer.add(sprite);
+    });
+    return spriteContainer;
+  }
+
+  static centerContainer(container: Phaser.GameObjects.Container, offset: XY) {
+    const displayCenterPosition = Tools.getDisplayCenterPosition();
+
+    const inventorySlotsContainerBounds = container.getBounds();
+    container.width = inventorySlotsContainerBounds.width;
+    container.height = inventorySlotsContainerBounds.height;
+
+    const inventorySlotsContainerCenterPosition = Tools.getCenterPosition(
+      displayCenterPosition.x,
+      displayCenterPosition.y,
+      container.width,
+      container.height
+    );
+
+    container.x = inventorySlotsContainerCenterPosition.x + offset.x;
+    container.y = inventorySlotsContainerCenterPosition.y + offset.y;
   }
 }

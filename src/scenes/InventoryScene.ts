@@ -1,6 +1,6 @@
 import { InventoryEvents } from '../events/InventoryEvents';
 import { Globals } from '../Globals';
-import { Scene } from '../Interfaces';
+import { XY, Scene, Inventory } from '../Interfaces';
 import { Tools } from '../Tools';
 import config from './../json/config.json';
 
@@ -65,50 +65,31 @@ export class InventoryScene extends Scene {
     return newInventory;
   }
 
+  getSpritesFromInventory(inventory: Inventory) {
+    return inventory.map((item) => {
+      const spriteInfo = Tools.getSpriteInfoFromSpriteSource(item.source);
+      return Tools.getNewSprite(this.scene.scene, 0, 0, spriteInfo);
+    });
+  }
+
   renderInventory() {
-    const displayCenterPosition = Tools.getDisplayCenterPosition();
-
     const inventory = Globals.Instance.getActivePlayer().inventory.slice(0, config.inventorySize);
-    this.inventorySlotsContainer = new Phaser.GameObjects.Container(this.scene.scene);
-
-    const inventoryItemSpriteScale = 0.35;
-    const inventoryGapSize = { x: 8.5, y: 8.5 };
-    const inventoryColumns = 5;
-    const inventoryPosition = { x: -12, y: 22 };
-
     inventory.length < config.inventorySize && console.error('inventory is not valid');
 
-    inventory.forEach((slot, index) => {
-      const spriteInfo = Tools.getSpriteInfoFromSpriteSource(slot.source);
-      const x =
-        inventoryPosition.x +
-        (index * (config.gridSize * inventoryItemSpriteScale + inventoryGapSize.x) -
-          Math.floor(index / inventoryColumns) *
-            (inventoryColumns * (config.gridSize * inventoryItemSpriteScale + inventoryGapSize.x)));
-      const y =
-        inventoryPosition.y +
-        Math.floor(index / inventoryColumns) * (config.gridSize * inventoryItemSpriteScale + inventoryGapSize.y);
+    const inventoryItemSpriteScale = 0.35;
+    const inventoryGapSize = { x: 8.5, y: 8.5 } as XY;
+    const inventoryColumns = 5;
+    const inventoryPosition = { x: -12, y: 22 } as XY;
 
-      const topLeftSlotPosition = Tools.getTopLeftSpritePosition(x, y, spriteInfo, inventoryItemSpriteScale);
-
-      const sprite = Tools.getNewSprite(this.scene.scene, topLeftSlotPosition.x, topLeftSlotPosition.y, spriteInfo);
-      sprite.scale = inventoryItemSpriteScale;
-
-      this.inventorySlotsContainer.add(sprite);
-    });
-
-    const inventorySlotsContainerBounds = this.inventorySlotsContainer.getBounds();
-    this.inventorySlotsContainer.width = inventorySlotsContainerBounds.width;
-    this.inventorySlotsContainer.height = inventorySlotsContainerBounds.height;
-
-    const inventorySlotsContainerCenterPosition = Tools.getCenterPosition(
-      displayCenterPosition.x,
-      displayCenterPosition.y,
-      this.inventorySlotsContainer.width,
-      this.inventorySlotsContainer.height
+    this.inventorySlotsContainer = Tools.alignSpritesToGrid(
+      this.scene.scene,
+      this.getSpritesFromInventory(inventory),
+      inventoryItemSpriteScale,
+      inventoryGapSize,
+      inventoryColumns
     );
-    this.inventorySlotsContainer.x = inventorySlotsContainerCenterPosition.x;
-    this.inventorySlotsContainer.y = inventorySlotsContainerCenterPosition.y;
+
+    Tools.centerContainer(this.inventorySlotsContainer, inventoryPosition);
 
     this.gameObjectContainer.add(this.inventorySlotsContainer);
   }

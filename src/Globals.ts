@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { Scene, SpriteState, EntityState, State } from './Interfaces';
+import { Scene, SpriteState, EntityState, State, XY } from './Interfaces';
 import { BehaviorSubject, Subject } from 'rxjs';
 
 export class Globals {
@@ -19,7 +19,7 @@ export class Globals {
   scalingFactor = 1;
   canRerender = true;
   activeMainScene: Scene;
-  offsetToCenter = { x: 0, y: 0 };
+  offsetToCenter = { x: 0, y: 0 } as XY;
   activePlayerName: string;
 
   // call state.entities.next() on update

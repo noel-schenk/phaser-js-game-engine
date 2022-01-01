@@ -12,6 +12,11 @@ export enum GameObjectEvents {
   dragend
 }
 
+export type XY = {
+  x: number;
+  y: number;
+};
+
 export interface SpriteData {
   mutations: number;
   width: number;
@@ -31,15 +36,15 @@ export type SpriteInfo = { name: string; mutation: number };
 
 export type SpriteState = { source: string };
 
-export type EntityState = {
+export type Inventory = {
   source: string;
-  x: number;
-  y: number;
+}[];
+
+export type EntityState = XY & {
+  source: string;
   name: string;
   sceneName: string;
-  inventory: {
-    source: string;
-  }[];
+  inventory: Inventory;
 };
 
 export type State = {
@@ -88,7 +93,7 @@ export class Scene extends Phaser.Scene {
   on(gameObject: Phaser.GameObjects.Sprite, customData: Function) {
     Object.keys(GameObjectEvents).forEach((eventName) => {
       gameObject.on(eventName, (event) => {
-        event.native = { x: 0, y: 0 };
+        event.native = { x: 0, y: 0 } as XY;
         event.native.x = event.x;
         event.native.y = event.y;
 
@@ -116,6 +121,19 @@ export class Scene extends Phaser.Scene {
 export class MainScene extends Scene {
   preload() {
     Globals.Instance.activeMainScene = this;
+  }
+
+  create() {
+    super.create();
+    this.clickRadius(200);
+  }
+
+  clickRadius(radius: number, x = 0, y = 0) {
+    const coordinates = x & y ? { x: x, y: y } : Tools.getDisplayCenterPosition();
+    const circle = this.scene.scene.add.circle(coordinates.x, coordinates.y, radius);
+    circle.fillColor = 0xfff;
+    circle.width = 200;
+    circle.height = 200;
   }
 }
 

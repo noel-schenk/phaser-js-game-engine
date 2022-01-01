@@ -1,6 +1,6 @@
 import { PlayerEvents } from '../events/PlayerEvents';
 import { Globals } from '../Globals';
-import { EntityState, Scene, SpriteInfo } from '../Interfaces';
+import { XY, EntityState, Scene, SpriteInfo } from '../Interfaces';
 import { LoginManager } from '../managers/LoginManager';
 import { Tools } from '../Tools';
 
@@ -66,14 +66,14 @@ export class EntityScene extends Scene {
   }
 
   animateEntity(entitySprite: Phaser.GameObjects.Sprite, entityState: EntityState, entitySpriteInfo: SpriteInfo) {
-    const positions = {
-      from: { x: entitySprite.x, y: entitySprite.y },
-      to: { x: entityState.x, y: entityState.y }
+    const coordinates = {
+      from: { x: entitySprite.x, y: entitySprite.y } as XY,
+      to: { x: entityState.x, y: entityState.y } as XY
     };
 
-    const direction = Tools.getDirectionFromPosition(positions.from, positions.to);
+    const direction = Tools.getDirectionFromPosition(coordinates.from, coordinates.to);
 
-    if (positions.from.x !== positions.to.x || positions.from.y !== positions.to.y) {
+    if (coordinates.from.x !== coordinates.to.x || coordinates.from.y !== coordinates.to.y) {
       entitySprite.getData('tween')?.stop().removeAllListeners().remove();
 
       const tween = this.scene.scene.add.tween({
@@ -81,7 +81,7 @@ export class EntityScene extends Scene {
         x: entityState.x,
         y: entityState.y,
         ease: 'Linear',
-        duration: Tools.getSpeedForDistance(positions.from, positions.to, entitySpriteInfo),
+        duration: Tools.getSpeedForDistance(coordinates.from, coordinates.to, entitySpriteInfo),
         completeDelay: 100,
         onComplete: () => {
           entitySprite.play('idle');
