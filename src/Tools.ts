@@ -33,7 +33,7 @@ export class Tools {
   static getSpriteInfoFromSprite(sprite: Phaser.GameObjects.Sprite) {
     return {
       name: sprite.texture.key,
-      mutation: sprite.anims?.currentFrame?.index || 0
+      mutation: parseInt(sprite.frame.name)
     };
   }
 

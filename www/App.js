@@ -73516,7 +73516,7 @@
     static getSpriteInfoFromSprite(sprite) {
       return {
         name: sprite.texture.key,
-        mutation: sprite.anims?.currentFrame?.index || 0
+        mutation: parseInt(sprite.frame.name)
       };
     }
     static getSpriteInfoFromSpriteSource(spriteSource) {
