@@ -1,5 +1,5 @@
 import { Globals } from '../Globals';
-import { Events, Scene, SpriteEvent } from '../Interfaces';
+import { Events, Scene, SpriteEvent, SpriteInfo } from '../Interfaces';
 import config from '../json/config.json';
 import { Tools } from '../Tools';
 
@@ -13,10 +13,17 @@ export class SpriteEvents extends Events<Scene> {
         case 'dragend':
           this.onDragEnd(params);
           break;
+        case 'pointerup':
+          this.onClick(params);
+          break;
         default:
           break;
       }
     });
+  }
+
+  onClick(params: SpriteEvent) {
+    console.log('clicked', Tools.checkClickRadius({ x: params.event.native.x, y: params.event.y }));
   }
 
   onDrag(params: SpriteEvent) {
@@ -29,8 +36,8 @@ export class SpriteEvents extends Events<Scene> {
   onDragEnd(params: SpriteEvent) {
     const data = params.customData();
 
-    params.gameObject.x = Phaser.Math.Snap.To(params.event.x, config.gridSize, config.gridSize / 2);
-    params.gameObject.y = Phaser.Math.Snap.To(params.event.y, config.gridSize, config.gridSize / 2);
+    params.gameObject.x = Phaser.Math.Snap.To(params.event.x, config.gridSize);
+    params.gameObject.y = Phaser.Math.Snap.To(params.event.y, config.gridSize);
     const updatedPosition = Tools.getGridPosition(params.gameObject.x, params.gameObject.y);
 
     if (

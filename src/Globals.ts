@@ -16,7 +16,7 @@ export class Globals {
     entities: new Subject<void>()
   };
 
-  scalingFactor = 1;
+  scalingFactor = 4;
   canRerender = true;
   activeMainScene: Scene;
   offsetToCenter = { x: 0, y: 0 } as XY;

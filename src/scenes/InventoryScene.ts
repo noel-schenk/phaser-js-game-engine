@@ -34,7 +34,7 @@ export class InventoryScene extends Scene {
 
     this.gameObjectContainer.add(this.bagSprite);
 
-    Tools.addGameObjectToScene<Phaser.GameObjects.Sprite>(this.scene.scene, this.gameObjectContainer);
+    this.scene.scene.add.existing(this.gameObjectContainer);
 
     this.on(this.bagSprite, undefined);
 
@@ -51,18 +51,16 @@ export class InventoryScene extends Scene {
     );
   }
 
-  createInventory() {
+  loadInventory() {
     const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource('ui/inventory/0');
 
-    const newInventory = Tools.getNewSprite(
-      this.scene.scene,
-      ...(Object.values(Tools.getDisplayCenterPosition()) as [number, number]),
-      inventorySpriteInfo
-    );
+    const newInventory = Tools.getNewSprite(this.scene.scene, 0, 0, inventorySpriteInfo);
+
+    Tools.centerGameObject(newInventory);
 
     this.renderInventory();
 
-    return newInventory;
+    return (this.inventorySprite = newInventory);
   }
 
   getSpritesFromInventory(inventory: Inventory) {
@@ -89,7 +87,7 @@ export class InventoryScene extends Scene {
       inventoryColumns
     );
 
-    Tools.centerContainer(this.inventorySlotsContainer, inventoryPosition);
+    Tools.centerGameObject(this.inventorySlotsContainer, inventoryPosition);
 
     this.gameObjectContainer.add(this.inventorySlotsContainer);
   }

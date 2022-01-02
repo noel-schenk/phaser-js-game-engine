@@ -1,8 +1,8 @@
 import { Globals } from './Globals';
 import Sprites from './json/sprites.json';
 import config from './json/config.json';
-import { XY, EntityState, SpriteData, SpriteInfo, SpriteState, State } from './Interfaces';
-import Phaser, { Scene } from 'phaser';
+import { XY, EntityState, SpriteData, SpriteInfo, SpriteState, State, GameObject } from './Interfaces';
+import Phaser, { Game, Scene } from 'phaser';
 
 export class Tools {
   private constructor() {}
@@ -41,8 +41,8 @@ export class Tools {
     return Tools.getUndefinedSpriteInfo();
   }
 
-  static getDisplayCenterPosition() {
-    const getCenter = (size) => size / 2 / Globals.Instance.scalingFactor;
+  static getDisplayCenterPosition(scalingFactor = Globals.Instance.scalingFactor) {
+    const getCenter = (size) => size / 2 / scalingFactor;
     return { x: getCenter(Globals.Instance.game.canvas.width), y: getCenter(Globals.Instance.game.canvas.height) };
   }
 
@@ -75,22 +75,15 @@ export class Tools {
     }
   }
 
-  static addGameObjectToScene<T extends Phaser.GameObjects.GameObject>(
-    scene: Phaser.Scene,
-    gameObject: Phaser.GameObjects.GameObject
-  ): T {
-    return scene.add.existing(gameObject) as any as T;
-  }
-
   static removeAllGameObjectsFromScene(scene: Phaser.Scene) {
     while (scene.children.list[0]) {
-      const child = scene.children.list[0];
+      const child = scene.children.list[0] as GameObject;
       child && Tools.destroyGameObject(child);
     }
     console.log(scene.children.list, 'should be empty');
   }
 
-  static destroyGameObject(gameObject: Phaser.GameObjects.GameObject) {
+  static destroyGameObject(gameObject: GameObject) {
     gameObject.removeAllListeners();
     gameObject.destroy();
   }
@@ -182,18 +175,11 @@ export class Tools {
   }
 
   static getPixelGridNumber(pos) {
-    return Phaser.Math.Snap.To(pos, config.gridSize, config.gridSize / 2) - config.gridSize / 2;
+    return Phaser.Math.Snap.To(pos, config.gridSize);
   }
 
   static getUniqueKey() {
     return Math.random().toString(36).substring(2, 9);
-  }
-
-  static setGlobalScalingFactorBasedOnGameObject(gameObject: Phaser.GameObjects.Sprite | Phaser.GameObjects.Container) {
-    Globals.Instance.scalingFactor = Math.max(
-      Globals.Instance.game.canvas.width / gameObject.getBounds().width,
-      Globals.Instance.game.canvas.height / gameObject.getBounds().height
-    );
   }
 
   static setGlobalOffsetPositonRelativeToSprite(spriteToCenter: Phaser.GameObjects.Sprite) {
@@ -295,38 +281,53 @@ export class Tools {
     const spriteContainer = new Phaser.GameObjects.Container(scene);
 
     sprites.forEach((sprite, index) => {
-      const spriteInfo = Tools.getSpriteInfoFromSprite(sprite);
       const x =
         index * (config.gridSize * spriteScale + gapSize.x) -
         Math.floor(index / columns) * (columns * (config.gridSize * spriteScale + gapSize.x));
       const y = Math.floor(index / columns) * (config.gridSize * spriteScale + gapSize.y);
 
-      const topLeftSlotPosition = Tools.getTopLeftSpritePosition(x, y, spriteInfo, spriteScale);
-
-      sprite.x = topLeftSlotPosition.x;
-      sprite.y = topLeftSlotPosition.y;
+      sprite.x = x;
+      sprite.y = y;
       sprite.scale = spriteScale;
+      sprite.setOrigin(0);
 
       spriteContainer.add(sprite);
     });
+
     return spriteContainer;
   }
 
-  static centerContainer(container: Phaser.GameObjects.Container, offset: XY) {
-    const displayCenterPosition = Tools.getDisplayCenterPosition();
+  static centerGameObject(gameObject: GameObject, offset: XY = { x: 0, y: 0 }) {
+    let displayCenterPosition = Tools.getDisplayCenterPosition();
 
-    const inventorySlotsContainerBounds = container.getBounds();
-    container.width = inventorySlotsContainerBounds.width;
-    container.height = inventorySlotsContainerBounds.height;
+    if (!(gameObject as any).setDisplayOrigin) {
+      const container = gameObject as Phaser.GameObjects.Container;
 
-    const inventorySlotsContainerCenterPosition = Tools.getCenterPosition(
-      displayCenterPosition.x,
-      displayCenterPosition.y,
-      container.width,
-      container.height
-    );
+      const gameObjectBounds = container.getBounds();
+      container.width = gameObjectBounds.width;
+      container.height = gameObjectBounds.height;
 
-    container.x = inventorySlotsContainerCenterPosition.x + offset.x;
-    container.y = inventorySlotsContainerCenterPosition.y + offset.y;
+      displayCenterPosition = Tools.getCenterPosition(
+        displayCenterPosition.x,
+        displayCenterPosition.y,
+        container.width,
+        container.height
+      );
+    }
+
+    if ((gameObject as any).setDisplayOrigin) {
+      (gameObject as any).setOrigin(0.5);
+    }
+
+    gameObject.x = displayCenterPosition.x + offset.x;
+    gameObject.y = displayCenterPosition.y + offset.y;
+  }
+
+  static checkClickRadius({ x, y }: XY) {
+    const clickedDistance =
+      Globals.Instance.activeMainScene.gameObjectContainer.getBounds().width + Globals.Instance.offsetToCenter.x;
+    console.log(x, clickedDistance);
+    throw "please implement I'm just too tired";
+    return '';
   }
 }

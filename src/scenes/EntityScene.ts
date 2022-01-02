@@ -36,7 +36,7 @@ export class EntityScene extends Scene {
       }
     });
 
-    Tools.addGameObjectToScene<Phaser.GameObjects.Sprite>(this.scene.scene, this.gameObjectContainer);
+    this.scene.scene.add.existing(this.gameObjectContainer);
     this.isReady = true;
   }
 

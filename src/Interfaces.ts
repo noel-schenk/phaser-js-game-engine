@@ -17,6 +17,13 @@ export type XY = {
   y: number;
 };
 
+export type Size = {
+  width: number;
+  height: number;
+};
+
+export type GameObject = Phaser.GameObjects.GameObject & XY & Size;
+
 export interface SpriteData {
   mutations: number;
   width: number;
@@ -125,15 +132,6 @@ export class MainScene extends Scene {
 
   create() {
     super.create();
-    this.clickRadius(200);
-  }
-
-  clickRadius(radius: number, x = 0, y = 0) {
-    const coordinates = x & y ? { x: x, y: y } : Tools.getDisplayCenterPosition();
-    const circle = this.scene.scene.add.circle(coordinates.x, coordinates.y, radius);
-    circle.fillColor = 0xfff;
-    circle.width = 200;
-    circle.height = 200;
   }
 }
 

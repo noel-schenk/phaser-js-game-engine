@@ -24,11 +24,12 @@ export class InventoryEvents extends Events<InventoryScene> {
   onInventoryClick(params) {
     Tools.destroyGameObject(this.scene.inventorySprite);
     Tools.destroyGameObject(this.scene.inventorySlotsContainer);
+    delete this.scene.inventorySprite;
     delete this.scene.inventorySlotsContainer;
   }
 
   onBagClick(params) {
-    this.scene.inventorySprite = this.scene.createInventory();
+    this.scene.loadInventory();
     this.scene.gameObjectContainer.add(this.scene.inventorySprite);
     this.scene.gameObjectContainer.moveDown(this.scene.inventorySprite);
     this.scene.on(this.scene.inventorySprite, undefined);

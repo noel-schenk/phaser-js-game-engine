@@ -53879,8 +53879,8 @@
             if (false) {
               var FacebookInstantGamesPlugin;
             }
-            var Game2 = new Class({
-              initialize: function Game3(config2) {
+            var Game3 = new Class({
+              initialize: function Game4(config2) {
                 this.config = new Config(config2);
                 this.renderer = null;
                 this.domContainer = null;
@@ -54023,7 +54023,7 @@
                 this.pendingDestroy = false;
               }
             });
-            module2.exports = Game2;
+            module2.exports = Game3;
           },
           function(module2, exports2, __webpack_require__) {
             var AddToDOM = __webpack_require__(142);
@@ -73347,7 +73347,7 @@
       sprites: new Subject(),
       entities: new Subject()
     };
-    scalingFactor = 1;
+    scalingFactor = 4;
     canRerender = true;
     activeMainScene;
     offsetToCenter = { x: 0, y: 0 };
@@ -73527,8 +73527,8 @@
       console.log(`Could not find [${spriteData.name}]`);
       return Tools.getUndefinedSpriteInfo();
     }
-    static getDisplayCenterPosition() {
-      const getCenter = (size) => size / 2 / Globals.Instance.scalingFactor;
+    static getDisplayCenterPosition(scalingFactor = Globals.Instance.scalingFactor) {
+      const getCenter = (size) => size / 2 / scalingFactor;
       return { x: getCenter(Globals.Instance.game.canvas.width), y: getCenter(Globals.Instance.game.canvas.height) };
     }
     static getTopLeftSpritePosition(x, y, spriteInfo, spriteScalingFactor = 1) {
@@ -73554,9 +73554,6 @@
           frameHeight: sprite.height
         });
       }
-    }
-    static addGameObjectToScene(scene, gameObject) {
-      return scene.add.existing(gameObject);
     }
     static removeAllGameObjectsFromScene(scene) {
       while (scene.children.list[0]) {
@@ -73626,13 +73623,10 @@
       return { x: Tools.getPixelGridNumber(x), y: Tools.getPixelGridNumber(y) };
     }
     static getPixelGridNumber(pos) {
-      return import_phaser.default.Math.Snap.To(pos, config_default.gridSize, config_default.gridSize / 2) - config_default.gridSize / 2;
+      return import_phaser.default.Math.Snap.To(pos, config_default.gridSize);
     }
     static getUniqueKey() {
       return Math.random().toString(36).substring(2, 9);
-    }
-    static setGlobalScalingFactorBasedOnGameObject(gameObject) {
-      Globals.Instance.scalingFactor = Math.max(Globals.Instance.game.canvas.width / gameObject.getBounds().width, Globals.Instance.game.canvas.height / gameObject.getBounds().height);
     }
     static setGlobalOffsetPositonRelativeToSprite(spriteToCenter) {
       const defaultX = Globals.Instance.game.canvas.width / 2;
@@ -73708,25 +73702,36 @@
     static alignSpritesToGrid(scene, sprites, spriteScale, gapSize, columns) {
       const spriteContainer = new import_phaser.default.GameObjects.Container(scene);
       sprites.forEach((sprite, index) => {
-        const spriteInfo = Tools.getSpriteInfoFromSprite(sprite);
         const x = index * (config_default.gridSize * spriteScale + gapSize.x) - Math.floor(index / columns) * (columns * (config_default.gridSize * spriteScale + gapSize.x));
         const y = Math.floor(index / columns) * (config_default.gridSize * spriteScale + gapSize.y);
-        const topLeftSlotPosition = Tools.getTopLeftSpritePosition(x, y, spriteInfo, spriteScale);
-        sprite.x = topLeftSlotPosition.x;
-        sprite.y = topLeftSlotPosition.y;
+        sprite.x = x;
+        sprite.y = y;
         sprite.scale = spriteScale;
+        sprite.setOrigin(0);
         spriteContainer.add(sprite);
       });
       return spriteContainer;
     }
-    static centerContainer(container, offset) {
-      const displayCenterPosition = Tools.getDisplayCenterPosition();
-      const inventorySlotsContainerBounds = container.getBounds();
-      container.width = inventorySlotsContainerBounds.width;
-      container.height = inventorySlotsContainerBounds.height;
-      const inventorySlotsContainerCenterPosition = Tools.getCenterPosition(displayCenterPosition.x, displayCenterPosition.y, container.width, container.height);
-      container.x = inventorySlotsContainerCenterPosition.x + offset.x;
-      container.y = inventorySlotsContainerCenterPosition.y + offset.y;
+    static centerGameObject(gameObject, offset = { x: 0, y: 0 }) {
+      let displayCenterPosition = Tools.getDisplayCenterPosition();
+      if (!gameObject.setDisplayOrigin) {
+        const container = gameObject;
+        const gameObjectBounds = container.getBounds();
+        container.width = gameObjectBounds.width;
+        container.height = gameObjectBounds.height;
+        displayCenterPosition = Tools.getCenterPosition(displayCenterPosition.x, displayCenterPosition.y, container.width, container.height);
+      }
+      if (gameObject.setDisplayOrigin) {
+        gameObject.setOrigin(0.5);
+      }
+      gameObject.x = displayCenterPosition.x + offset.x;
+      gameObject.y = displayCenterPosition.y + offset.y;
+    }
+    static checkClickRadius({ x, y }) {
+      const clickedDistance = Globals.Instance.activeMainScene.gameObjectContainer.getBounds().width + Globals.Instance.offsetToCenter.x;
+      console.log(x, clickedDistance);
+      throw "please implement I'm just too tired";
+      return "";
     }
   };
 
@@ -73793,14 +73798,6 @@
     }
     create() {
       super.create();
-      this.clickRadius(200);
-    }
-    clickRadius(radius, x = 0, y = 0) {
-      const coordinates = x & y ? { x, y } : Tools.getDisplayCenterPosition();
-      const circle = this.scene.scene.add.circle(coordinates.x, coordinates.y, radius);
-      circle.fillColor = 4095;
-      circle.width = 200;
-      circle.height = 200;
     }
   };
   var Events = class {
@@ -73836,10 +73833,11 @@
     onInventoryClick(params) {
       Tools.destroyGameObject(this.scene.inventorySprite);
       Tools.destroyGameObject(this.scene.inventorySlotsContainer);
+      delete this.scene.inventorySprite;
       delete this.scene.inventorySlotsContainer;
     }
     onBagClick(params) {
-      this.scene.inventorySprite = this.scene.createInventory();
+      this.scene.loadInventory();
       this.scene.gameObjectContainer.add(this.scene.inventorySprite);
       this.scene.gameObjectContainer.moveDown(this.scene.inventorySprite);
       this.scene.on(this.scene.inventorySprite, void 0);
@@ -73864,7 +73862,7 @@
       this.gameObjectContainerConfig.offset = false;
       this.bagSprite = this.createBag();
       this.gameObjectContainer.add(this.bagSprite);
-      Tools.addGameObjectToScene(this.scene.scene, this.gameObjectContainer);
+      this.scene.scene.add.existing(this.gameObjectContainer);
       this.on(this.bagSprite, void 0);
       new InventoryEvents(this);
     }
@@ -73872,11 +73870,12 @@
       const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/bag/0");
       return Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getTopLeftSpritePosition(0, 0, bagSpriteInfo)), bagSpriteInfo);
     }
-    createInventory() {
+    loadInventory() {
       const inventorySpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/inventory/0");
-      const newInventory = Tools.getNewSprite(this.scene.scene, ...Object.values(Tools.getDisplayCenterPosition()), inventorySpriteInfo);
+      const newInventory = Tools.getNewSprite(this.scene.scene, 0, 0, inventorySpriteInfo);
+      Tools.centerGameObject(newInventory);
       this.renderInventory();
-      return newInventory;
+      return this.inventorySprite = newInventory;
     }
     getSpritesFromInventory(inventory) {
       return inventory.map((item) => {
@@ -73892,7 +73891,7 @@
       const inventoryColumns = 5;
       const inventoryPosition = { x: -12, y: 22 };
       this.inventorySlotsContainer = Tools.alignSpritesToGrid(this.scene.scene, this.getSpritesFromInventory(inventory), inventoryItemSpriteScale, inventoryGapSize, inventoryColumns);
-      Tools.centerContainer(this.inventorySlotsContainer, inventoryPosition);
+      Tools.centerGameObject(this.inventorySlotsContainer, inventoryPosition);
       this.gameObjectContainer.add(this.inventorySlotsContainer);
     }
   };
@@ -73917,10 +73916,16 @@
           case "dragend":
             this.onDragEnd(params);
             break;
+          case "pointerup":
+            this.onClick(params);
+            break;
           default:
             break;
         }
       });
+    }
+    onClick(params) {
+      console.log("clicked", Tools.checkClickRadius({ x: params.event.native.x, y: params.event.y }));
     }
     onDrag(params) {
       Globals.Instance.canRerender = false;
@@ -73929,8 +73934,8 @@
     }
     onDragEnd(params) {
       const data = params.customData();
-      params.gameObject.x = Phaser.Math.Snap.To(params.event.x, config_default.gridSize, config_default.gridSize / 2);
-      params.gameObject.y = Phaser.Math.Snap.To(params.event.y, config_default.gridSize, config_default.gridSize / 2);
+      params.gameObject.x = Phaser.Math.Snap.To(params.event.x, config_default.gridSize);
+      params.gameObject.y = Phaser.Math.Snap.To(params.event.y, config_default.gridSize);
       const updatedPosition = Tools.getGridPosition(params.gameObject.x, params.gameObject.y);
       if (Tools.moveSpriteToPosition({
         level: data.statePosition.levelIndex,
@@ -73963,27 +73968,28 @@
     renderSpriteUpdate() {
       Tools.removeAllGameObjectsFromScene(this.scene.scene);
       this.gameObjectContainer = new Phaser3.GameObjects.Container(this.scene.scene);
-      this.renderScene(this.scene.scene, Globals.Instance.state.sprites.value, this.gameObjectContainer, (sprite, spriteInfo, statePosition) => {
+      this.renderScene(this.scene.scene, Globals.Instance.state.sprites.value, (sprite, spriteInfo, statePosition) => {
         this.on(sprite, () => {
           return { statePosition, spriteInfo };
         });
       });
-      Tools.setGlobalScalingFactorBasedOnGameObject(this.gameObjectContainer);
+      this.scene.scene.add.existing(this.gameObjectContainer);
     }
     create() {
       super.create();
       new SpriteEvents(this);
     }
-    renderScene(scene, state, container, spriteRenderCB) {
+    renderScene(scene, state, spriteRenderCB) {
       state.map((level, levelIndex) => {
         level.map((row, rowIndex) => {
           row.map((spriteData, columnIndex) => {
             const spriteInfo = Tools.getSpriteInfoFromSpriteSource(spriteData.source);
             const spriteX = columnIndex * config_default.gridSize;
             const spriteY = rowIndex * config_default.gridSize;
-            const sprite = Tools.getNewSprite(scene, ...Object.values(Tools.getTopLeftSpritePosition(spriteX, spriteY, spriteInfo)), spriteInfo);
+            const sprite = Tools.getNewSprite(scene, spriteX, spriteY, spriteInfo);
+            sprite.setOrigin(0.5, 0.5);
             sprite.setDisplaySize(40, 40);
-            container.add(sprite);
+            this.gameObjectContainer.add(sprite);
             spriteRenderCB?.(sprite, spriteInfo, {
               levelIndex,
               rowIndex,
@@ -73992,7 +73998,6 @@
           });
         });
       });
-      return Tools.addGameObjectToScene(scene, container);
     }
   };
   var HomeOutsideScene = _HomeOutsideScene;
@@ -74149,7 +74154,7 @@
           }
         }
       });
-      Tools.addGameObjectToScene(this.scene.scene, this.gameObjectContainer);
+      this.scene.scene.add.existing(this.gameObjectContainer);
       this.isReady = true;
     }
     renderEntitiesUpdate() {

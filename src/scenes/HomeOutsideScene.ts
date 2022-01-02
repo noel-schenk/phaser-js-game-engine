@@ -24,18 +24,13 @@ export class HomeOutsideScene extends MainScene {
 
     this.gameObjectContainer = new Phaser.GameObjects.Container(this.scene.scene);
 
-    this.renderScene(
-      this.scene.scene,
-      Globals.Instance.state.sprites.value,
-      this.gameObjectContainer,
-      (sprite, spriteInfo, statePosition) => {
-        this.on(sprite, () => {
-          return { statePosition: statePosition, spriteInfo: spriteInfo };
-        });
-      }
-    );
+    this.renderScene(this.scene.scene, Globals.Instance.state.sprites.value, (sprite, spriteInfo, statePosition) => {
+      this.on(sprite, () => {
+        return { statePosition: statePosition, spriteInfo: spriteInfo };
+      });
+    });
 
-    Tools.setGlobalScalingFactorBasedOnGameObject(this.gameObjectContainer);
+    this.scene.scene.add.existing(this.gameObjectContainer);
   }
 
   create() {
@@ -46,7 +41,6 @@ export class HomeOutsideScene extends MainScene {
   renderScene(
     scene: Phaser.Scene,
     state: SpriteState[][][],
-    container: Phaser.GameObjects.Container,
     spriteRenderCB?: (
       sprite: Phaser.GameObjects.Sprite,
       spriteInfo: SpriteInfo,
@@ -64,14 +58,11 @@ export class HomeOutsideScene extends MainScene {
           const spriteX = columnIndex * config.gridSize;
           const spriteY = rowIndex * config.gridSize;
 
-          const sprite = Tools.getNewSprite(
-            scene,
-            ...(Object.values(Tools.getTopLeftSpritePosition(spriteX, spriteY, spriteInfo)) as [number, number]),
-            spriteInfo
-          );
+          const sprite = Tools.getNewSprite(scene, spriteX, spriteY, spriteInfo);
+          sprite.setOrigin(0.5, 0.5);
           sprite.setDisplaySize(40, 40);
 
-          container.add(sprite);
+          this.gameObjectContainer.add(sprite);
 
           spriteRenderCB?.(sprite, spriteInfo, {
             levelIndex,
@@ -81,6 +72,5 @@ export class HomeOutsideScene extends MainScene {
         });
       });
     });
-    return Tools.addGameObjectToScene<Phaser.GameObjects.Container>(scene, container);
   }
 }
