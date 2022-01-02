@@ -41,6 +41,11 @@ export class InventoryScene extends Scene {
     new InventoryEvents(this);
   }
 
+  reload() {
+    Tools.removeAllGameObjectsFromScene(this);
+    this.create();
+  }
+
   createBag() {
     const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource('ui/bag/0');
 
@@ -79,15 +84,21 @@ export class InventoryScene extends Scene {
     const inventoryColumns = 5;
     const inventoryPosition = { x: -12, y: 22 } as XY;
 
+    const inventoryItemSprites = this.getSpritesFromInventory(inventory);
+
     this.inventorySlotsContainer = Tools.alignSpritesToGrid(
       this.scene.scene,
-      this.getSpritesFromInventory(inventory),
+      inventoryItemSprites,
       inventoryItemSpriteScale,
       inventoryGapSize,
       inventoryColumns
     );
 
     Tools.centerGameObject(this.inventorySlotsContainer, inventoryPosition);
+
+    this.inventorySlotsContainer.name = 'inventorySlotsContainer';
+
+    inventoryItemSprites.forEach((itemSprite) => this.on(itemSprite, undefined));
 
     this.gameObjectContainer.add(this.inventorySlotsContainer);
   }

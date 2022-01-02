@@ -1,8 +1,19 @@
 import { Globals } from './Globals';
 import Sprites from './json/sprites.json';
 import config from './json/config.json';
-import { XY, EntityState, SpriteData, SpriteInfo, SpriteState, State, GameObject } from './Interfaces';
-import Phaser, { Game, Scene } from 'phaser';
+import {
+  XY,
+  EntityState,
+  SpriteData,
+  SpriteInfo,
+  SpriteState,
+  State,
+  GameObject,
+  SpriteEvent,
+  Events,
+  Scene
+} from './Interfaces';
+import Phaser from 'phaser';
 
 export class Tools {
   private constructor() {}
@@ -152,6 +163,21 @@ export class Tools {
     return JSON.parse(JSON.stringify(object));
   }
 
+  // this function will not move the sprite only set the sprite source to the current position
+  static updateSpriteToNewPosition(sprite: Phaser.GameObjects.Sprite) {
+    const spriteInfo = Tools.getSpriteInfoFromSprite(sprite);
+    const spriteData = Tools.getSpriteDataFromSpriteInfo(spriteInfo);
+    const gridPosition = Tools.getGridPosition(sprite.x, sprite.y);
+    Tools.updateStateSpritesToNewPosition([
+      {
+        level: spriteData?.level || (spriteData?.level !== 0 && 1) || spriteData.level,
+        column: gridPosition.column,
+        row: gridPosition.row,
+        spriteInfo: spriteInfo
+      }
+    ]);
+  }
+
   static updateStateSpritesToNewPosition(
     sprites: Array<{ level: number; row: number; column: number; spriteInfo: SpriteInfo }>
   ) {
@@ -195,16 +221,18 @@ export class Tools {
     Globals.Instance.offsetToCenter = offsetPosition;
   }
 
-  static getSpeedForDistance(from: XY, to: XY, spriteInfo?: SpriteInfo) {
+  static getDistanceFromXY(from: XY, to: XY) {
     const x = from.x - to.x;
     const y = from.y - to.y;
+    return Math.hypot(x, y);
+  }
 
-    const speed = 200 - Sprites[spriteInfo?.name]?.speed;
+  static getSpeedForDistance(from: XY, to: XY, spriteInfo?: SpriteInfo) {
+    const speed = 25 - Sprites[spriteInfo?.name]?.speed / 4;
 
-    const distance = 40;
     const speedInMs = speed || 100;
 
-    return (Math.hypot(x, y) / distance) * speedInMs * Globals.Instance.scalingFactor;
+    return Tools.getDistanceFromXY(from, to) * speedInMs;
   }
 
   static getAngleFromPositions(from: XY, to: XY) {
@@ -323,11 +351,27 @@ export class Tools {
     gameObject.y = displayCenterPosition.y + offset.y;
   }
 
-  static checkClickRadius({ x, y }: XY) {
-    const clickedDistance =
-      Globals.Instance.activeMainScene.gameObjectContainer.getBounds().width + Globals.Instance.offsetToCenter.x;
-    console.log(x, clickedDistance);
-    throw "please implement I'm just too tired";
-    return '';
+  static setGlobalScalingFactor() {
+    Globals.Instance.scalingFactor = 4;
+    if (Globals.Instance.game.canvas.width < 800) {
+      Globals.Instance.scalingFactor = 2;
+    }
+  }
+
+  static spriteFollowMouse(sprite: Phaser.GameObjects.Sprite, event: Phaser.Input.Pointer) {
+    sprite.setOrigin(0.5);
+    sprite.x = event.x;
+    sprite.y = event.y;
+  }
+
+  static doWhile(task: Function, check: () => boolean) {
+    const interval = setInterval(() => {
+      task();
+      !check() && clearInterval(interval);
+    });
+  }
+
+  static getEvent<T extends Events<Scene>>(type: string) {
+    return Globals.Instance.events.find((event) => event.constructor.name === `${type}Events`) as T;
   }
 }

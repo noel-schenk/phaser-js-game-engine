@@ -28,6 +28,7 @@ export class LoadingScene extends Scene {
 
   create() {
     super.create();
+    Tools.setGlobalScalingFactor();
     new DataManager(() => {
       Globals.Instance.game.scene.add(Tools.getUniqueKey(), InventoryScene, true);
       new LoginManager();

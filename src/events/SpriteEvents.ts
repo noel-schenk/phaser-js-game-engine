@@ -1,9 +1,9 @@
 import { Globals } from '../Globals';
-import { Events, Scene, SpriteEvent, SpriteInfo } from '../Interfaces';
+import { Events, GameObject, MainScene, Scene, SpriteEvent, SpriteInfo, XY } from '../Interfaces';
 import config from '../json/config.json';
 import { Tools } from '../Tools';
 
-export class SpriteEvents extends Events<Scene> {
+export class SpriteEvents extends Events<MainScene> {
   override init() {
     this.scene.onSpriteEvent.subscribe((params) => {
       switch (params.eventName) {
@@ -13,31 +13,34 @@ export class SpriteEvents extends Events<Scene> {
         case 'dragend':
           this.onDragEnd(params);
           break;
-        case 'pointerup':
-          this.onClick(params);
-          break;
         default:
           break;
       }
     });
   }
 
-  onClick(params: SpriteEvent) {
-    console.log('clicked', Tools.checkClickRadius({ x: params.event.native.x, y: params.event.y }));
-  }
-
   onDrag(params: SpriteEvent) {
     Globals.Instance.canRerender = false;
 
-    params.gameObject.x = params.event.x;
-    params.gameObject.y = params.event.y;
+    this.moveSpriteToMouse(params.event, params.gameObject);
+  }
+
+  moveSpriteToMouse(position: XY, gameObject: GameObject) {
+    gameObject.x = position.x;
+    gameObject.y = position.y;
   }
 
   onDragEnd(params: SpriteEvent) {
+    this.dropSpriteToMouse(params);
+
+    Globals.Instance.canRerender = true;
+  }
+
+  dropSpriteToMouse(params: SpriteEvent) {
     const data = params.customData();
 
-    params.gameObject.x = Phaser.Math.Snap.To(params.event.x, config.gridSize);
-    params.gameObject.y = Phaser.Math.Snap.To(params.event.y, config.gridSize);
+    params.gameObject.x = Tools.getPixelGridNumber(params.event.x);
+    params.gameObject.y = Tools.getPixelGridNumber(params.event.y);
     const updatedPosition = Tools.getGridPosition(params.gameObject.x, params.gameObject.y);
 
     if (
@@ -56,11 +59,9 @@ export class SpriteEvents extends Events<Scene> {
       )
     ) {
       Globals.Instance.stateTransaction.sprites.next();
-      Globals.Instance.canRerender = true;
       return true;
     }
 
-    Globals.Instance.canRerender = true;
     this.scene.renderSpriteUpdate();
     return false;
   }

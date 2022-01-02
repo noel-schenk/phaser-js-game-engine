@@ -1,6 +1,7 @@
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Globals } from './Globals';
 import { Tools } from './Tools';
+import config from './json/config.json';
 
 export enum GameObjectEvents {
   pointerdown,
@@ -37,6 +38,7 @@ export interface SpriteData {
     left: [number];
     idle: [number];
   };
+  level: number;
 }
 
 export type SpriteInfo = { name: string; mutation: number };
@@ -62,11 +64,12 @@ export type State = {
 export type SpriteEvent = {
   eventName: string;
   gameObject: Phaser.GameObjects.Sprite;
-  event: any;
+  event: Phaser.Input.Pointer;
   customData: Function;
 };
 
 export class Scene extends Phaser.Scene {
+  event: Events<Scene>;
   onSpriteEvent = new Subject<SpriteEvent>();
 
   gameObjectContainer: Phaser.GameObjects.Container;
@@ -101,11 +104,11 @@ export class Scene extends Phaser.Scene {
     Object.keys(GameObjectEvents).forEach((eventName) => {
       gameObject.on(eventName, (event) => {
         event.native = { x: 0, y: 0 } as XY;
-        event.native.x = event.x;
-        event.native.y = event.y;
+        event.native.x = Globals.Instance.game.input.activePointer.worldX;
+        event.native.y = Globals.Instance.game.input.activePointer.worldY;
 
-        event.x = (event.x - Globals.Instance.offsetToCenter.x) / Globals.Instance.scalingFactor;
-        event.y = (event.y - Globals.Instance.offsetToCenter.y) / Globals.Instance.scalingFactor;
+        event.x = (event.native.x - Globals.Instance.offsetToCenter.x) / Globals.Instance.scalingFactor;
+        event.y = (event.native.y - Globals.Instance.offsetToCenter.y) / Globals.Instance.scalingFactor;
         this.onSpriteEvent.next({ eventName, gameObject, event, customData });
       });
     });
@@ -140,6 +143,10 @@ export class Events<T extends Scene> {
 
   constructor(scene: T) {
     this.scene = scene;
+    this.scene.event = this;
+
+    Globals.Instance.events.push(this);
+
     this.init();
   }
 

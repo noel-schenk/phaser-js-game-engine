@@ -2,8 +2,6 @@ import { Globals } from '../Globals';
 import { Tools } from '../Tools';
 
 export class PlayerEvents {
-  static playerSprite: Phaser.GameObjects.Sprite;
-
   constructor() {
     this.init();
   }
@@ -25,10 +23,10 @@ export class PlayerEvents {
   }
 
   onClickGroundGrass(params) {
-    this.updatePlayerEntity(params);
+    this.movePlayerToMouse(params);
   }
 
-  updatePlayerEntity(params) {
+  movePlayerToMouse(params) {
     const activePlayer = Globals.Instance.getActivePlayer();
     activePlayer.x = params.event.x;
     activePlayer.y = params.event.y;
@@ -41,7 +39,7 @@ export class PlayerEvents {
   }
 
   static afterCreate(playerSprite: Phaser.GameObjects.Sprite) {
-    PlayerEvents.playerSprite = playerSprite;
+    Globals.Instance.activePlayerSprite = playerSprite;
 
     Tools.setGlobalOffsetPositonRelativeToSprite(playerSprite);
     playerSprite.play('idle');

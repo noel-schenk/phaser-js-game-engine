@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { Scene, SpriteState, EntityState, State, XY } from './Interfaces';
+import { Scene, SpriteState, EntityState, State, XY, MainScene, Events } from './Interfaces';
 import { BehaviorSubject, Subject } from 'rxjs';
 
 export class Globals {
@@ -16,11 +16,16 @@ export class Globals {
     entities: new Subject<void>()
   };
 
-  scalingFactor = 4;
   canRerender = true;
-  activeMainScene: Scene;
+  activeMainScene: MainScene;
   offsetToCenter = { x: 0, y: 0 } as XY;
   activePlayerName: string;
+
+  activePlayerSprite: Phaser.GameObjects.Sprite;
+
+  scalingFactor: number;
+
+  events = new Array<Events<Scene>>();
 
   // call state.entities.next() on update
   getActivePlayer(): EntityState {

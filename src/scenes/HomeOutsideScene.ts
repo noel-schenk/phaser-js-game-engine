@@ -52,6 +52,8 @@ export class HomeOutsideScene extends MainScene {
     ) => void
   ) {
     state.map((level, levelIndex) => {
+      const levelContainer = new Phaser.GameObjects.Container(this.scene.scene);
+      levelContainer.setData('z-index', level);
       level.map((row, rowIndex) => {
         row.map((spriteData, columnIndex) => {
           const spriteInfo = Tools.getSpriteInfoFromSpriteSource(spriteData.source);
@@ -62,7 +64,7 @@ export class HomeOutsideScene extends MainScene {
           sprite.setOrigin(0.5, 0.5);
           sprite.setDisplaySize(40, 40);
 
-          this.gameObjectContainer.add(sprite);
+          levelContainer.add(sprite);
 
           spriteRenderCB?.(sprite, spriteInfo, {
             levelIndex,
@@ -71,6 +73,7 @@ export class HomeOutsideScene extends MainScene {
           });
         });
       });
+      this.gameObjectContainer.add(levelContainer);
     });
   }
 }

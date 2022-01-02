@@ -1076,9 +1076,9 @@
             var EventEmitter = __webpack_require__(9);
             var Events2 = __webpack_require__(75);
             var SceneEvents = __webpack_require__(20);
-            var GameObject = new Class({
+            var GameObject2 = new Class({
               Extends: EventEmitter,
-              initialize: function GameObject2(scene, type) {
+              initialize: function GameObject3(scene, type) {
                 EventEmitter.call(this);
                 this.scene = scene;
                 this.displayList = null;
@@ -1168,7 +1168,7 @@
                 return ComponentsToJSON(this);
               },
               willRender: function(camera) {
-                return !(GameObject.RENDER_MASK !== this.renderFlags || this.cameraFilter !== 0 && this.cameraFilter & camera.id);
+                return !(GameObject2.RENDER_MASK !== this.renderFlags || this.cameraFilter !== 0 && this.cameraFilter & camera.id);
               },
               getIndexList: function() {
                 var child = this;
@@ -1264,8 +1264,8 @@
                 this.parentContainer = void 0;
               }
             });
-            GameObject.RENDER_MASK = 15;
-            module2.exports = GameObject;
+            GameObject2.RENDER_MASK = 15;
+            module2.exports = GameObject2;
           },
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
@@ -2591,10 +2591,10 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var Line = __webpack_require__(47);
             var Shape = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.AlphaSingle,
                 Components.BlendMode,
@@ -2611,7 +2611,7 @@
                 if (type === void 0) {
                   type = "Shape";
                 }
-                GameObject.call(this, scene, type);
+                GameObject2.call(this, scene, type);
                 this.geom = data;
                 this.pathData = [];
                 this.pathIndexes = [];
@@ -6596,10 +6596,10 @@
             var AnimationState = __webpack_require__(164);
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var SpriteRender = __webpack_require__(1065);
             var Sprite = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Alpha,
                 Components.BlendMode,
@@ -6618,7 +6618,7 @@
                 SpriteRender
               ],
               initialize: function Sprite2(scene, x, y, texture, frame) {
-                GameObject.call(this, scene, "Sprite");
+                GameObject2.call(this, scene, "Sprite");
                 this._crop = this.resetCropObject();
                 this.anims = new AnimationState(this);
                 this.setTexture(texture, frame);
@@ -10853,10 +10853,10 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var ImageRender = __webpack_require__(1068);
             var Image2 = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Alpha,
                 Components.BlendMode,
@@ -10875,7 +10875,7 @@
                 ImageRender
               ],
               initialize: function Image3(scene, x, y, texture, frame) {
-                GameObject.call(this, scene, "Image");
+                GameObject2.call(this, scene, "Image");
                 this._crop = this.resetCropObject();
                 this.setTexture(texture, frame);
                 this.setPosition(x, y);
@@ -11089,11 +11089,11 @@
             var CircleContains = __webpack_require__(66);
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var Rectangle = __webpack_require__(10);
             var RectangleContains = __webpack_require__(57);
             var Zone = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Depth,
                 Components.GetBounds,
@@ -11109,7 +11109,7 @@
                 if (height === void 0) {
                   height = width;
                 }
-                GameObject.call(this, scene, "Zone");
+                GameObject2.call(this, scene, "Zone");
                 this.setPosition(x, y);
                 this.width = width;
                 this.height = height;
@@ -12821,14 +12821,14 @@
             var Class = __webpack_require__(0);
             var Clamp = __webpack_require__(18);
             var Components = __webpack_require__(11);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var GetBitmapTextSize = __webpack_require__(1043);
             var ParseFromAtlas = __webpack_require__(1044);
             var ParseXMLBitmapFont = __webpack_require__(212);
             var Rectangle = __webpack_require__(10);
             var Render = __webpack_require__(1045);
             var BitmapText = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Alpha,
                 Components.BlendMode,
@@ -12850,7 +12850,7 @@
                 if (align === void 0) {
                   align = 0;
                 }
-                GameObject.call(this, scene, "BitmapText");
+                GameObject2.call(this, scene, "BitmapText");
                 this.font = font;
                 var entry = this.scene.sys.cache.bitmapFont.get(font);
                 if (!entry) {
@@ -13294,12 +13294,12 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var IntegerToColor = __webpack_require__(189);
             var PIPELINES_CONST = __webpack_require__(92);
             var Render = __webpack_require__(1182);
             var PointLight = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.AlphaSingle,
                 Components.BlendMode,
@@ -13325,7 +13325,7 @@
                 if (attenuation === void 0) {
                   attenuation = 0.1;
                 }
-                GameObject.call(this, scene, "PointLight");
+                GameObject2.call(this, scene, "PointLight");
                 this.initPipeline(PIPELINES_CONST.POINTLIGHT_PIPELINE);
                 this.setPosition(x, y);
                 this.color = IntegerToColor(color);
@@ -16787,10 +16787,10 @@
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
             var Frame = __webpack_require__(109);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var List = __webpack_require__(110);
             var Blitter = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Alpha,
                 Components.BlendMode,
@@ -16805,7 +16805,7 @@
                 BlitterRender
               ],
               initialize: function Blitter2(scene, x, y, texture, frame) {
-                GameObject.call(this, scene, "Blitter");
+                GameObject2.call(this, scene, "Blitter");
                 this.setTexture(texture, frame);
                 this.setPosition(x, y);
                 this.initPipeline();
@@ -16884,13 +16884,13 @@
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
             var Events2 = __webpack_require__(75);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var Rectangle = __webpack_require__(10);
             var Render = __webpack_require__(1052);
             var Union = __webpack_require__(441);
             var Vector2 = __webpack_require__(3);
             var Container = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.AlphaSingle,
                 Components.BlendMode,
@@ -16903,7 +16903,7 @@
                 Render
               ],
               initialize: function Container2(scene, x, y, children) {
-                GameObject.call(this, scene, "Container");
+                GameObject2.call(this, scene, "Container");
                 this.list = [];
                 this.exclusive = true;
                 this.maxSize = -1;
@@ -17313,13 +17313,13 @@
             var ComponentsTransform = __webpack_require__(313);
             var ComponentsVisible = __webpack_require__(314);
             var Ellipse = __webpack_require__(111);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var GetFastValue = __webpack_require__(2);
             var GetValue = __webpack_require__(6);
             var MATH_CONST = __webpack_require__(14);
             var Render = __webpack_require__(1063);
             var Graphics = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 ComponentsAlpha,
                 ComponentsBlendMode,
@@ -17334,7 +17334,7 @@
               initialize: function Graphics2(scene, options) {
                 var x = GetValue(options, "x", 0);
                 var y = GetValue(options, "y", 0);
-                GameObject.call(this, scene, "Graphics");
+                GameObject2.call(this, scene, "Graphics");
                 this.setPosition(x, y);
                 this.initPipeline();
                 this.displayOriginX = 0;
@@ -17990,13 +17990,13 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var GravityWell = __webpack_require__(450);
             var List = __webpack_require__(110);
             var ParticleEmitter = __webpack_require__(452);
             var Render = __webpack_require__(1075);
             var ParticleEmitterManager = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Depth,
                 Components.Mask,
@@ -18006,7 +18006,7 @@
                 Render
               ],
               initialize: function ParticleEmitterManager2(scene, texture, frame, emitters) {
-                GameObject.call(this, scene, "ParticleEmitterManager");
+                GameObject2.call(this, scene, "ParticleEmitterManager");
                 this.blendMode = -1;
                 this.timeScale = 1;
                 this.texture = null;
@@ -18135,7 +18135,7 @@
             var Components = __webpack_require__(11);
             var CONST = __webpack_require__(33);
             var Frame = __webpack_require__(109);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var NOOP = __webpack_require__(1);
             var PIPELINE_CONST = __webpack_require__(92);
             var Render = __webpack_require__(1079);
@@ -18143,7 +18143,7 @@
             var Utils = __webpack_require__(12);
             var UUID = __webpack_require__(222);
             var RenderTexture = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Alpha,
                 Components.BlendMode,
@@ -18174,7 +18174,7 @@
                 if (height === void 0) {
                   height = 32;
                 }
-                GameObject.call(this, scene, "RenderTexture");
+                GameObject2.call(this, scene, "RenderTexture");
                 this.renderer = scene.sys.renderer;
                 this.textureManager = scene.sys.textures;
                 this.globalTint = 16777215;
@@ -18588,12 +18588,12 @@
             var AnimationState = __webpack_require__(164);
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var PIPELINE_CONST = __webpack_require__(92);
             var RopeRender = __webpack_require__(1085);
             var Vector2 = __webpack_require__(3);
             var Rope = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.AlphaSingle,
                 Components.BlendMode,
@@ -18618,7 +18618,7 @@
                 if (horizontal === void 0) {
                   horizontal = true;
                 }
-                GameObject.call(this, scene, "Rope");
+                GameObject2.call(this, scene, "Rope");
                 this.anims = new AnimationState(this);
                 this.points = points;
                 this.vertices;
@@ -18992,14 +18992,14 @@
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
             var GameEvents = __webpack_require__(22);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var GetTextSize = __webpack_require__(458);
             var GetValue = __webpack_require__(6);
             var RemoveFromDOM = __webpack_require__(202);
             var TextRender = __webpack_require__(1088);
             var TextStyle = __webpack_require__(459);
             var Text = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Alpha,
                 Components.BlendMode,
@@ -19024,7 +19024,7 @@
                 if (y === void 0) {
                   y = 0;
                 }
-                GameObject.call(this, scene, "Text");
+                GameObject2.call(this, scene, "Text");
                 this.renderer = scene.sys.renderer;
                 this.setPosition(x, y);
                 this.setOrigin(0, 0);
@@ -19459,14 +19459,14 @@
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
             var GameEvents = __webpack_require__(22);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var GetPowerOfTwo = __webpack_require__(361);
             var Smoothing = __webpack_require__(192);
             var TileSpriteRender = __webpack_require__(1091);
             var Vector2 = __webpack_require__(3);
             var _FLAG = 8;
             var TileSprite = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Alpha,
                 Components.BlendMode,
@@ -19486,7 +19486,7 @@
               ],
               initialize: function TileSprite2(scene, x, y, width, height, textureKey, frameKey) {
                 var renderer = scene.sys.renderer;
-                GameObject.call(this, scene, "TileSprite");
+                GameObject2.call(this, scene, "TileSprite");
                 var displayTexture = scene.sys.textures.get(textureKey);
                 var displayFrame = displayTexture.get(frameKey);
                 if (!width || !height) {
@@ -19686,13 +19686,13 @@
             var Events2 = __webpack_require__(75);
             var GameEvents = __webpack_require__(22);
             var InputEvents = __webpack_require__(51);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var SoundEvents = __webpack_require__(70);
             var UUID = __webpack_require__(222);
             var VideoRender = __webpack_require__(1094);
             var MATH_CONST = __webpack_require__(14);
             var Video = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Alpha,
                 Components.BlendMode,
@@ -19711,7 +19711,7 @@
                 VideoRender
               ],
               initialize: function Video2(scene, x, y, key) {
-                GameObject.call(this, scene, "Video");
+                GameObject2.call(this, scene, "Video");
                 this.video = null;
                 this.videoTexture = null;
                 this.videoTextureSource = null;
@@ -20376,14 +20376,14 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var GetFastValue = __webpack_require__(2);
             var Extend = __webpack_require__(17);
             var SetValue = __webpack_require__(478);
             var ShaderRender = __webpack_require__(1176);
             var TransformMatrix = __webpack_require__(25);
             var Shader = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.ComputedSize,
                 Components.Depth,
@@ -20408,7 +20408,7 @@
                 if (height === void 0) {
                   height = 128;
                 }
-                GameObject.call(this, scene, "Shader");
+                GameObject2.call(this, scene, "Shader");
                 this.blendMode = -1;
                 this.shader;
                 var renderer = scene.sys.renderer;
@@ -20442,7 +20442,7 @@
                 if (this.renderToTexture) {
                   return true;
                 } else {
-                  return !(GameObject.RENDER_MASK !== this.renderFlags || this.cameraFilter !== 0 && this.cameraFilter & camera.id);
+                  return !(GameObject2.RENDER_MASK !== this.renderFlags || this.cameraFilter !== 0 && this.cameraFilter & camera.id);
                 }
               },
               setRenderToTexture: function(key, flipY) {
@@ -20797,7 +20797,7 @@
             var Components = __webpack_require__(11);
             var DegToRad = __webpack_require__(36);
             var Face = __webpack_require__(116);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var GenerateVerts = __webpack_require__(479);
             var GenerateObjVerts = __webpack_require__(480);
             var GetCalcMatrix = __webpack_require__(19);
@@ -20807,7 +20807,7 @@
             var Vector3 = __webpack_require__(39);
             var Vertex = __webpack_require__(117);
             var Mesh = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.AlphaSingle,
                 Components.BlendMode,
@@ -20831,7 +20831,7 @@
                 if (texture === void 0) {
                   texture = "__WHITE";
                 }
-                GameObject.call(this, scene, "Mesh");
+                GameObject2.call(this, scene, "Mesh");
                 this.faces = [];
                 this.vertices = [];
                 this.tintFill = false;
@@ -33044,7 +33044,7 @@
             var GetValue = __webpack_require__(6);
             var LoaderEvents = __webpack_require__(95);
             var NOOP = __webpack_require__(1);
-            var Scene4 = __webpack_require__(418);
+            var Scene3 = __webpack_require__(418);
             var Systems = __webpack_require__(204);
             var SceneManager = new Class({
               initialize: function SceneManager2(game, sceneConfig) {
@@ -33086,7 +33086,7 @@
                   key = entry.key;
                   sceneConfig = entry.scene;
                   var newScene;
-                  if (sceneConfig instanceof Scene4) {
+                  if (sceneConfig instanceof Scene3) {
                     newScene = this.createSceneFromInstance(key, sceneConfig);
                   } else if (typeof sceneConfig === "object") {
                     newScene = this.createSceneFromObject(key, sceneConfig);
@@ -33163,7 +33163,7 @@
                 }
                 key = this.getKey(key, sceneConfig);
                 var newScene;
-                if (sceneConfig instanceof Scene4) {
+                if (sceneConfig instanceof Scene3) {
                   newScene = this.createSceneFromInstance(key, sceneConfig);
                 } else if (typeof sceneConfig === "object") {
                   sceneConfig.key = key;
@@ -33281,7 +33281,7 @@
               },
               createSceneFromFunction: function(key, scene) {
                 var newScene = new scene();
-                if (newScene instanceof Scene4) {
+                if (newScene instanceof Scene3) {
                   var configKey = newScene.sys.settings.key;
                   if (configKey !== "") {
                     key = configKey;
@@ -33306,7 +33306,7 @@
                 return newScene;
               },
               createSceneFromObject: function(key, sceneConfig) {
-                var newScene = new Scene4(sceneConfig);
+                var newScene = new Scene3(sceneConfig);
                 var configKey = newScene.sys.settings.key;
                 if (configKey !== "") {
                   key = configKey;
@@ -33342,7 +33342,7 @@
                 }
                 if (typeof sceneConfig === "function") {
                   return key;
-                } else if (sceneConfig instanceof Scene4) {
+                } else if (sceneConfig instanceof Scene3) {
                   key = sceneConfig.sys.settings.key;
                 } else if (typeof sceneConfig === "object" && sceneConfig.hasOwnProperty("key")) {
                   key = sceneConfig.key;
@@ -33666,8 +33666,8 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Systems = __webpack_require__(204);
-            var Scene4 = new Class({
-              initialize: function Scene5(config2) {
+            var Scene3 = new Class({
+              initialize: function Scene4(config2) {
                 this.sys = new Systems(this, config2);
                 this.game;
                 this.anims;
@@ -33698,7 +33698,7 @@
               update: function() {
               }
             });
-            module2.exports = Scene4;
+            module2.exports = Scene3;
           },
           function(module2, exports2, __webpack_require__) {
             var GetFastValue = __webpack_require__(2);
@@ -36061,13 +36061,13 @@
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
             var DOMElementRender = __webpack_require__(1055);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var IsPlainObject = __webpack_require__(7);
             var RemoveFromDOM = __webpack_require__(202);
             var SCENE_EVENTS = __webpack_require__(20);
             var Vector4 = __webpack_require__(140);
             var DOMElement = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.AlphaSingle,
                 Components.BlendMode,
@@ -36079,7 +36079,7 @@
                 DOMElementRender
               ],
               initialize: function DOMElement2(scene, x, y, element, style, innerText) {
-                GameObject.call(this, scene, "DOMElement");
+                GameObject2.call(this, scene, "DOMElement");
                 this.parent = scene.sys.game.domContainer;
                 this.cache = scene.sys.cache.html;
                 this.node;
@@ -36299,7 +36299,7 @@
           },
           function(module2, exports2, __webpack_require__) {
             var CSSBlendModes = __webpack_require__(1056);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var TransformMatrix = __webpack_require__(25);
             var tempMatrix1 = new TransformMatrix();
             var tempMatrix2 = new TransformMatrix();
@@ -36310,7 +36310,7 @@
               }
               var style = src.node.style;
               var settings = src.scene.sys.settings;
-              if (!style || !settings.visible || GameObject.RENDER_MASK !== src.renderFlags || src.cameraFilter !== 0 && src.cameraFilter & camera.id || src.parentContainer && !src.parentContainer.willRender()) {
+              if (!style || !settings.visible || GameObject2.RENDER_MASK !== src.renderFlags || src.cameraFilter !== 0 && src.cameraFilter & camera.id || src.parentContainer && !src.parentContainer.willRender()) {
                 style.display = "none";
                 return;
               }
@@ -36361,10 +36361,10 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var ExternRender = __webpack_require__(1060);
             var Extern = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Alpha,
                 Components.BlendMode,
@@ -36380,7 +36380,7 @@
                 ExternRender
               ],
               initialize: function Extern2(scene) {
-                GameObject.call(this, scene, "Extern");
+                GameObject2.call(this, scene, "Extern");
               },
               addedToScene: function() {
                 this.scene.sys.updateList.add(this);
@@ -45995,11 +45995,11 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(11);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var TilemapComponents = __webpack_require__(251);
             var TilemapLayerRender = __webpack_require__(1456);
             var TilemapLayer = new Class({
-              Extends: GameObject,
+              Extends: GameObject2,
               Mixins: [
                 Components.Alpha,
                 Components.BlendMode,
@@ -46015,7 +46015,7 @@
                 TilemapLayerRender
               ],
               initialize: function TilemapLayer2(scene, tilemap, layerIndex, tileset, x, y) {
-                GameObject.call(this, scene, "TilemapLayer");
+                GameObject2.call(this, scene, "TilemapLayer");
                 this.isTilemap = true;
                 this.tilemap = tilemap;
                 this.layerIndex = layerIndex;
@@ -46250,7 +46250,7 @@
                 this.cullCallback = null;
                 this.gidMap = [];
                 this.tileset = [];
-                GameObject.prototype.destroy.call(this);
+                GameObject2.prototype.destroy.call(this);
               }
             });
             module2.exports = TilemapLayer;
@@ -53879,8 +53879,8 @@
             if (false) {
               var FacebookInstantGamesPlugin;
             }
-            var Game3 = new Class({
-              initialize: function Game4(config2) {
+            var Game2 = new Class({
+              initialize: function Game3(config2) {
                 this.config = new Config(config2);
                 this.renderer = null;
                 this.domContainer = null;
@@ -54023,7 +54023,7 @@
                 this.pendingDestroy = false;
               }
             });
-            module2.exports = Game3;
+            module2.exports = Game2;
           },
           function(module2, exports2, __webpack_require__) {
             var AddToDOM = __webpack_require__(142);
@@ -66984,7 +66984,7 @@
           function(module2, exports2, __webpack_require__) {
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(249);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var GetFastValue = __webpack_require__(2);
             var Image2 = __webpack_require__(125);
             var Pipeline = __webpack_require__(167);
@@ -67007,7 +67007,7 @@
                 Pipeline
               ],
               initialize: function MatterImage2(world, x, y, texture, frame, options) {
-                GameObject.call(this, world.scene, "Image");
+                GameObject2.call(this, world.scene, "Image");
                 this._crop = this.resetCropObject();
                 this.setTexture(texture, frame);
                 this.setSizeToFrame();
@@ -67030,7 +67030,7 @@
             var AnimationState = __webpack_require__(164);
             var Class = __webpack_require__(0);
             var Components = __webpack_require__(249);
-            var GameObject = __webpack_require__(15);
+            var GameObject2 = __webpack_require__(15);
             var GetFastValue = __webpack_require__(2);
             var Pipeline = __webpack_require__(167);
             var Sprite = __webpack_require__(73);
@@ -67053,7 +67053,7 @@
                 Pipeline
               ],
               initialize: function MatterSprite2(world, x, y, texture, frame, options) {
-                GameObject.call(this, world.scene, "Sprite");
+                GameObject2.call(this, world.scene, "Sprite");
                 this._crop = this.resetCropObject();
                 this.anims = new AnimationState(this);
                 this.setTexture(texture, frame);
@@ -68638,7 +68638,7 @@
           function(module2, exports2, __webpack_require__) {
             var CONST = __webpack_require__(144);
             var Extend = __webpack_require__(17);
-            var Scene4 = {
+            var Scene3 = {
               Events: __webpack_require__(20),
               GetPhysicsPlugins: __webpack_require__(419),
               GetScenePlugins: __webpack_require__(420),
@@ -68647,8 +68647,8 @@
               Settings: __webpack_require__(421),
               Systems: __webpack_require__(204)
             };
-            Scene4 = Extend(false, Scene4, CONST);
-            module2.exports = Scene4;
+            Scene3 = Extend(false, Scene3, CONST);
+            module2.exports = Scene3;
           },
           function(module2, exports2, __webpack_require__) {
             var Clamp = __webpack_require__(18);
@@ -73303,25 +73303,25 @@
 
   // node_modules/rxjs/dist/esm5/internal/BehaviorSubject.js
   var BehaviorSubject = function(_super) {
-    __extends(BehaviorSubject3, _super);
-    function BehaviorSubject3(_value) {
+    __extends(BehaviorSubject2, _super);
+    function BehaviorSubject2(_value) {
       var _this = _super.call(this) || this;
       _this._value = _value;
       return _this;
     }
-    Object.defineProperty(BehaviorSubject3.prototype, "value", {
+    Object.defineProperty(BehaviorSubject2.prototype, "value", {
       get: function() {
         return this.getValue();
       },
       enumerable: false,
       configurable: true
     });
-    BehaviorSubject3.prototype._subscribe = function(subscriber) {
+    BehaviorSubject2.prototype._subscribe = function(subscriber) {
       var subscription = _super.prototype._subscribe.call(this, subscriber);
       !subscription.closed && subscriber.next(this._value);
       return subscription;
     };
-    BehaviorSubject3.prototype.getValue = function() {
+    BehaviorSubject2.prototype.getValue = function() {
       var _a = this, hasError = _a.hasError, thrownError = _a.thrownError, _value = _a._value;
       if (hasError) {
         throw thrownError;
@@ -73329,10 +73329,10 @@
       this._throwIfClosed();
       return _value;
     };
-    BehaviorSubject3.prototype.next = function(value) {
+    BehaviorSubject2.prototype.next = function(value) {
       _super.prototype.next.call(this, this._value = value);
     };
-    return BehaviorSubject3;
+    return BehaviorSubject2;
   }(Subject);
 
   // src/Globals.ts
@@ -73347,11 +73347,13 @@
       sprites: new Subject(),
       entities: new Subject()
     };
-    scalingFactor = 4;
     canRerender = true;
     activeMainScene;
     offsetToCenter = { x: 0, y: 0 };
     activePlayerName;
+    activePlayerSprite;
+    scalingFactor;
+    events = new Array();
     getActivePlayer() {
       return _Globals.Instance.state.entities.value.find((entity) => entity.name === _Globals.Instance.activePlayerName);
     }
@@ -73370,7 +73372,8 @@
     width: 40,
     height: 40,
     ext: "jpg",
-    interactive: {}
+    interactive: {},
+    level: 0
   };
   var undefined2 = {
     mutations: 1,
@@ -73386,7 +73389,8 @@
     ext: "png",
     interactive: {
       draggable: true
-    }
+    },
+    level: 1
   };
   var ui_inventory = {
     mutations: 1,
@@ -73408,7 +73412,7 @@
     height: 60,
     ext: "png",
     interactive: false,
-    speed: 10,
+    speed: 25,
     animations: {
       up: [
         9,
@@ -73446,7 +73450,7 @@
     height: 40,
     ext: "png",
     interactive: false,
-    speed: 120,
+    speed: 40,
     animations: {
       up: [
         9,
@@ -73606,6 +73610,19 @@
     static clone(object) {
       return JSON.parse(JSON.stringify(object));
     }
+    static updateSpriteToNewPosition(sprite) {
+      const spriteInfo = Tools.getSpriteInfoFromSprite(sprite);
+      const spriteData = Tools.getSpriteDataFromSpriteInfo(spriteInfo);
+      const gridPosition = Tools.getGridPosition(sprite.x, sprite.y);
+      Tools.updateStateSpritesToNewPosition([
+        {
+          level: spriteData?.level || spriteData?.level !== 0 && 1 || spriteData.level,
+          column: gridPosition.column,
+          row: gridPosition.row,
+          spriteInfo
+        }
+      ]);
+    }
     static updateStateSpritesToNewPosition(sprites) {
       const temp = Tools.clone(Globals.Instance.state.sprites.value);
       sprites.forEach((sprite) => {
@@ -73637,13 +73654,15 @@
       offsetPosition.y -= spriteToCenter.y * Globals.Instance.scalingFactor;
       Globals.Instance.offsetToCenter = offsetPosition;
     }
-    static getSpeedForDistance(from, to, spriteInfo) {
+    static getDistanceFromXY(from, to) {
       const x = from.x - to.x;
       const y = from.y - to.y;
-      const speed = 200 - sprites_default[spriteInfo?.name]?.speed;
-      const distance = 40;
+      return Math.hypot(x, y);
+    }
+    static getSpeedForDistance(from, to, spriteInfo) {
+      const speed = 25 - sprites_default[spriteInfo?.name]?.speed / 4;
       const speedInMs = speed || 100;
-      return Math.hypot(x, y) / distance * speedInMs * Globals.Instance.scalingFactor;
+      return Tools.getDistanceFromXY(from, to) * speedInMs;
     }
     static getAngleFromPositions(from, to) {
       return Math.atan2(to.y - from.y, to.x - from.x) * 180 / Math.PI + 180;
@@ -73727,11 +73746,25 @@
       gameObject.x = displayCenterPosition.x + offset.x;
       gameObject.y = displayCenterPosition.y + offset.y;
     }
-    static checkClickRadius({ x, y }) {
-      const clickedDistance = Globals.Instance.activeMainScene.gameObjectContainer.getBounds().width + Globals.Instance.offsetToCenter.x;
-      console.log(x, clickedDistance);
-      throw "please implement I'm just too tired";
-      return "";
+    static setGlobalScalingFactor() {
+      Globals.Instance.scalingFactor = 4;
+      if (Globals.Instance.game.canvas.width < 800) {
+        Globals.Instance.scalingFactor = 2;
+      }
+    }
+    static spriteFollowMouse(sprite, event) {
+      sprite.setOrigin(0.5);
+      sprite.x = event.x;
+      sprite.y = event.y;
+    }
+    static doWhile(task, check) {
+      const interval = setInterval(() => {
+        task();
+        !check() && clearInterval(interval);
+      });
+    }
+    static getEvent(type) {
+      return Globals.Instance.events.find((event) => event.constructor.name === `${type}Events`);
     }
   };
 
@@ -73746,7 +73779,8 @@
     GameObjectEvents2[GameObjectEvents2["dragend"] = 6] = "dragend";
     return GameObjectEvents2;
   })(GameObjectEvents || {});
-  var Scene2 = class extends Phaser.Scene {
+  var Scene = class extends Phaser.Scene {
+    event;
     onSpriteEvent = new Subject();
     gameObjectContainer;
     gameObjectContainerConfig = {
@@ -73771,10 +73805,10 @@
       Object.keys(GameObjectEvents).forEach((eventName) => {
         gameObject.on(eventName, (event) => {
           event.native = { x: 0, y: 0 };
-          event.native.x = event.x;
-          event.native.y = event.y;
-          event.x = (event.x - Globals.Instance.offsetToCenter.x) / Globals.Instance.scalingFactor;
-          event.y = (event.y - Globals.Instance.offsetToCenter.y) / Globals.Instance.scalingFactor;
+          event.native.x = Globals.Instance.game.input.activePointer.worldX;
+          event.native.y = Globals.Instance.game.input.activePointer.worldY;
+          event.x = (event.native.x - Globals.Instance.offsetToCenter.x) / Globals.Instance.scalingFactor;
+          event.y = (event.native.y - Globals.Instance.offsetToCenter.y) / Globals.Instance.scalingFactor;
           this.onSpriteEvent.next({ eventName, gameObject, event, customData });
         });
       });
@@ -73791,8 +73825,8 @@
     renderEntitiesUpdate() {
     }
   };
-  __publicField(Scene2, "sceneConfig");
-  var MainScene = class extends Scene2 {
+  __publicField(Scene, "sceneConfig");
+  var MainScene = class extends Scene {
     preload() {
       Globals.Instance.activeMainScene = this;
     }
@@ -73804,6 +73838,8 @@
     scene;
     constructor(scene) {
       this.scene = scene;
+      this.scene.event = this;
+      Globals.Instance.events.push(this);
       this.init();
     }
     init() {
@@ -73817,15 +73853,14 @@
       this.scene.onSpriteEvent.subscribe((params) => {
         if (params.eventName === "pointerup") {
           const spriteInfo = Tools.getSpriteInfoFromSprite(params.gameObject);
-          switch (spriteInfo.name) {
-            case "ui/bag":
-              this.onBagClick(params);
-              break;
-            case "ui/inventory":
-              this.onInventoryClick(params);
-              break;
-            default:
-              break;
+          if (spriteInfo.name === "ui/bag") {
+            this.onBagClick(params);
+          }
+          if (spriteInfo.name === "ui/inventory") {
+            this.onInventoryClick(params);
+          }
+          if (params?.gameObject?.parentContainer?.name === "inventorySlotsContainer") {
+            this.onInventoryItemClick(params);
           }
         }
       });
@@ -73842,10 +73877,30 @@
       this.scene.gameObjectContainer.moveDown(this.scene.inventorySprite);
       this.scene.on(this.scene.inventorySprite, void 0);
     }
+    onInventoryItemClick(params) {
+      const sprite = params.gameObject;
+      sprite.scale = 1;
+      Globals.Instance.activeMainScene.gameObjectContainer.add(sprite);
+      this.scene.reload();
+      let isInDropMode = true;
+      const checkForDrop = this.scene.onSpriteEvent.subscribe((params2) => {
+        if (params2.eventName === "pointerup") {
+          isInDropMode = false;
+          checkForDrop.unsubscribe();
+          Tools.updateSpriteToNewPosition(sprite);
+          Globals.Instance.stateTransaction.sprites.next();
+        }
+      });
+      Tools.doWhile(() => {
+        Tools.spriteFollowMouse(params.gameObject, params.event);
+      }, () => {
+        return isInDropMode;
+      });
+    }
   };
 
   // src/scenes/InventoryScene.ts
-  var _InventoryScene = class extends Scene2 {
+  var _InventoryScene = class extends Scene {
     bagSprite;
     inventorySprite;
     inventorySlotsContainer;
@@ -73865,6 +73920,10 @@
       this.scene.scene.add.existing(this.gameObjectContainer);
       this.on(this.bagSprite, void 0);
       new InventoryEvents(this);
+    }
+    reload() {
+      Tools.removeAllGameObjectsFromScene(this);
+      this.create();
     }
     createBag() {
       const bagSpriteInfo = Tools.getSpriteInfoFromSpriteSource("ui/bag/0");
@@ -73890,8 +73949,11 @@
       const inventoryGapSize = { x: 8.5, y: 8.5 };
       const inventoryColumns = 5;
       const inventoryPosition = { x: -12, y: 22 };
-      this.inventorySlotsContainer = Tools.alignSpritesToGrid(this.scene.scene, this.getSpritesFromInventory(inventory), inventoryItemSpriteScale, inventoryGapSize, inventoryColumns);
+      const inventoryItemSprites = this.getSpritesFromInventory(inventory);
+      this.inventorySlotsContainer = Tools.alignSpritesToGrid(this.scene.scene, inventoryItemSprites, inventoryItemSpriteScale, inventoryGapSize, inventoryColumns);
       Tools.centerGameObject(this.inventorySlotsContainer, inventoryPosition);
+      this.inventorySlotsContainer.name = "inventorySlotsContainer";
+      inventoryItemSprites.forEach((itemSprite) => this.on(itemSprite, void 0));
       this.gameObjectContainer.add(this.inventorySlotsContainer);
     }
   };
@@ -73916,26 +73978,27 @@
           case "dragend":
             this.onDragEnd(params);
             break;
-          case "pointerup":
-            this.onClick(params);
-            break;
           default:
             break;
         }
       });
     }
-    onClick(params) {
-      console.log("clicked", Tools.checkClickRadius({ x: params.event.native.x, y: params.event.y }));
-    }
     onDrag(params) {
       Globals.Instance.canRerender = false;
-      params.gameObject.x = params.event.x;
-      params.gameObject.y = params.event.y;
+      this.moveSpriteToMouse(params.event, params.gameObject);
+    }
+    moveSpriteToMouse(position, gameObject) {
+      gameObject.x = position.x;
+      gameObject.y = position.y;
     }
     onDragEnd(params) {
+      this.dropSpriteToMouse(params);
+      Globals.Instance.canRerender = true;
+    }
+    dropSpriteToMouse(params) {
       const data = params.customData();
-      params.gameObject.x = Phaser.Math.Snap.To(params.event.x, config_default.gridSize);
-      params.gameObject.y = Phaser.Math.Snap.To(params.event.y, config_default.gridSize);
+      params.gameObject.x = Tools.getPixelGridNumber(params.event.x);
+      params.gameObject.y = Tools.getPixelGridNumber(params.event.y);
       const updatedPosition = Tools.getGridPosition(params.gameObject.x, params.gameObject.y);
       if (Tools.moveSpriteToPosition({
         level: data.statePosition.levelIndex,
@@ -73948,10 +74011,8 @@
         column: updatedPosition.column
       })) {
         Globals.Instance.stateTransaction.sprites.next();
-        Globals.Instance.canRerender = true;
         return true;
       }
-      Globals.Instance.canRerender = true;
       this.scene.renderSpriteUpdate();
       return false;
     }
@@ -73981,6 +74042,8 @@
     }
     renderScene(scene, state, spriteRenderCB) {
       state.map((level, levelIndex) => {
+        const levelContainer = new Phaser3.GameObjects.Container(this.scene.scene);
+        levelContainer.setData("z-index", level);
         level.map((row, rowIndex) => {
           row.map((spriteData, columnIndex) => {
             const spriteInfo = Tools.getSpriteInfoFromSpriteSource(spriteData.source);
@@ -73989,7 +74052,7 @@
             const sprite = Tools.getNewSprite(scene, spriteX, spriteY, spriteInfo);
             sprite.setOrigin(0.5, 0.5);
             sprite.setDisplaySize(40, 40);
-            this.gameObjectContainer.add(sprite);
+            levelContainer.add(sprite);
             spriteRenderCB?.(sprite, spriteInfo, {
               levelIndex,
               rowIndex,
@@ -73997,6 +74060,7 @@
             });
           });
         });
+        this.gameObjectContainer.add(levelContainer);
       });
     }
   };
@@ -74093,7 +74157,7 @@
   };
 
   // src/events/PlayerEvents.ts
-  var _PlayerEvents = class {
+  var PlayerEvents = class {
     constructor() {
       this.init();
     }
@@ -74112,9 +74176,9 @@
       }
     }
     onClickGroundGrass(params) {
-      this.updatePlayerEntity(params);
+      this.movePlayerToMouse(params);
     }
-    updatePlayerEntity(params) {
+    movePlayerToMouse(params) {
       const activePlayer = Globals.Instance.getActivePlayer();
       activePlayer.x = params.event.x;
       activePlayer.y = params.event.y;
@@ -74125,16 +74189,14 @@
       Tools.setGlobalOffsetPositonRelativeToSprite(playerSprite);
     }
     static afterCreate(playerSprite) {
-      _PlayerEvents.playerSprite = playerSprite;
+      Globals.Instance.activePlayerSprite = playerSprite;
       Tools.setGlobalOffsetPositonRelativeToSprite(playerSprite);
       playerSprite.play("idle");
     }
   };
-  var PlayerEvents = _PlayerEvents;
-  __publicField(PlayerEvents, "playerSprite");
 
   // src/scenes/EntityScene.ts
-  var _EntityScene = class extends Scene2 {
+  var _EntityScene = class extends Scene {
     isReady = false;
     settings = {
       zIndex: 400
@@ -74227,7 +74289,7 @@
   });
 
   // src/scenes/LoadingScene.ts
-  var _LoadingScene = class extends Scene2 {
+  var _LoadingScene = class extends Scene {
     settings = {
       zIndex: 900
     };
@@ -74239,6 +74301,7 @@
     }
     create() {
       super.create();
+      Tools.setGlobalScalingFactor();
       new DataManager(() => {
         Globals.Instance.game.scene.add(Tools.getUniqueKey(), InventoryScene, true);
         new LoginManager();

@@ -4,7 +4,8 @@
         "width": 40,
         "height": 40,
         "ext": "jpg",
-        "interactive": {}
+        "interactive": {},
+        "level": 0
     },
     "undefined": {
         "mutations": 1,
@@ -20,7 +21,8 @@
         "ext": "png",
         "interactive": {
             "draggable": true
-        }
+        },
+        "level": 1
     },
     "ui/inventory": {
         "mutations": 1,
@@ -42,7 +44,7 @@
         "height": 60,
         "ext": "png",
         "interactive": false,
-        "speed": 10,
+        "speed": 25,
         "animations": {
             "up": [
                 9,
@@ -80,7 +82,7 @@
         "height": 40,
         "ext": "png",
         "interactive": false,
-        "speed": 120,
+        "speed": 40,
         "animations": {
             "up": [
                 9,
