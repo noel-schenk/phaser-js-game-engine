@@ -3353,10 +3353,79 @@
                     "source": "object/beehive/1"
                 },
                 {
-                    "source": "object/beehive/2"
+                    "source": "ground/road/0"
                 },
                 {
                     "source": "ground/grass/1"
+                }
+            ]
+        },
+        {
+            "source": "entity/wolf/0",
+            "x": "200",
+            "y": "200",
+            "name": "road",
+            "sceneName": "HomeOutsideScene",
+            "inventory": [
+                {
+                    "source": "ground/road/0"
+                },
+                {
+                    "source": "ground/road/1"
+                },
+                {
+                    "source": "ground/road/2"
+                },
+                {
+                    "source": "ground/road/3"
+                },
+                {
+                    "source": "ground/road/5"
+                },
+                {
+                    "source": "ground/grass/0"
+                },
+                {
+                    "source": "ground/grass/1"
+                },
+                {
+                    "source": "ground/grass/2"
+                },
+                {
+                    "source": "ground/grass/3"
+                },
+                {
+                    "source": "ground/grass/4"
+                },
+                {
+                    "source": "ground/grass/5"
+                },
+                {
+                    "source": "ground/grass/5"
+                },
+                {
+                    "source": "ground/grass/5"
+                },
+                {
+                    "source": "ground/grass/5"
+                },
+                {
+                    "source": "ground/grass/5"
+                },
+                {
+                    "source": "ground/grass/5"
+                },
+                {
+                    "source": "ground/grass/5"
+                },
+                {
+                    "source": "ground/grass/5"
+                },
+                {
+                    "source": "ground/grass/5"
+                },
+                {
+                    "source": "ground/grass/5"
                 }
             ]
         }

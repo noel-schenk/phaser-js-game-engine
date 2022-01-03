@@ -17,6 +17,7 @@ export class PlayerEvents {
   onClick(params) {
     switch (params.gameObject.texture.key) {
       case 'ground/grass':
+      case 'ground/road':
         this.onClickGroundGrass(params);
         break;
     }

@@ -7,6 +7,14 @@
         "interactive": {},
         "level": 0
     },
+    "ground/road": {
+        "mutations": 5,
+        "width": 40,
+        "height": 40,
+        "ext": "png",
+        "interactive": {},
+        "level": 0
+    },
     "undefined": {
         "mutations": 1,
         "width": 40,
@@ -22,7 +30,7 @@
         "interactive": {
             "draggable": true
         },
-        "level": 1
+        "level": 2
     },
     "ui/inventory": {
         "mutations": 1,

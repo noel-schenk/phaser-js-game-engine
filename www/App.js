@@ -73375,6 +73375,14 @@
     interactive: {},
     level: 0
   };
+  var ground_road = {
+    mutations: 5,
+    width: 40,
+    height: 40,
+    ext: "png",
+    interactive: {},
+    level: 0
+  };
   var undefined2 = {
     mutations: 1,
     width: 40,
@@ -73390,7 +73398,7 @@
     interactive: {
       draggable: true
     },
-    level: 1
+    level: 2
   };
   var ui_inventory = {
     mutations: 1,
@@ -73481,6 +73489,7 @@
   };
   var sprites_default = {
     "ground/grass": ground_grass,
+    "ground/road": ground_road,
     undefined: undefined2,
     "object/beehive": object_beehive,
     "ui/inventory": ui_inventory,
@@ -74171,6 +74180,7 @@
     onClick(params) {
       switch (params.gameObject.texture.key) {
         case "ground/grass":
+        case "ground/road":
           this.onClickGroundGrass(params);
           break;
       }
